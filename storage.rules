@@ -1,0 +1,62 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Helper function to check if user is authenticated
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Helper function to check if user is admin
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.role == 'admin';
+    }
+
+    // Helper function to check if user is NGO
+    function isNGO() {
+      return isSignedIn() && request.auth.token.role == 'ngo';
+    }
+
+    // NGO logos
+    match /ngo-logos/{ngoId}/{filename} {
+      // Public read access
+      allow read: if true;
+
+      // Only admins or NGO owners can upload/update/delete
+      allow write: if isAdmin() || (isNGO() && request.auth.uid == ngoId);
+    }
+
+    // Experience images (old path)
+    match /experience-images/{experienceId}/{filename} {
+      // Public read access
+      allow read: if true;
+
+      // Only admins or NGOs can upload/update/delete experience images
+      allow write: if isAdmin() || isNGO();
+    }
+
+    // Experience images (new path - for image uploads)
+    match /experiences/{allPaths=**} {
+      // Public read access
+      allow read: if true;
+
+      // Only admins or NGOs can upload/update/delete experience images
+      allow write: if isAdmin() || isNGO();
+    }
+
+    // User avatars
+    match /user-avatars/{userId}/{filename} {
+      // Public read access
+      allow read: if true;
+
+      // Users can only manage their own avatars
+      allow write: if isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Default deny for all other paths
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

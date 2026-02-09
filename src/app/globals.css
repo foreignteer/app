@@ -1,26 +1,112 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Primary Colors - Teal */
+  --primary: #21B3B1;           /* Main teal - good contrast with white text */
+  --primary-dark: #178583;      /* Darker teal for hover states */
+  --primary-light: #E5F7F7;     /* Very light teal for backgrounds */
+  --primary-muted: #7DD3D1;     /* Muted teal for decorative elements */
+
+  /* Accent Colors - Peach/Coral */
+  --accent: #F6C98D;            /* Peach accent */
+  --accent-dark: #D9A866;       /* Darker peach for hover */
+  --accent-light: #FFF5E8;      /* Very light peach for backgrounds */
+
+  /* Text Colors - High Contrast Dark Teal/Green Theme */
+  --text-primary: #0A3433;      /* Very dark teal for main text (AAA contrast) */
+  --text-secondary: #135B59;    /* Dark teal for secondary text (AA contrast) */
+  --text-muted: #2A7876;        /* Medium teal for muted text (AA contrast on white) */
+  --text-on-primary: #4A4A4A;   /* Dark gray for text on primary background */
+
+  /* Background Colors */
+  --background-white: #FFFFFF;
+  --background-gray: #F5F5F5;
+  --background-light: #FAFAFA;
+
+  /* Legacy mappings (for backwards compatibility) */
+  --background: #FAFAFA;
+  --text: #1A1A1A;
+  --text-light: #737373;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Primary Colors */
+  --color-primary-DEFAULT: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-light: var(--primary-light);
+  --color-primary-muted: var(--primary-muted);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Accent Colors */
+  --color-accent-DEFAULT: var(--accent);
+  --color-accent-dark: var(--accent-dark);
+  --color-accent-light: var(--accent-light);
+
+  /* Background Colors */
+  --color-background: var(--background);
+  --color-background-white: var(--background-white);
+  --color-background-gray: var(--background-gray);
+  --color-background-light: var(--background-light);
+
+  /* Text Colors */
+  --color-text-DEFAULT: var(--text-primary);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-text-light: var(--text-muted);
+  --color-text-on-primary: var(--text-on-primary);
+
+  /* Font Families */
+  --font-heading: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Lato', ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--background-white);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Utility Classes */
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 200ms;
+  border: 2px solid var(--primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+}
+
+.btn-secondary {
+  background-color: var(--accent);
+  color: var(--text-primary);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 200ms;
+  border: 2px solid var(--accent);
+}
+
+.btn-secondary:hover {
+  background-color: var(--accent-dark);
+  border-color: var(--accent-dark);
+}
+
+.card {
+  background-color: var(--background-white);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  padding: 1.5rem;
+  border: 1px solid #E5E5E5;
 }

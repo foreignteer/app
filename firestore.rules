@@ -1,0 +1,113 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.role == 'admin';
+    }
+
+    function isNGO() {
+      return isSignedIn() && request.auth.token.role == 'ngo';
+    }
+
+    function isUser() {
+      return isSignedIn() && request.auth.token.role == 'user';
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Users collection
+    match /users/{userId} {
+      // Anyone signed in can read user profiles (for displaying names, avatars, etc.)
+      allow read: if isSignedIn();
+
+      // Users can create their own profile
+      allow create: if isSignedIn() && isOwner(userId);
+
+      // Users can update their own profile, or admins can update any profile
+      allow update: if isOwner(userId) || isAdmin();
+
+      // Only admins can delete users
+      allow delete: if isAdmin();
+    }
+
+    // NGOs collection
+    match /ngos/{ngoId} {
+      // Public profiles - anyone can read (even unauthenticated for public pages)
+      allow read: if true;
+
+      // Any authenticated user can create an NGO registration (pending admin approval)
+      allow create: if isSignedIn();
+
+      // Admins can update any NGO, or NGO owners can update their own
+      allow update: if isAdmin() || (isNGO() && resource.data.createdBy == request.auth.uid);
+
+      // Only admins can delete NGOs
+      allow delete: if isAdmin();
+    }
+
+    // Experiences collection
+    match /experiences/{experienceId} {
+      // Published experiences are public, drafts/pending visible to admin and owner NGO
+      allow read: if resource.data.status == 'published'
+                  || isAdmin()
+                  || (isNGO() && resource.data.ngoId == request.auth.uid);
+
+      // Only NGOs can create experiences
+      allow create: if isNGO();
+
+      // Admins can update any experience, NGOs can update their own
+      allow update: if isAdmin()
+                    || (isNGO() && resource.data.ngoId == request.auth.uid);
+
+      // Only admins can delete experiences
+      allow delete: if isAdmin();
+    }
+
+    // Bookings collection
+    match /bookings/{bookingId} {
+      // Users can read their own bookings, NGOs can read bookings for their experiences,
+      // Admins can read all bookings
+      allow read: if isOwner(resource.data.userId)
+                  || isAdmin()
+                  || (isNGO() && resource.data.ngoId == request.auth.uid);
+
+      // Signed in users can create bookings for themselves
+      allow create: if isSignedIn() && isOwner(request.resource.data.userId);
+
+      // Users can update their own bookings (e.g., cancel),
+      // NGOs can update bookings for their experiences (e.g., confirm),
+      // Admins can update any booking
+      allow update: if isOwner(resource.data.userId)
+                    || isAdmin()
+                    || (isNGO() && resource.data.ngoId == request.auth.uid);
+
+      // Only admins can delete bookings
+      allow delete: if isAdmin();
+    }
+
+    // Enquiries collection
+    match /enquiries/{enquiryId} {
+      // Anyone can create an enquiry (no auth required)
+      allow create: if true;
+
+      // Only admins and related NGOs can read enquiries
+      allow read: if isAdmin()
+                  || (isNGO() && resource.data.ngoId == request.auth.uid);
+
+      // Only admins can update enquiries (to mark as contacted/resolved)
+      allow update: if isAdmin();
+
+      // Only admins can delete enquiries
+      allow delete: if isAdmin();
+    }
+  }
+}

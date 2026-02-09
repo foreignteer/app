@@ -1,0 +1,29 @@
+{
+  "name": "foreignteer-functions",
+  "version": "1.0.0",
+  "description": "Firebase Cloud Functions for Foreignteer",
+  "scripts": {
+    "build": "tsc",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "20"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "@types/nodemailer": "^7.0.9",
+    "dotenv": "^17.2.4",
+    "firebase-admin": "^12.0.0",
+    "firebase-functions": "^4.5.0",
+    "nodemailer": "^8.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.2"
+  },
+  "private": true
+}

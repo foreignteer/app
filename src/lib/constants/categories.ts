@@ -1,0 +1,25 @@
+export const CAUSE_CATEGORIES = [
+  'Education & Literacy',
+  'Children & Youth',
+  'Environment & Conservation',
+  'Animal Welfare',
+  'Community Development',
+  'Healthcare & Medical',
+  'Mental Health & Wellbeing',
+  'Elderly Care',
+  'Disability Support',
+  'Homelessness & Housing',
+  'Food Security & Nutrition',
+  'Women\'s Empowerment',
+  'LGBTQ+ Rights',
+  'Refugee & Migrant Support',
+  'Arts & Culture',
+  'Sports & Recreation',
+  'Technology & Digital Inclusion',
+  'Human Rights & Advocacy',
+  'Disaster Relief',
+  'Poverty Alleviation',
+  'Other',
+] as const;
+
+export type CauseCategory = typeof CAUSE_CATEGORIES[number];
