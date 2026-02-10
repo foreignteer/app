@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
 
     // Apply filters in memory (to avoid complex Firestore indexes)
     if (causeCategory) {
-      experiences = experiences.filter((exp) => exp.causeCategory === causeCategory);
+      experiences = experiences.filter((exp) => exp.causeCategories?.includes(causeCategory));
     }
 
     if (city) {
