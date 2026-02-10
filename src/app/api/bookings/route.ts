@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminAuth, adminDb } from '@/lib/firebase/admin';
-import { Booking } from '@/lib/types/booking';
+import { Booking, BookingStatus } from '@/lib/types/booking';
 
 export async function POST(request: NextRequest) {
   try {
