@@ -74,6 +74,7 @@ Perfect for individuals, families, or groups who care about ocean health. No exp
     status: 'published',
     requirements: ['Comfortable walking shoes', 'Sun protection', 'Reusable water bottle'],
     accessibility: 'Wheelchair accessible beach access available. All fitness levels welcome.',
+    images: ['https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?w=800', 'https://images.unsplash.com/photo-1621451537084-482c73073a0f?w=800'],
     createdAt: admin.firestore.Timestamp.now(),
     updatedAt: admin.firestore.Timestamp.now(),
   },
@@ -659,11 +660,38 @@ async function clearAndSeedExperiences() {
     // Create mock experiences
     console.log('🌟 Creating mock experiences...\n');
 
+    // Default images by category
+    const defaultImages = {
+      beach: ['https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?w=800', 'https://images.unsplash.com/photo-1621451537084-482c73073a0f?w=800'],
+      education: ['https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800', 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=800'],
+      garden: ['https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=800', 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800'],
+      food: ['https://images.unsplash.com/photo-1593113616828-48f90bb446b9?w=800', 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800'],
+      elderly: ['https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800', 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800'],
+      dogs: ['https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800', 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800'],
+      youth: ['https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800', 'https://images.unsplash.com/photo-1517164850305-99a3e65bb47e?w=800'],
+      homeless: ['https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=800', 'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=800'],
+      festival: ['https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800', 'https://images.unsplash.com/photo-1506157786151-b8491531f063?w=800'],
+      woodland: ['https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=800', 'https://images.unsplash.com/photo-1511497584788-876760111969?w=800'],
+    };
+
+    const imageMapping = {
+      'Beach Clean-Up & Marine Conservation': defaultImages.beach,
+      'English Tutoring for Refugee Children': defaultImages.education,
+      'Urban Community Garden Project': defaultImages.garden,
+      'Food Bank Warehouse Support': defaultImages.food,
+      'Elderly Companionship & Tech Support': defaultImages.elderly,
+      'Animal Shelter Dog Walking & Care': defaultImages.dogs,
+      'Youth Mentoring & Sports Coaching': defaultImages.youth,
+      'Homeless Outreach & Support': defaultImages.homeless,
+      'Festival Event Support & Sustainability': defaultImages.festival,
+      'Conservation Workday: Woodland Restoration': defaultImages.woodland,
+    };
+
     for (const experience of mockExperiences) {
       const expRef = db.collection('experiences').doc();
       await expRef.set({
         ...experience,
-        images: [], // Add empty images array (required field)
+        images: imageMapping[experience.title] || [],
         ngoId,
       });
       console.log(`✅ Created: ${experience.title}`);
