@@ -107,7 +107,7 @@ export default async function ExperienceDetailPage({ params, searchParams }: Exp
           <div className="max-w-7xl mx-auto">
             <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-6 inline-block max-w-4xl">
               <Badge variant="primary" size="lg" className="mb-4">
-                {experience.causeCategory}
+                {experience.causeCategories?.[0] || 'Volunteering'}
               </Badge>
               <h1 className="text-4xl font-bold text-[#2C3E3A] mb-2">{experience.title}</h1>
               <p className="text-xl text-[#4A4A4A]">{experience.summary}</p>
