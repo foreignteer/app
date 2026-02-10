@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { adminDb } from '@/lib/firebase/admin';
 import { Experience } from '@/lib/types/experience';
+import { NGO } from '@/lib/types/ngo';
 import { format } from 'date-fns';
 
 interface ExperienceDetailPageProps {
@@ -59,7 +60,7 @@ async function getExperience(id: string, instanceDate?: string): Promise<Experie
   }
 }
 
-async function getNGO(ngoId: string) {
+async function getNGO(ngoId: string): Promise<NGO | null> {
   try {
     const docRef = adminDb.collection('ngos').doc(ngoId);
     const doc = await docRef.get();
@@ -68,7 +69,13 @@ async function getNGO(ngoId: string) {
       return null;
     }
 
-    return { id: doc.id, ...doc.data() };
+    const data = doc.data()!;
+    return {
+      id: doc.id,
+      ...data,
+      createdAt: data.createdAt?.toDate(),
+      updatedAt: data.updatedAt?.toDate(),
+    } as NGO;
   } catch (error) {
     console.error('Error fetching NGO:', error);
     return null;
