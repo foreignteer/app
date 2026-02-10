@@ -64,7 +64,7 @@ export async function GET(
       );
     }
 
-    const experienceData = experienceDoc.data();
+    const experienceData = experienceDoc.data()!; // Non-null assertion since we checked exists
 
     // Verify that this experience belongs to the NGO
     if (experienceData?.ngoId !== ngoId) {
@@ -158,7 +158,7 @@ export async function PATCH(
       );
     }
 
-    const existingData = experienceDoc.data();
+    const existingData = experienceDoc.data()!; // Non-null assertion since we checked exists
 
     // Verify that this experience belongs to the NGO
     if (existingData?.ngoId !== ngoId) {
@@ -262,7 +262,7 @@ export async function PATCH(
 
       // Fetch the updated experience
       const updatedDoc = await adminDb.collection('experiences').doc(id).get();
-      const updatedData = updatedDoc.data();
+      const updatedData = updatedDoc.data()!; // Non-null assertion since document was just updated
 
       const experience: Experience = {
         id: updatedDoc.id,
@@ -355,7 +355,7 @@ export async function DELETE(
       );
     }
 
-    const existingData = experienceDoc.data();
+    const existingData = experienceDoc.data()!; // Non-null assertion since we checked exists
 
     // Verify that this experience belongs to the NGO
     if (existingData?.ngoId !== ngoId) {
