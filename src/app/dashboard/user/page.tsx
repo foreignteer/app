@@ -179,7 +179,7 @@ export default function UserDashboard() {
                         </h4>
                         {experiences[booking.experienceId] && (
                           <p className="text-sm text-text-muted mb-1">
-                            {format(new Date(experiences[booking.experienceId].dates.start), 'MMM d, yyyy')}
+                            {format(new Date(experiences[booking.experienceId]!.dates.start), 'MMM d, yyyy')}
                           </p>
                         )}
                         <p className="text-sm text-text-muted">
