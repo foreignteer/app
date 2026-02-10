@@ -161,7 +161,6 @@ export default function ImageUpload({ images, onImagesChange, maxImages = 5 }: I
                 disabled={uploading}
                 isLoading={uploading}
                 onClick={() => document.getElementById('image-upload')?.click()}
-                as="span"
               >
                 <Upload className="w-4 h-4 mr-2" />
                 {uploading ? 'Uploading...' : 'Upload Images'}
