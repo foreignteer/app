@@ -8,8 +8,13 @@ let adminDb: Firestore;
 
 // Initialize Firebase Admin (server-side only)
 if (getApps().length === 0) {
-  // Handle private key - Vercel might double-escape backslashes
+  // Handle private key - remove quotes and fix newlines
   let privateKey = process.env.FIREBASE_PRIVATE_KEY || '';
+
+  // Remove surrounding quotes if present (common mistake when pasting)
+  if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
+    privateKey = privateKey.slice(1, -1);
+  }
 
   // Replace literal \n with actual newlines
   // Also handle double-escaped \\n (in case Vercel escapes it)
