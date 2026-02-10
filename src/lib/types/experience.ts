@@ -62,6 +62,7 @@ export interface ExperienceFormData {
 }
 
 export interface ExperienceFilters {
+  search?: string;
   city?: string;
   country?: string;
   causeCategory?: string;
