@@ -7,13 +7,14 @@ import { Badge } from '@/components/ui/Badge';
 import { ExperienceCard } from '@/components/experiences/ExperienceCard';
 import { adminDb } from '@/lib/firebase/admin';
 import { Experience } from '@/lib/types/experience';
+import { NGO } from '@/lib/types/ngo';
 import { expandAllRecurringExperiences } from '@/lib/utils/recurring';
 
 interface NGOProfilePageProps {
   params: Promise<{ slug: string }>;
 }
 
-async function getNGOBySlug(slug: string) {
+async function getNGOBySlug(slug: string): Promise<NGO | null> {
   try {
     const querySnapshot = await adminDb
       .collection('ngos')
@@ -27,7 +28,13 @@ async function getNGOBySlug(slug: string) {
     }
 
     const doc = querySnapshot.docs[0];
-    return { id: doc.id, ...doc.data() };
+    const data = doc.data();
+    return {
+      id: doc.id,
+      ...data,
+      createdAt: data.createdAt?.toDate(),
+      updatedAt: data.updatedAt?.toDate(),
+    } as NGO;
   } catch (error) {
     console.error('Error fetching NGO:', error);
     return null;
