@@ -66,6 +66,8 @@ export interface ExperienceFilters {
   city?: string;
   country?: string;
   causeCategory?: string;
+  startDate?: string;
+  endDate?: string;
   dateRange?: {
     start: Date;
     end: Date;
