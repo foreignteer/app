@@ -27,19 +27,24 @@ export async function GET(request: NextRequest) {
     let experiences: Experience[] = [];
 
     querySnapshot.forEach((doc: FirebaseFirestore.QueryDocumentSnapshot) => {
-      const data = doc.data();
-      experiences.push({
-        id: doc.id,
-        ...data,
-        dates: {
-          start: data.dates.start.toDate(),
-          end: data.dates.end.toDate(),
-        },
-        images: data.images || [],
-        recurrenceEndDate: data.recurrenceEndDate ? data.recurrenceEndDate.toDate() : undefined,
-        createdAt: data.createdAt.toDate(),
-        updatedAt: data.updatedAt.toDate(),
-      } as Experience);
+      try {
+        const data = doc.data();
+        experiences.push({
+          id: doc.id,
+          ...data,
+          dates: {
+            start: data.dates.start.toDate(),
+            end: data.dates.end.toDate(),
+          },
+          images: data.images || [],
+          recurrenceEndDate: data.recurrenceEndDate ? data.recurrenceEndDate.toDate() : undefined,
+          createdAt: data.createdAt.toDate(),
+          updatedAt: data.updatedAt.toDate(),
+        } as Experience);
+      } catch (docError) {
+        console.error(`Error processing experience document ${doc.id}:`, docError);
+        console.error('Document data:', JSON.stringify(doc.data(), null, 2));
+      }
     });
 
     // Apply filters in memory (to avoid complex Firestore indexes)
