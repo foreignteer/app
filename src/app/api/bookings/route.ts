@@ -179,16 +179,16 @@ export async function GET(request: NextRequest) {
     const experienceId = searchParams.get('experienceId');
     const ngoId = searchParams.get('ngoId');
 
-    let query = adminDb.collection('bookings');
+    let query: FirebaseFirestore.Query | FirebaseFirestore.CollectionReference = adminDb.collection('bookings');
 
     // Filter based on user role
     if (userRole === 'admin') {
       // Admin can see all bookings, optionally filtered
       if (experienceId) {
-        query = query.where('experienceId', '==', experienceId) as any;
+        query = query.where('experienceId', '==', experienceId);
       }
       if (ngoId) {
-        query = query.where('ngoId', '==', ngoId) as any;
+        query = query.where('ngoId', '==', ngoId);
       }
     } else if (userRole === 'ngo') {
       // NGO can see bookings for their experiences
@@ -203,14 +203,14 @@ export async function GET(request: NextRequest) {
         );
       }
 
-      query = query.where('ngoId', '==', userNgoId) as any;
+      query = query.where('ngoId', '==', userNgoId);
 
       if (experienceId) {
-        query = query.where('experienceId', '==', experienceId) as any;
+        query = query.where('experienceId', '==', experienceId);
       }
     } else {
       // Regular users can only see their own bookings
-      query = query.where('userId', '==', userId) as any;
+      query = query.where('userId', '==', userId);
     }
 
     const querySnapshot = await query.orderBy('appliedAt', 'desc').get();

@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status'); // 'draft', 'pending_approval', 'published', 'cancelled'
 
     // Fetch experiences
-    let query = adminDb.collection('experiences');
+    let query: FirebaseFirestore.Query | FirebaseFirestore.CollectionReference = adminDb.collection('experiences');
 
     if (status) {
       query = query.where('status', '==', status);

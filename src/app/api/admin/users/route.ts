@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
     const roleFilter = searchParams.get('role');
 
     // Fetch users from Firestore
-    let query = adminDb.collection('users');
+    let query: FirebaseFirestore.Query | FirebaseFirestore.CollectionReference = adminDb.collection('users');
 
     if (roleFilter) {
       query = query.where('role', '==', roleFilter);

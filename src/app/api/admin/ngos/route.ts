@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status'); // 'pending', 'approved', 'rejected'
 
     // Fetch NGOs
-    let query = adminDb.collection('ngos');
+    let query: FirebaseFirestore.Query | FirebaseFirestore.CollectionReference = adminDb.collection('ngos');
 
     if (status) {
       query = query.where('approved', '==', status === 'approved');
