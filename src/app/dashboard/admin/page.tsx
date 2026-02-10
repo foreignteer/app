@@ -39,20 +39,54 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // TODO: Fetch actual stats from API
-    // For now, using mock data
-    setTimeout(() => {
-      setStats({
-        totalUsers: 156,
-        totalNGOs: 23,
-        totalExperiences: 48,
-        totalBookings: 342,
-        pendingNGOs: 5,
-        pendingExperiences: 8,
-      });
-      setLoading(false);
-    }, 500);
+    fetchStats();
   }, []);
+
+  const fetchStats = async () => {
+    try {
+      const authModule = await import('@/lib/firebase/config');
+      const currentUser = authModule.auth.currentUser;
+
+      if (!currentUser) {
+        setLoading(false);
+        return;
+      }
+
+      const token = await currentUser.getIdToken();
+      const response = await fetch('/api/admin/stats', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch stats');
+      }
+
+      const data = await response.json();
+      setStats({
+        totalUsers: data.totalUsers,
+        totalNGOs: data.totalNGOs,
+        totalExperiences: data.totalExperiences,
+        totalBookings: data.totalBookings,
+        pendingNGOs: data.pendingNGOs,
+        pendingExperiences: data.pendingExperiences,
+      });
+    } catch (error) {
+      console.error('Error fetching admin stats:', error);
+      // Keep default stats if fetch fails
+      setStats({
+        totalUsers: 0,
+        totalNGOs: 0,
+        totalExperiences: 0,
+        totalBookings: 0,
+        pendingNGOs: 0,
+        pendingExperiences: 0,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <DashboardLayout requiredRole="admin">
