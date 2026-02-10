@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
       .get();
 
     const subscribers: NewsletterSubscriber[] = [];
-    subscribersSnapshot.forEach((doc) => {
+    subscribersSnapshot.forEach((doc: FirebaseFirestore.QueryDocumentSnapshot) => {
       const data = doc.data();
       subscribers.push({
         id: doc.id,

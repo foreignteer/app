@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
 
     // Fetch all testimonials
     const snapshot = await query.get();
-    let testimonials: Testimonial[] = snapshot.docs.map((doc) => {
+    let testimonials: Testimonial[] = snapshot.docs.map((doc: FirebaseFirestore.QueryDocumentSnapshot) => {
       const data = doc.data();
       return {
         id: doc.id,

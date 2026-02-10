@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
     const querySnapshot = await query.get();
 
     const ngos: any[] = [];
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach((doc: FirebaseFirestore.QueryDocumentSnapshot) => {
       const data = doc.data();
       ngos.push({
         id: doc.id,

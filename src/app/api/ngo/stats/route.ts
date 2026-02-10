@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
 
     const experienceIds: string[] = [];
 
-    experiencesSnapshot.forEach((doc) => {
+    experiencesSnapshot.forEach((doc: FirebaseFirestore.QueryDocumentSnapshot) => {
       totalExperiences++;
       const data = doc.data();
       experienceIds.push(doc.id);
@@ -93,7 +93,7 @@ export async function GET(request: NextRequest) {
           .where('experienceId', 'in', batch)
           .get();
 
-        bookingsSnapshot.forEach((doc) => {
+        bookingsSnapshot.forEach((doc: FirebaseFirestore.QueryDocumentSnapshot) => {
           const data = doc.data();
           if (data.status !== 'cancelled') {
             totalApplicants++;

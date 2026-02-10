@@ -210,7 +210,7 @@ export async function PATCH(
       console.log(`Updating ${seriesSnapshot.size} experiences in series ${recurringGroupId}`);
 
       const batch = adminDb.batch();
-      seriesSnapshot.docs.forEach((doc) => {
+      seriesSnapshot.docs.forEach((doc: FirebaseFirestore.QueryDocumentSnapshot) => {
         batch.update(doc.ref, seriesUpdateData);
       });
 

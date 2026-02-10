@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     const querySnapshot = await query.get();
     let experiences: Experience[] = [];
 
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach((doc: FirebaseFirestore.QueryDocumentSnapshot) => {
       const data = doc.data();
       experiences.push({
         id: doc.id,

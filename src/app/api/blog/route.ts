@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
 
     // Fetch all posts
     const snapshot = await query.get();
-    let posts: BlogPost[] = snapshot.docs.map((doc) => {
+    let posts: BlogPost[] = snapshot.docs.map((doc: FirebaseFirestore.QueryDocumentSnapshot) => {
       const data = doc.data();
       return {
         id: doc.id,

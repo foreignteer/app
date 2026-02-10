@@ -216,7 +216,7 @@ export async function GET(request: NextRequest) {
     const querySnapshot = await query.orderBy('appliedAt', 'desc').get();
 
     const bookings: Booking[] = [];
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach((doc: FirebaseFirestore.QueryDocumentSnapshot) => {
       const data = doc.data();
       bookings.push({
         id: doc.id,
