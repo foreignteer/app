@@ -264,7 +264,7 @@ export async function GET(
       );
     }
 
-    const bookingData = bookingDoc.data();
+    const bookingData = bookingDoc.data()!; // Non-null assertion since we checked exists
     const booking = bookingData as Booking;
 
     // Check permissions
