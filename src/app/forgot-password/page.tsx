@@ -40,13 +40,13 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-primary-light flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#C9F0EF] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md" padding="lg">
         <CardHeader>
-          <CardTitle className="text-center text-2xl">
+          <CardTitle className="text-center text-2xl text-[#4A4A4A]">
             Reset Your Password
           </CardTitle>
-          <p className="text-center text-text-muted mt-2">
+          <p className="text-center text-[#7A7A7A] mt-2">
             Enter your email address and we'll send you a link to reset your password
           </p>
         </CardHeader>

@@ -19,6 +19,7 @@ function LoginForm() {
   const [loading, setLoading] = useState(false);
 
   const returnUrl = searchParams.get('returnUrl') || '/';
+  const message = searchParams.get('message');
 
   // Redirect if already logged in
   useEffect(() => {
@@ -56,6 +57,18 @@ function LoginForm() {
 
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
+            {message === 'password-reset-success' && (
+              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
+                <strong>Password reset successful!</strong> You can now sign in with your new password.
+              </div>
+            )}
+
+            {message === 'password-reset' && (
+              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
+                Your password has been reset. Please sign in with your new password.
+              </div>
+            )}
+
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
                 {error}

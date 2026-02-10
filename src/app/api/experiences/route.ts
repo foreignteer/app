@@ -35,6 +35,8 @@ export async function GET(request: NextRequest) {
           start: data.dates.start.toDate(),
           end: data.dates.end.toDate(),
         },
+        images: data.images || [],
+        recurrenceEndDate: data.recurrenceEndDate ? data.recurrenceEndDate.toDate() : undefined,
         createdAt: data.createdAt.toDate(),
         updatedAt: data.updatedAt.toDate(),
       } as Experience);

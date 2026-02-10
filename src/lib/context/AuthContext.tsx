@@ -9,6 +9,8 @@ import {
   createUserWithEmailAndPassword,
   signOut as firebaseSignOut,
   sendPasswordResetEmail,
+  confirmPasswordReset,
+  verifyPasswordResetCode,
   updateProfile,
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -23,6 +25,8 @@ interface AuthContextType {
   signUp: (email: string, password: string, displayName: string) => Promise<UserCredential>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
+  confirmPasswordReset: (oobCode: string, newPassword: string) => Promise<void>;
+  verifyPasswordResetCode: (oobCode: string) => Promise<string>;
   updateUserProfile: (data: Partial<User>) => Promise<void>;
   refreshUser: () => Promise<void>;
 }
@@ -131,7 +135,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const resetPassword = async (email: string) => {
-    await sendPasswordResetEmail(auth, email);
+    // Send password reset email with a continue URL that redirects to login after reset
+    const actionCodeSettings = {
+      // URL to redirect to after password reset is complete
+      url: `${window.location.origin}/login?message=password-reset`,
+    };
+
+    await sendPasswordResetEmail(auth, email, actionCodeSettings);
+  };
+
+  const confirmPasswordResetFn = async (oobCode: string, newPassword: string) => {
+    await confirmPasswordReset(auth, oobCode, newPassword);
+  };
+
+  const verifyPasswordResetCodeFn = async (oobCode: string): Promise<string> => {
+    return await verifyPasswordResetCode(auth, oobCode);
   };
 
   const updateUserProfile = async (data: Partial<User>) => {
@@ -164,6 +182,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signUp,
         signOut,
         resetPassword,
+        confirmPasswordReset: confirmPasswordResetFn,
+        verifyPasswordResetCode: verifyPasswordResetCodeFn,
         updateUserProfile,
         refreshUser,
       }}
