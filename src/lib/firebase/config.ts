@@ -27,4 +27,4 @@ if (typeof window !== 'undefined') {
 }
 
 export { app, auth, db, storage };
-export default app;
+export default app!; // Non-null assertion since app is initialized on client side
