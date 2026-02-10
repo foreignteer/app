@@ -19,15 +19,15 @@ export function expandRecurringExperience(
   const endDate = new Date(experience.dates.end);
   const duration = endDate.getTime() - startDate.getTime();
 
-  // Parse recurrence rule to determine interval
-  const rule = experience.recurrenceRule?.toLowerCase() || '';
+  // Parse recurrence pattern to determine interval
+  const pattern = experience.recurrencePattern?.toLowerCase() || '';
   let intervalDays = 0;
 
-  if (rule.includes('daily')) {
-    intervalDays = 1;
-  } else if (rule.includes('weekly') || rule.includes('twice weekly')) {
+  if (pattern === 'weekly') {
     intervalDays = 7;
-  } else if (rule.includes('monthly')) {
+  } else if (pattern === 'biweekly') {
+    intervalDays = 14;
+  } else if (pattern === 'monthly') {
     // For monthly, we'll use 30 days as approximation
     intervalDays = 30;
   } else {
