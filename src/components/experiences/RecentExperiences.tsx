@@ -85,7 +85,7 @@ export default function RecentExperiences() {
                 )}
                 {experience.instantConfirmation && (
                   <div className="absolute top-3 right-3">
-                    <Badge className="bg-[#6FB7A4] text-white border-[#6FB7A4]">
+                    <Badge className="!bg-[#6FB7A4] !text-white border-[#6FB7A4]">
                       Instant Confirmation
                     </Badge>
                   </div>
