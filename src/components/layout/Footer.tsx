@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { Mail, MapPin, Phone, Facebook, Instagram, Linkedin } from 'lucide-react';
 import ManageCookies from '@/components/ManageCookies';
 import NewsletterSignup from '@/components/newsletter/NewsletterSignup';
 
@@ -181,27 +181,32 @@ export default function Footer() {
               &copy; {currentYear} Foreignteer. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
-              {/* Add social media icons here if needed */}
               <a
-                href="#"
-                className="text-text-light hover:text-primary transition-colors"
-                aria-label="Facebook"
+                href="https://www.facebook.com/foreignteer"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-text-light hover:text-[#21B3B1] transition-colors"
+                aria-label="Follow us on Facebook"
               >
-                {/* Facebook icon */}
+                <Facebook size={20} />
               </a>
               <a
-                href="#"
-                className="text-text-light hover:text-primary transition-colors"
-                aria-label="Instagram"
+                href="https://www.instagram.com/foreignteer/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-text-light hover:text-[#21B3B1] transition-colors"
+                aria-label="Follow us on Instagram"
               >
-                {/* Instagram icon */}
+                <Instagram size={20} />
               </a>
               <a
-                href="#"
-                className="text-text-light hover:text-primary transition-colors"
-                aria-label="LinkedIn"
+                href="https://www.linkedin.com/company/foreignteer"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-text-light hover:text-[#21B3B1] transition-colors"
+                aria-label="Follow us on LinkedIn"
               >
-                {/* LinkedIn icon */}
+                <Linkedin size={20} />
               </a>
             </div>
           </div>

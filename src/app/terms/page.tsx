@@ -1,3 +1,14 @@
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Terms of Service - Foreignteer',
+  description: 'Read Foreignteer\'s terms of service. Learn about our platform rules, user responsibilities, and service conditions.',
+  openGraph: {
+    title: 'Terms of Service - Foreignteer',
+    url: 'https://foreignteer.com/terms',
+  },
+};
+
 export default function TermsOfServicePage() {
   return (
     <div className="min-h-screen bg-[#FAF5EC]">

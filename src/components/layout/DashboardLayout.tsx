@@ -1,10 +1,11 @@
 'use client';
 
 import { useAuth } from '@/lib/hooks/useAuth';
-import { useRouter } from 'next/navigation';
-import { useEffect, ReactNode } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import { useEffect, useState, ReactNode } from 'react';
 import DashboardSidebar from './DashboardSidebar';
 import { UserRole } from '@/lib/types/user';
+import { Menu } from 'lucide-react';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -17,6 +18,13 @@ export default function DashboardLayout({
 }: DashboardLayoutProps) {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     if (!loading) {
@@ -51,8 +59,43 @@ export default function DashboardLayout({
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      <DashboardSidebar role={user.role} />
-      <main className="flex-1 p-8">
+      {/* Mobile menu button */}
+      <button
+        onClick={() => setMobileMenuOpen(true)}
+        className="md:hidden fixed top-4 left-4 z-40 p-2 bg-white rounded-lg shadow-md hover:bg-gray-50 transition-colors"
+        aria-label="Open menu"
+      >
+        <Menu className="w-6 h-6 text-[#4A4A4A]" />
+      </button>
+
+      {/* Backdrop for mobile */}
+      {mobileMenuOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black/50 z-40"
+          onClick={() => setMobileMenuOpen(false)}
+          aria-label="Close menu"
+        />
+      )}
+
+      {/* Sidebar - responsive */}
+      <aside
+        className={`
+          fixed md:relative
+          inset-y-0 left-0
+          transform ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+          transition-transform duration-300 ease-in-out
+          w-64
+          z-50 md:z-auto
+        `}
+      >
+        <DashboardSidebar
+          role={user.role}
+          onClose={() => setMobileMenuOpen(false)}
+        />
+      </aside>
+
+      {/* Main content */}
+      <main className="flex-1 p-4 md:p-8 w-full">
         <div className="max-w-7xl mx-auto">
           {children}
         </div>

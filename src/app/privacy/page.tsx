@@ -1,3 +1,14 @@
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Privacy Policy - Foreignteer',
+  description: 'Learn about Foreignteer\'s privacy policy. Understand how we collect, use, and protect your personal information.',
+  openGraph: {
+    title: 'Privacy Policy - Foreignteer',
+    url: 'https://foreignteer.com/privacy',
+  },
+};
+
 export default function PrivacyPolicyPage() {
   return (
     <div className="min-h-screen bg-[#FAF5EC]">

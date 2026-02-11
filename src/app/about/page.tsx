@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { Metadata } from 'next';
 import { Button } from '@/components/ui/Button';
 import {
   Heart,
@@ -10,6 +11,16 @@ import {
   Compass,
   Handshake,
 } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'About Foreignteer - Micro-Volunteering Made Easy',
+  description: 'Learn about Foreignteer\'s mission to connect travellers with meaningful volunteering experiences. Discover how we\'re making travel more impactful.',
+  openGraph: {
+    title: 'About Foreignteer',
+    description: 'Our mission to connect travellers with meaningful volunteering',
+    url: 'https://foreignteer.com/about',
+  },
+};
 
 export default function AboutPage() {
   const values = [
@@ -62,7 +73,7 @@ export default function AboutPage() {
                 hands — even for just an hour or two.
               </p>
             </div>
-            <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-lg">
+            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg">
               <Image
                 src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=800&h=600&fit=crop&q=80"
                 alt="Team collaboration"
@@ -166,7 +177,7 @@ export default function AboutPage() {
                 </p>
               </div>
             </div>
-            <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-lg">
+            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg">
               <Image
                 src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800&h=600&fit=crop&q=80"
                 alt="Volunteers working together"

@@ -13,13 +13,15 @@ import {
   Settings,
   FileText,
   CheckCircle,
+  X,
 } from 'lucide-react';
 
 interface DashboardSidebarProps {
   role: UserRole;
+  onClose?: () => void;
 }
 
-export default function DashboardSidebar({ role }: DashboardSidebarProps) {
+export default function DashboardSidebar({ role, onClose }: DashboardSidebarProps) {
   const pathname = usePathname();
 
   const adminLinks = [
@@ -61,7 +63,20 @@ export default function DashboardSidebar({ role }: DashboardSidebarProps) {
   const links = role === 'admin' ? adminLinks : role === 'ngo' ? ngoLinks : userLinks;
 
   return (
-    <aside className="w-64 bg-white border-r border-gray-200 min-h-screen">
+    <aside className="w-64 bg-white border-r border-gray-200 min-h-screen h-full flex flex-col">
+      {/* Mobile close button */}
+      {onClose && (
+        <div className="md:hidden flex justify-end p-4 border-b border-gray-200">
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            aria-label="Close menu"
+          >
+            <X className="w-6 h-6 text-[#4A4A4A]" />
+          </button>
+        </div>
+      )}
+
       <div className="p-6 border-b border-gray-200">
         <h2 className="text-xl font-heading font-bold text-primary">
           {role === 'admin' ? 'Admin' : role === 'ngo' ? 'NGO' : 'User'} Portal

@@ -1,7 +1,18 @@
 import Link from 'next/link';
+import { Metadata } from 'next';
 import { Search, Heart, UserCheck, Star, CheckCircle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+
+export const metadata: Metadata = {
+  title: 'How It Works - Foreignteer',
+  description: 'Learn how to find and book meaningful micro-volunteering experiences with Foreignteer. Simple steps for volunteers and NGO partners.',
+  openGraph: {
+    title: 'How Foreignteer Works',
+    description: 'Connect with meaningful micro-volunteering experiences in just a few simple steps',
+    url: 'https://foreignteer.com/how-it-works',
+  },
+};
 
 export default function HowItWorksPage() {
   return (
