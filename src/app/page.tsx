@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Globe, Clock, Heart, Shield, Users, CheckCircle, ArrowRight, Star, Quote } from 'lucide-react';
+import { Globe, Clock, Heart, Shield, Users, CheckCircle, ArrowRight, Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Testimonial } from '@/lib/types/testimonial';
@@ -12,6 +12,7 @@ import RecentExperiences from '@/components/experiences/RecentExperiences';
 
 export default function HomePage() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Fetch published testimonials
@@ -20,6 +21,16 @@ export default function HomePage() {
       .then((data) => setTestimonials(data.testimonials || []))
       .catch((err) => console.error('Error fetching testimonials:', err));
   }, []);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 400;
+      scrollContainerRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -394,107 +405,124 @@ export default function HomePage() {
 
       {/* Testimonials */}
       {testimonials.length > 0 && (
-        <section className="py-20 bg-gradient-to-br from-[#C9F0EF] to-[#F6C98D]">
+        <section className="py-16 bg-gradient-to-br from-[#C9F0EF] to-[#F6C98D]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="text-center mb-16"
+              className="text-center mb-12"
             >
-              <h2 className="text-4xl font-bold text-[#2C3E3A] mb-4">
+              <h2 className="text-3xl font-bold text-[#2C3E3A] mb-3">
                 What Our Volunteers Say
               </h2>
-              <p className="text-lg text-[#4A4A4A] max-w-2xl mx-auto">
+              <p className="text-base text-[#4A4A4A] max-w-2xl mx-auto">
                 Real stories from travellers who made a difference
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {testimonials.slice(0, 6).map((testimonial, index) => (
-                <motion.div
-                  key={testimonial.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow relative"
-                >
-                  {/* Quote Icon */}
-                  <div className="absolute top-6 right-6 text-[#C9F0EF]">
-                    <Quote className="w-12 h-12" />
-                  </div>
+            <div className="relative">
+              {/* Scroll Left Button */}
+              <button
+                onClick={() => scroll('left')}
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-all hover:scale-110 -ml-4"
+                aria-label="Scroll left"
+              >
+                <ChevronLeft className="w-6 h-6 text-[#21B3B1]" />
+              </button>
 
-                  {/* Rating */}
-                  {testimonial.rating && (
-                    <div className="flex items-center gap-1 mb-4">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-5 h-5 ${
-                            i < testimonial.rating!
-                              ? 'fill-[#F6C98D] text-[#F6C98D]'
-                              : 'text-gray-300'
-                          }`}
-                        />
-                      ))}
+              {/* Scroll Right Button */}
+              <button
+                onClick={() => scroll('right')}
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-all hover:scale-110 -mr-4"
+                aria-label="Scroll right"
+              >
+                <ChevronRight className="w-6 h-6 text-[#21B3B1]" />
+              </button>
+
+              {/* Scrollable Container */}
+              <div
+                ref={scrollContainerRef}
+                className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {testimonials.map((testimonial, index) => (
+                  <motion.div
+                    key={testimonial.id}
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.05 }}
+                    className="bg-white rounded-xl p-5 shadow-lg hover:shadow-xl transition-shadow relative flex-shrink-0 w-[320px] h-[280px] flex flex-col"
+                  >
+                    {/* Quote Icon */}
+                    <div className="absolute top-4 right-4 text-[#C9F0EF]">
+                      <Quote className="w-8 h-8" />
                     </div>
-                  )}
 
-                  {/* Content */}
-                  <p className="text-[#4A4A4A] mb-6 leading-relaxed italic">
-                    "{testimonial.content}"
-                  </p>
-
-                  {/* Author Info */}
-                  <div className="flex items-center gap-4 pt-6 border-t border-[#E6EAEA]">
-                    {testimonial.image ? (
-                      <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
-                        <Image
-                          src={testimonial.image}
-                          alt={testimonial.name}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    ) : (
-                      <div className="w-12 h-12 rounded-full bg-[#21B3B1] flex items-center justify-center flex-shrink-0">
-                        <span className="text-white font-semibold text-lg">
-                          {testimonial.name.charAt(0)}
-                        </span>
+                    {/* Rating */}
+                    {testimonial.rating && (
+                      <div className="flex items-center gap-1 mb-3">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-4 h-4 ${
+                              i < testimonial.rating!
+                                ? 'fill-[#F6C98D] text-[#F6C98D]'
+                                : 'text-gray-300'
+                            }`}
+                          />
+                        ))}
                       </div>
                     )}
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-[#2C3E3A] truncate">
-                        {testimonial.name}
-                      </p>
-                      {testimonial.role && (
-                        <p className="text-sm text-[#7A7A7A] truncate">
-                          {testimonial.role}
-                          {testimonial.organization && ` • ${testimonial.organization}`}
-                        </p>
-                      )}
-                      {testimonial.location && (
-                        <p className="text-xs text-[#7A7A7A] mt-1 truncate">
-                          📍 {testimonial.location}
-                        </p>
-                      )}
-                    </div>
-                  </div>
 
-                  {/* Experience Badge */}
-                  {testimonial.experienceTitle && (
-                    <div className="mt-4">
-                      <span className="inline-block px-3 py-1 bg-[#C9F0EF] text-[#21B3B1] text-xs rounded-full">
-                        {testimonial.experienceTitle}
-                      </span>
+                    {/* Content */}
+                    <p className="text-sm text-[#4A4A4A] mb-4 leading-relaxed italic line-clamp-4 flex-grow">
+                      "{testimonial.content}"
+                    </p>
+
+                    {/* Author Info */}
+                    <div className="flex items-center gap-3 pt-4 border-t border-[#E6EAEA] mt-auto">
+                      {testimonial.image ? (
+                        <div className="relative w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                          <Image
+                            src={testimonial.image}
+                            alt={testimonial.name}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-[#21B3B1] flex items-center justify-center flex-shrink-0">
+                          <span className="text-white font-semibold text-sm">
+                            {testimonial.name.charAt(0)}
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-sm text-[#2C3E3A] truncate">
+                          {testimonial.name}
+                        </p>
+                        {testimonial.location && (
+                          <p className="text-xs text-[#7A7A7A] truncate">
+                            📍 {testimonial.location}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  )}
-                </motion.div>
-              ))}
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
+
+          {/* Hide scrollbar CSS */}
+          <style jsx>{`
+            .scrollbar-hide::-webkit-scrollbar {
+              display: none;
+            }
+          `}</style>
         </section>
       )}
 
