@@ -87,13 +87,16 @@ export async function POST(request: NextRequest) {
       const createContact = new brevo.CreateContact();
       createContact.email = emailLower;
       createContact.listIds = [2]; // Newsletter list ID in Brevo
-      createContact.attributes = {
+
+      // Build attributes object
+      const attributes: { [key: string]: string } = {
         SOURCE: source,
         SUBSCRIBED_AT: now.toISOString(),
       };
       if (userId) {
-        createContact.attributes.USER_ID = userId;
+        attributes.USER_ID = userId;
       }
+      createContact.attributes = attributes;
 
       await contactsApi.createContact(createContact);
     } catch (brevoErr: any) {
