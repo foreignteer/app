@@ -119,99 +119,57 @@ export default function PartnerPage() {
             See the amazing nonprofits and NGOs already using Foreignteer to connect with passionate volunteers worldwide.
           </p>
           <Link href="/partners">
-            <Button size="lg" className="bg-[#21B3B1] hover:bg-[#168E8C] text-white font-medium px-8 py-4 rounded-lg text-lg">
+            <button className="inline-flex items-center justify-center !bg-[#21B3B1] hover:!bg-[#168E8C] !text-white font-semibold px-8 py-4 rounded-lg text-lg transition-colors !border-0">
               <Users className="w-5 h-5 mr-2" />
               View All Partners
-            </Button>
+            </button>
           </Link>
         </div>
       </div>
 
       {/* How It Works for NGOs */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-[#4A4A4A] mb-4">How It Works</h2>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl font-bold text-[#4A4A4A] mb-3">How It Works</h2>
           <p className="text-lg text-[#7A7A7A] max-w-2xl mx-auto">
             From registration to impact in four simple steps
           </p>
         </div>
 
-        <div className="space-y-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
             {
               number: '01',
               icon: FileCheck,
               title: 'Register & Get Verified',
-              description: 'Complete our simple registration form with your organization details. Our team reviews and verifies your NGO within 2-3 business days.',
-              details: [
-                'Quick online registration form',
-                'Upload required documents for verification',
-                'Get approved within 2-3 business days',
-                'Access your dedicated dashboard',
-              ],
+              description: 'Complete our registration form. Get verified within 2-3 business days.',
             },
             {
               number: '02',
               icon: Calendar,
               title: 'Create Experiences',
-              description: 'Post your micro-volunteering opportunities with details about the cause, duration, and requirements. Make them as flexible or specific as you need.',
-              details: [
-                'Create unlimited experiences',
-                'Set schedules and capacity',
-                'Add custom application questions',
-                'Upload photos and descriptions',
-              ],
+              description: 'Post unlimited volunteering opportunities with custom details and schedules.',
             },
             {
               number: '03',
               icon: MessageCircle,
               title: 'Review Applications',
-              description: 'Receive applications from engaged volunteers. Review their profiles, communicate directly, and approve the best fits for your opportunities.',
-              details: [
-                'Get instant email notifications',
-                'Review volunteer profiles and experience',
-                'Approve or decline applications',
-                'Communicate directly with volunteers',
-              ],
+              description: 'Review volunteer profiles, communicate directly, and approve the best fits.',
             },
             {
               number: '04',
               icon: Heart,
               title: 'Host & Impact',
-              description: 'Welcome volunteers to your cause. Host meaningful experiences that advance your mission while providing cultural exchange for travelers.',
-              details: [
-                'Receive enthusiastic volunteers',
-                'Share your cause and impact',
-                'Build lasting connections',
-                'Grow your organization\'s reach',
-              ],
+              description: 'Welcome volunteers and host meaningful experiences that advance your mission.',
             },
-          ].map((step, index) => (
-            <div key={step.number} className={`grid lg:grid-cols-2 gap-10 lg:gap-16 items-center ${index % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
-              <div className={index % 2 === 1 ? 'lg:order-2' : ''}>
-                <div className="inline-flex items-center gap-3 mb-6">
-                  <span className="text-sm font-bold text-[#F6C98D]">{step.number}</span>
-                  <div className="w-10 h-10 bg-[#21B3B1]/10 rounded-xl flex items-center justify-center">
-                    <step.icon className="w-5 h-5 text-[#21B3B1]" />
-                  </div>
-                </div>
-                <h3 className="text-2xl font-bold text-[#4A4A4A] mb-4">{step.title}</h3>
-                <p className="text-lg text-[#7A7A7A] mb-6 leading-relaxed">{step.description}</p>
-                <ul className="space-y-3">
-                  {step.details.map((detail, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-[#21B3B1] flex-shrink-0 mt-0.5" />
-                      <span className="text-[#7A7A7A]">{detail}</span>
-                    </li>
-                  ))}
-                </ul>
+          ].map((step) => (
+            <div key={step.number} className="bg-white rounded-xl p-6 border border-[#E6EAEA] text-center">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-[#21B3B1]/10 rounded-xl mb-4">
+                <step.icon className="w-6 h-6 text-[#21B3B1]" />
               </div>
-
-              <div className={index % 2 === 1 ? 'lg:order-1' : ''}>
-                <div className="bg-[#C9F0EF] rounded-2xl p-8 h-64 flex items-center justify-center">
-                  <step.icon className="w-24 h-24 text-[#21B3B1]/30" />
-                </div>
-              </div>
+              <div className="text-sm font-bold text-[#F6C98D] mb-2">{step.number}</div>
+              <h3 className="text-lg font-bold text-[#4A4A4A] mb-2">{step.title}</h3>
+              <p className="text-sm text-[#7A7A7A] leading-relaxed">{step.description}</p>
             </div>
           ))}
         </div>
