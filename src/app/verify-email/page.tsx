@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Mail, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 
-export default function VerifyEmailPage() {
+function VerifyEmailContent() {
   const { firebaseUser, resendVerificationEmail, refreshUser } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -55,7 +55,7 @@ export default function VerifyEmailPage() {
       setMessage('Email verified successfully! Redirecting to your dashboard...');
 
       // Refresh user data to get updated emailVerified status
-      await refreshUser(true);
+      await refreshUser();
 
       // Redirect to dashboard
       setTimeout(() => {
@@ -91,7 +91,7 @@ export default function VerifyEmailPage() {
 
     try {
       // Refresh user data
-      await refreshUser(true);
+      await refreshUser();
 
       if (firebaseUser?.emailVerified) {
         setMessage('Email verified! Redirecting to dashboard...');
@@ -255,5 +255,21 @@ export default function VerifyEmailPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function VerifyEmailPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#FAF5EC] flex items-center justify-center py-12 px-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="p-8 text-center">
+            <Loader2 className="w-8 h-8 text-[#21B3B1] animate-spin mx-auto" />
+          </CardContent>
+        </Card>
+      </div>
+    }>
+      <VerifyEmailContent />
+    </Suspense>
   );
 }
