@@ -77,7 +77,7 @@ const faqs: FAQItem[] = [
   {
     question: 'How do I contact support?',
     answer:
-      'You can reach our support team by emailing hello@foreignteer.com or using the Contact Us form on our website. We typically respond within 24 hours on business days.',
+      'You can reach our support team by emailing info@foreignteer.com or using the Contact Us form on our website. We typically respond within 24 hours on business days.',
   },
   {
     question: 'Is my personal data safe?',

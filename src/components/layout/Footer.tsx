@@ -38,8 +38,8 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <Mail size={16} />
-                <a href="mailto:hello@foreignteer.com" className="hover:text-primary">
-                  hello@foreignteer.com
+                <a href="mailto:info@foreignteer.com" className="hover:text-primary">
+                  info@foreignteer.com
                 </a>
               </div>
             </div>

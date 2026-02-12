@@ -105,7 +105,7 @@ export default function RootLayout({
               contactPoint: {
                 '@type': 'ContactPoint',
                 contactType: 'Customer Service',
-                email: 'hello@foreignteer.com',
+                email: 'info@foreignteer.com',
               },
             }),
           }}

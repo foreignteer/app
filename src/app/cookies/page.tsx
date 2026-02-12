@@ -267,8 +267,8 @@ export default function CookiePolicyPage() {
             </p>
             <p className="text-[#4A4A4A]">
               Email:{' '}
-              <a href="mailto:privacy@foreignteer.com" className="text-[#21B3B1] hover:underline">
-                privacy@foreignteer.com
+              <a href="mailto:info@foreignteer.com" className="text-[#21B3B1] hover:underline">
+                info@foreignteer.com
               </a>
             </p>
           </section>

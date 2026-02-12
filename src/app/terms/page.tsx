@@ -152,7 +152,7 @@ export default function TermsOfServicePage() {
               If you have any questions about these Terms of Service, please contact us at:
             </p>
             <p className="text-[#4A4A4A]">
-              Email: <a href="mailto:legal@foreignteer.com" className="text-[#21B3B1] hover:underline">legal@foreignteer.com</a>
+              Email: <a href="mailto:info@foreignteer.com" className="text-[#21B3B1] hover:underline">info@foreignteer.com</a>
             </p>
           </section>
         </div>

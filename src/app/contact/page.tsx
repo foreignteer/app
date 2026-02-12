@@ -173,10 +173,10 @@ export default function ContactPage() {
                     </div>
                     <p className="text-text-muted ml-13">
                       <a
-                        href="mailto:hello@foreignteer.com"
+                        href="mailto:info@foreignteer.com"
                         className="text-primary hover:text-primary-dark"
                       >
-                        hello@foreignteer.com
+                        info@foreignteer.com
                       </a>
                     </p>
                   </div>

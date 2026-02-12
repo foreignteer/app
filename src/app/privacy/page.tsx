@@ -138,7 +138,7 @@ export default function PrivacyPolicyPage() {
               <li><strong>Withdrawal:</strong> Withdraw consent for marketing communications</li>
             </ul>
             <p className="text-[#4A4A4A] leading-relaxed mt-4">
-              To exercise these rights, contact us at privacy@foreignteer.com
+              To exercise these rights, contact us at info@foreignteer.com
             </p>
           </section>
 
@@ -174,7 +174,7 @@ export default function PrivacyPolicyPage() {
               If you have questions about this Privacy Policy or our data practices, please contact us:
             </p>
             <div className="text-[#4A4A4A] space-y-2">
-              <p>Email: <a href="mailto:privacy@foreignteer.com" className="text-[#21B3B1] hover:underline">privacy@foreignteer.com</a></p>
+              <p>Email: <a href="mailto:info@foreignteer.com" className="text-[#21B3B1] hover:underline">info@foreignteer.com</a></p>
               <p>Address: Hong Kong</p>
             </div>
           </section>
