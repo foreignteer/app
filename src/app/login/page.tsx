@@ -69,6 +69,12 @@ function LoginForm() {
               </div>
             )}
 
+            {message === 'verified' && (
+              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
+                <strong>Email verified!</strong> You can now sign in to access your dashboard.
+              </div>
+            )}
+
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
                 {error}

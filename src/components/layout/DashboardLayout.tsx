@@ -16,7 +16,7 @@ export default function DashboardLayout({
   children,
   requiredRole,
 }: DashboardLayoutProps) {
-  const { user, loading } = useAuth();
+  const { user, loading, firebaseUser } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -31,12 +31,15 @@ export default function DashboardLayout({
       if (!user) {
         // Not logged in - redirect to login
         router.push('/login?returnUrl=' + encodeURIComponent(window.location.pathname));
+      } else if (firebaseUser && !firebaseUser.emailVerified) {
+        // Email not verified - redirect to verification page
+        router.push('/verify-email');
       } else if (requiredRole && user.role !== requiredRole) {
         // Logged in but wrong role - redirect to appropriate dashboard
         router.push(`/dashboard/${user.role}`);
       }
     }
-  }, [user, loading, requiredRole, router]);
+  }, [user, loading, firebaseUser, requiredRole, router]);
 
   if (loading) {
     return (
@@ -51,6 +54,10 @@ export default function DashboardLayout({
 
   if (!user) {
     return null; // Will redirect in useEffect
+  }
+
+  if (firebaseUser && !firebaseUser.emailVerified) {
+    return null; // Will redirect to verify-email
   }
 
   if (requiredRole && user.role !== requiredRole) {

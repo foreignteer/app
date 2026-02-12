@@ -78,7 +78,8 @@ export default function RegisterPage() {
         }
       }
 
-      router.push('/dashboard/user');
+      // Redirect to email verification page
+      router.push('/verify-email');
     } catch (err: any) {
       console.error('Registration error:', err);
       if (err.code === 'auth/email-already-in-use') {

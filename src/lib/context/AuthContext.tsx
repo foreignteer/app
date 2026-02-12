@@ -12,6 +12,7 @@ import {
   confirmPasswordReset,
   verifyPasswordResetCode,
   updateProfile,
+  sendEmailVerification,
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase/config';
@@ -29,6 +30,7 @@ interface AuthContextType {
   verifyPasswordResetCode: (oobCode: string) => Promise<string>;
   updateUserProfile: (data: Partial<User>) => Promise<void>;
   refreshUser: () => Promise<void>;
+  resendVerificationEmail: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -114,6 +116,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Update profile with display name
     await updateProfile(userCredential.user, { displayName });
 
+    // Send email verification
+    const actionCodeSettings = {
+      url: `${window.location.origin}/login?verified=true`,
+      handleCodeInApp: false,
+    };
+    await sendEmailVerification(userCredential.user, actionCodeSettings);
+
     // Create user document in Firestore
     // Note: This might also be done by Cloud Function
     const userDocRef = doc(db, 'users', userCredential.user.uid);
@@ -172,6 +181,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const resendVerificationEmail = async () => {
+    if (!firebaseUser) throw new Error('No user logged in');
+
+    const actionCodeSettings = {
+      url: `${window.location.origin}/login?verified=true`,
+      handleCodeInApp: false,
+    };
+    await sendEmailVerification(firebaseUser, actionCodeSettings);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -186,6 +205,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         verifyPasswordResetCode: verifyPasswordResetCodeFn,
         updateUserProfile,
         refreshUser,
+        resendVerificationEmail,
       }}
     >
       {children}
