@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase/admin';
 import { NewsletterSubscriber } from '@/lib/types/newsletter';
+import * as brevo from '@getbrevo/brevo';
+
+// Initialize Brevo Contacts API
+const contactsApi = new brevo.ContactsApi();
+contactsApi.setApiKey(
+  brevo.ContactsApiApiKeys.apiKey,
+  process.env.BREVO_API_KEY || ''
+);
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,6 +45,17 @@ export async function POST(request: NextRequest) {
             unsubscribedAt: null,
           });
 
+        // Update contact in Brevo (remove from unsubscribed list)
+        try {
+          const updateContact = new brevo.UpdateContact();
+          updateContact.listIds = [2]; // Newsletter list ID in Brevo
+          updateContact.unlinkListIds = [3]; // Unsubscribed list ID
+          await contactsApi.updateContact(emailLower, updateContact);
+        } catch (brevoErr) {
+          console.error('Brevo resubscribe error:', brevoErr);
+          // Don't fail the request if Brevo update fails
+        }
+
         return NextResponse.json(
           { success: true, message: 'Resubscribed successfully' },
           { status: 200 }
@@ -62,6 +81,35 @@ export async function POST(request: NextRequest) {
     };
 
     await adminDb.collection('newsletterSubscribers').add(subscriber);
+
+    // Add contact to Brevo
+    try {
+      const createContact = new brevo.CreateContact();
+      createContact.email = emailLower;
+      createContact.listIds = [2]; // Newsletter list ID in Brevo
+      createContact.attributes = {
+        SOURCE: source,
+        SUBSCRIBED_AT: now.toISOString(),
+      };
+      if (userId) {
+        createContact.attributes.USER_ID = userId;
+      }
+
+      await contactsApi.createContact(createContact);
+    } catch (brevoErr: any) {
+      console.error('Brevo create contact error:', brevoErr);
+      // If contact already exists in Brevo, update instead
+      if (brevoErr.status === 400) {
+        try {
+          const updateContact = new brevo.UpdateContact();
+          updateContact.listIds = [2];
+          await contactsApi.updateContact(emailLower, updateContact);
+        } catch (updateErr) {
+          console.error('Brevo update contact error:', updateErr);
+        }
+      }
+      // Don't fail the request if Brevo fails
+    }
 
     return NextResponse.json(
       { success: true, message: 'Successfully subscribed to newsletter' },
@@ -111,6 +159,17 @@ export async function DELETE(request: NextRequest) {
         status: 'unsubscribed',
         unsubscribedAt: new Date(),
       });
+
+    // Update contact in Brevo (move to unsubscribed list)
+    try {
+      const updateContact = new brevo.UpdateContact();
+      updateContact.unlinkListIds = [2]; // Remove from newsletter list
+      updateContact.listIds = [3]; // Add to unsubscribed list
+      await contactsApi.updateContact(emailLower, updateContact);
+    } catch (brevoErr) {
+      console.error('Brevo unsubscribe error:', brevoErr);
+      // Don't fail the request if Brevo update fails
+    }
 
     return NextResponse.json(
       { success: true, message: 'Successfully unsubscribed from newsletter' },

@@ -60,6 +60,21 @@ export default function RegisterPage() {
     try {
       const userCredential = await signUp(formData.email, formData.password, formData.displayName);
 
+      // Send welcome email
+      try {
+        await fetch('/api/send-email/welcome', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: formData.email,
+            name: formData.displayName,
+          }),
+        });
+      } catch (emailErr) {
+        // Don't fail registration if welcome email fails
+        console.error('Welcome email error:', emailErr);
+      }
+
       // Subscribe to newsletter if consent given
       if (marketingConsent) {
         try {
