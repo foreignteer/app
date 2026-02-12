@@ -116,11 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Update profile with display name
     await updateProfile(userCredential.user, { displayName });
 
-    // Send email verification (without custom redirect until domain is whitelisted)
-    await sendEmailVerification(userCredential.user);
-
     // Create user document in Firestore
-    // Note: This might also be done by Cloud Function
     const userDocRef = doc(db, 'users', userCredential.user.uid);
     await setDoc(userDocRef, {
       uid: userCredential.user.uid,
@@ -128,9 +124,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       displayName,
       role: 'user',
       profileCompleted: false,
+      emailVerified: false,
       createdAt: new Date(),
       updatedAt: new Date(),
     }, { merge: true });
+
+    // Send custom verification email via Brevo (from info@foreignteer.com)
+    try {
+      await fetch('/api/auth/send-verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: userCredential.user.uid }),
+      });
+    } catch (error) {
+      console.error('Failed to send verification email:', error);
+      // Don't fail registration if email fails
+    }
 
     return userCredential;
   };
@@ -180,8 +189,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const resendVerificationEmail = async () => {
     if (!firebaseUser) throw new Error('No user logged in');
 
-    // Send verification email (without custom redirect until domain is whitelisted)
-    await sendEmailVerification(firebaseUser);
+    // Send custom verification email via Brevo
+    const response = await fetch('/api/auth/send-verification', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: firebaseUser.uid }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to send verification email');
+    }
   };
 
   return (
