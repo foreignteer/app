@@ -116,12 +116,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Update profile with display name
     await updateProfile(userCredential.user, { displayName });
 
-    // Send email verification
-    const actionCodeSettings = {
-      url: `${window.location.origin}/login?verified=true`,
-      handleCodeInApp: false,
-    };
-    await sendEmailVerification(userCredential.user, actionCodeSettings);
+    // Send email verification (without custom redirect until domain is whitelisted)
+    await sendEmailVerification(userCredential.user);
 
     // Create user document in Firestore
     // Note: This might also be done by Cloud Function
@@ -184,11 +180,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const resendVerificationEmail = async () => {
     if (!firebaseUser) throw new Error('No user logged in');
 
-    const actionCodeSettings = {
-      url: `${window.location.origin}/login?verified=true`,
-      handleCodeInApp: false,
-    };
-    await sendEmailVerification(firebaseUser, actionCodeSettings);
+    // Send verification email (without custom redirect until domain is whitelisted)
+    await sendEmailVerification(firebaseUser);
   };
 
   return (
