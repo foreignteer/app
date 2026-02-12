@@ -61,6 +61,9 @@ export interface ExperienceFormData {
   accessibility?: string;
 }
 
+export type SortOption = 'newest' | 'price_low' | 'price_high' | 'date_asc' | 'date_desc';
+export type DurationFilter = 'any' | 'short' | 'medium' | 'long';
+
 export interface ExperienceFilters {
   search?: string;
   city?: string;
@@ -74,4 +77,6 @@ export interface ExperienceFilters {
   };
   recurring?: boolean;
   instantConfirmation?: boolean;
+  duration?: DurationFilter;
+  sortBy?: SortOption;
 }

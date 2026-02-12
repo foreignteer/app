@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   title: "Foreignteer - Micro-Volunteering Made Easy",
   description: "Connect with meaningful volunteering experiences worldwide. Join Foreignteer to discover and book micro-volunteering opportunities that make a difference.",
   keywords: "volunteering, micro-volunteering, NGO, volunteer abroad, social impact, community service",
-  metadataBase: new URL('https://foreignteer.com'),
+  metadataBase: new URL('https://www.foreignteer.com'),
   viewport: {
     width: 'device-width',
     initialScale: 1,
@@ -37,9 +37,9 @@ export const metadata: Metadata = {
     siteName: 'Foreignteer',
     title: 'Foreignteer - Micro-Volunteering Made Easy',
     description: 'Connect with meaningful volunteering experiences worldwide',
-    url: 'https://foreignteer.com',
+    url: 'https://www.foreignteer.com',
     images: [{
-      url: '/images/og-image.jpg',
+      url: 'https://www.foreignteer.com/images/og-image.jpg',
       width: 1200,
       height: 630,
       alt: 'Foreignteer - Volunteering Opportunities Worldwide',
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Foreignteer - Micro-Volunteering Made Easy',
     description: 'Connect with meaningful volunteering experiences worldwide',
-    images: ['/images/twitter-image.jpg'],
+    images: ['https://www.foreignteer.com/images/twitter-image.jpg'],
   },
   appleWebApp: {
     capable: true,
@@ -94,8 +94,8 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'Organization',
               name: 'Foreignteer',
-              url: 'https://foreignteer.com',
-              logo: 'https://foreignteer.com/images/foreignteer-logo.png',
+              url: 'https://www.foreignteer.com',
+              logo: 'https://www.foreignteer.com/images/foreignteer-logo.png',
               description: 'Micro-volunteering platform connecting travellers with local causes',
               sameAs: [
                 'https://www.facebook.com/foreignteer',

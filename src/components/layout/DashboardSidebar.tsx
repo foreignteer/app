@@ -69,7 +69,7 @@ export default function DashboardSidebar({ role, onClose }: DashboardSidebarProp
         <div className="md:hidden flex justify-end p-4 border-b border-gray-200">
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-3 hover:bg-gray-100 rounded-lg transition-colors min-w-[48px] min-h-[48px] flex items-center justify-center"
             aria-label="Close menu"
           >
             <X className="w-6 h-6 text-[#4A4A4A]" />

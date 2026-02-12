@@ -1,17 +1,35 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { ExperienceCard } from '@/components/experiences/ExperienceCard';
 import { ExperienceFilters } from '@/components/experiences/ExperienceFilters';
-import { Experience, ExperienceFilters as ExperienceFiltersType } from '@/lib/types/experience';
-import { Loader2 } from 'lucide-react';
+import { MobileFilterDrawer } from '@/components/experiences/MobileFilterDrawer';
+import { Experience, ExperienceFilters as ExperienceFiltersType, SortOption } from '@/lib/types/experience';
+import { Loader2, ArrowUpDown, Grid3x3, Map } from 'lucide-react';
+
+// Dynamically import map to avoid SSR issues with Leaflet
+const ExperienceMap = dynamic(
+  () => import('@/components/experiences/ExperienceMap').then((mod) => mod.ExperienceMap),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[600px] bg-gray-100 rounded-lg flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-[#21B3B1] animate-spin" />
+      </div>
+    ),
+  }
+);
+
+type ViewMode = 'grid' | 'map';
 
 export default function ExperiencesPage() {
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filters, setFilters] = useState<ExperienceFiltersType>({});
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
 
   useEffect(() => {
     fetchExperiences();
@@ -31,6 +49,8 @@ export default function ExperiencesPage() {
       if (filters.instantConfirmation !== undefined) params.append('instantConfirmation', filters.instantConfirmation.toString());
       if (filters.startDate) params.append('startDate', filters.startDate);
       if (filters.endDate) params.append('endDate', filters.endDate);
+      if (filters.duration && filters.duration !== 'any') params.append('duration', filters.duration);
+      if (filters.sortBy) params.append('sortBy', filters.sortBy);
 
       const response = await fetch(`/api/experiences?${params.toString()}`);
 
@@ -53,7 +73,7 @@ export default function ExperiencesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pb-24 lg:pb-0">
       {/* Hero Section */}
       <div className="bg-primary text-text-on-primary py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -72,15 +92,76 @@ export default function ExperiencesPage() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Filters Sidebar */}
-          <div className="lg:col-span-1">
+          {/* Filters Sidebar - Hidden on mobile */}
+          <div className="hidden lg:block lg:col-span-1">
             <div className="sticky top-4">
               <ExperienceFilters onFilterChange={handleFilterChange} />
             </div>
           </div>
 
-          {/* Experiences Grid */}
+          {/* Experiences Content */}
           <div className="lg:col-span-3">
+            {/* Controls Bar */}
+            {!loading && !error && experiences.length > 0 && (
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  {/* Sort Dropdown */}
+                  <div className="flex items-center gap-2">
+                    <ArrowUpDown className="w-4 h-4 text-[#7A7A7A]" />
+                    <label htmlFor="sortBy" className="text-sm font-medium text-[#4A4A4A]">
+                      Sort by:
+                    </label>
+                    <select
+                      id="sortBy"
+                      value={filters.sortBy || 'newest'}
+                      onChange={(e) => handleFilterChange({ ...filters, sortBy: e.target.value as SortOption })}
+                      className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#21B3B1] focus:border-transparent text-[#4A4A4A] bg-white"
+                    >
+                      <option value="newest">Newest First</option>
+                      <option value="date_asc">Date: Earliest First</option>
+                      <option value="date_desc">Date: Latest First</option>
+                      <option value="price_low">Price: Low to High</option>
+                      <option value="price_high">Price: High to Low</option>
+                    </select>
+                  </div>
+
+                  {/* View Toggle & Count */}
+                  <div className="flex items-center gap-4">
+                    <p className="text-sm text-[#7A7A7A]">
+                      {experiences.length} {experiences.length === 1 ? 'experience' : 'experiences'}
+                    </p>
+
+                    {/* Grid/Map Toggle */}
+                    <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+                      <button
+                        onClick={() => setViewMode('grid')}
+                        className={`px-3 py-2 rounded-md transition-colors ${
+                          viewMode === 'grid'
+                            ? 'bg-white text-[#21B3B1] shadow-sm'
+                            : 'text-[#7A7A7A] hover:text-[#4A4A4A]'
+                        }`}
+                        aria-label="Grid view"
+                      >
+                        <Grid3x3 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => setViewMode('map')}
+                        className={`px-3 py-2 rounded-md transition-colors ${
+                          viewMode === 'map'
+                            ? 'bg-white text-[#21B3B1] shadow-sm'
+                            : 'text-[#7A7A7A] hover:text-[#4A4A4A]'
+                        }`}
+                        aria-label="Map view"
+                      >
+                        <Map className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Content */}
             {loading ? (
               <div className="flex items-center justify-center py-20">
                 <Loader2 className="w-8 h-8 text-primary animate-spin" />
@@ -95,24 +176,24 @@ export default function ExperiencesPage() {
                 <p className="text-xl text-text-muted mb-2">No experiences found</p>
                 <p className="text-text-muted">Try adjusting your filters to see more results</p>
               </div>
+            ) : viewMode === 'map' ? (
+              <ExperienceMap experiences={experiences} />
             ) : (
-              <>
-                <div className="mb-6">
-                  <p className="text-text-muted">
-                    {experiences.length} {experiences.length === 1 ? 'experience' : 'experiences'} found
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {experiences.map((experience) => (
-                    <ExperienceCard key={experience.id} experience={experience} />
-                  ))}
-                </div>
-              </>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {experiences.map((experience) => (
+                  <ExperienceCard key={experience.id} experience={experience} />
+                ))}
+              </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* Mobile Filter Drawer */}
+      <MobileFilterDrawer
+        onFilterChange={handleFilterChange}
+        resultCount={experiences.length}
+      />
     </div>
   );
 }

@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description: 'Read Foreignteer\'s terms of service. Learn about our platform rules, user responsibilities, and service conditions.',
   openGraph: {
     title: 'Terms of Service - Foreignteer',
-    url: 'https://foreignteer.com/terms',
+    url: 'https://www.foreignteer.com/terms',
   },
 };
 

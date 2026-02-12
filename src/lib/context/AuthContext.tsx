@@ -181,8 +181,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const refreshUser = async (forceTokenRefresh = false) => {
     if (firebaseUser) {
-      const userData = await fetchUserData(firebaseUser, forceTokenRefresh);
-      setUser(userData);
+      // Reload Firebase Auth user to get updated emailVerified status
+      await firebaseUser.reload();
+
+      // Update the firebaseUser state with fresh data
+      const freshFirebaseUser = auth.currentUser;
+      if (freshFirebaseUser) {
+        setFirebaseUser(freshFirebaseUser);
+        const userData = await fetchUserData(freshFirebaseUser, forceTokenRefresh);
+        setUser(userData);
+      }
     }
   };
 

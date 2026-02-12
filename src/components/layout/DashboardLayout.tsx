@@ -69,7 +69,7 @@ export default function DashboardLayout({
       {/* Mobile menu button */}
       <button
         onClick={() => setMobileMenuOpen(true)}
-        className="md:hidden fixed top-4 left-4 z-40 p-2 bg-white rounded-lg shadow-md hover:bg-gray-50 transition-colors"
+        className="md:hidden fixed top-4 left-4 z-40 p-3 bg-white rounded-lg shadow-md hover:bg-gray-50 transition-colors min-w-[48px] min-h-[48px] flex items-center justify-center"
         aria-label="Open menu"
       >
         <Menu className="w-6 h-6 text-[#4A4A4A]" />

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/Button';
 import { Search, X } from 'lucide-react';
 import { CAUSE_CATEGORIES } from '@/lib/constants/categories';
 import { COUNTRIES } from '@/lib/constants/countries';
-import { ExperienceFilters as ExperienceFiltersType } from '@/lib/types/experience';
+import { ExperienceFilters as ExperienceFiltersType, DurationFilter } from '@/lib/types/experience';
 
 interface ExperienceFiltersProps {
   onFilterChange: (filters: ExperienceFiltersType) => void;
@@ -21,6 +21,7 @@ export function ExperienceFilters({ onFilterChange }: ExperienceFiltersProps) {
     instantConfirmation: undefined,
     startDate: undefined,
     endDate: undefined,
+    duration: 'any',
   });
 
   const handleChange = (field: keyof ExperienceFiltersType, value: string) => {
@@ -38,12 +39,22 @@ export function ExperienceFilters({ onFilterChange }: ExperienceFiltersProps) {
       instantConfirmation: undefined,
       startDate: undefined,
       endDate: undefined,
+      duration: 'any',
     };
     setFilters(emptyFilters);
     onFilterChange(emptyFilters);
   };
 
-  const hasActiveFilters = Object.values(filters).some(value => value !== '' && value !== undefined);
+  const handleDurationChange = (duration: DurationFilter) => {
+    const newFilters = { ...filters, duration };
+    setFilters(newFilters);
+    onFilterChange(newFilters);
+  };
+
+  const hasActiveFilters = Object.entries(filters).some(([key, value]) => {
+    if (key === 'duration') return value !== 'any';
+    return value !== '' && value !== undefined;
+  });
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -128,6 +139,25 @@ export function ExperienceFilters({ onFilterChange }: ExperienceFiltersProps) {
                 {category}
               </option>
             ))}
+          </select>
+        </div>
+
+        {/* Duration Filter */}
+        <div>
+          <label htmlFor="duration" className="block text-sm font-medium text-text mb-2">
+            Duration
+          </label>
+          <select
+            id="duration"
+            name="duration"
+            value={filters.duration || 'any'}
+            onChange={(e) => handleDurationChange(e.target.value as DurationFilter)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-text bg-white"
+          >
+            <option value="any">Any Duration</option>
+            <option value="short">Within 2 hours</option>
+            <option value="medium">2-4 hours</option>
+            <option value="long">4+ hours</option>
           </select>
         </div>
 

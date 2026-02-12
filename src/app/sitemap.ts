@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { adminDb } from '@/lib/firebase/admin';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://foreignteer.com';
+  const baseUrl = 'https://www.foreignteer.com';
 
   // Static routes
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -79,10 +79,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     blogRoutes = blogsSnapshot.docs.map((doc) => {
       const data = doc.data();
       return {
-        url: `${baseUrl}/blog/${doc.id}`,
+        url: `${baseUrl}/blog/${data.slug || doc.id}`,
         lastModified: data.updatedAt?.toDate() || data.publishedAt?.toDate() || new Date(),
         changeFrequency: 'weekly' as const,
-        priority: 0.6,
+        priority: 0.7,
       };
     });
   } catch (error) {
@@ -94,12 +94,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const ngosSnapshot = await adminDb
       .collection('ngos')
-      .where('status', '==', 'approved')
-      .where('publicSlug', '!=', null)
+      .where('approvalStatus', '==', 'approved')
       .get();
 
     ngoRoutes = ngosSnapshot.docs
-      .filter((doc) => doc.data().publicSlug) // Double-check slug exists
+      .filter((doc) => doc.data().publicSlug) // Only include NGOs with public slugs
       .map((doc) => {
         const data = doc.data();
         return {
@@ -113,5 +112,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error fetching NGOs for sitemap:', error);
   }
 
-  return [...staticRoutes, ...blogRoutes, ...ngoRoutes];
+  // Fetch active experiences
+  let experienceRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const experiencesSnapshot = await adminDb
+      .collection('experiences')
+      .where('status', '==', 'active')
+      .get();
+
+    experienceRoutes = experiencesSnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        url: `${baseUrl}/experiences/${doc.id}`,
+        lastModified: data.updatedAt?.toDate() || data.createdAt?.toDate() || new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      };
+    });
+  } catch (error) {
+    console.error('Error fetching experiences for sitemap:', error);
+  }
+
+  return [...staticRoutes, ...blogRoutes, ...ngoRoutes, ...experienceRoutes];
 }

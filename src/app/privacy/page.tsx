@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description: 'Learn about Foreignteer\'s privacy policy. Understand how we collect, use, and protect your personal information.',
   openGraph: {
     title: 'Privacy Policy - Foreignteer',
-    url: 'https://foreignteer.com/privacy',
+    url: 'https://www.foreignteer.com/privacy',
   },
 };
 

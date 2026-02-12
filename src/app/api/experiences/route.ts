@@ -13,8 +13,9 @@ export async function GET(request: NextRequest) {
     const instantConfirmation = searchParams.get('instantConfirmation');
     const startDate = searchParams.get('startDate');
     const endDate = searchParams.get('endDate');
+    const duration = searchParams.get('duration');
     const limit = searchParams.get('limit') ? parseInt(searchParams.get('limit')!) : undefined;
-    const sort = searchParams.get('sort') || 'soonest';
+    const sortBy = searchParams.get('sortBy') || 'newest';
 
     // Start with base query for published experiences
     // Note: We fetch all and filter in memory to avoid Firestore composite index requirements
@@ -91,24 +92,74 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Duration filter
+    if (duration && duration !== 'any') {
+      experiences = experiences.filter((exp) => {
+        if (!exp.time?.duration) return false;
+        const hours = exp.time.duration;
+
+        switch (duration) {
+          case 'short':
+            return hours <= 2;
+          case 'medium':
+            return hours > 2 && hours <= 4;
+          case 'long':
+            return hours > 4;
+          default:
+            return true;
+        }
+      });
+    }
+
     // Expand recurring experiences into individual occurrences
     experiences = expandAllRecurringExperiences(experiences);
 
-    // Sort based on sort parameter
-    if (sort === 'recent') {
-      // Sort by creation date (most recent first)
-      experiences.sort((a, b) => {
-        const aCreated = new Date(a.createdAt).getTime();
-        const bCreated = new Date(b.createdAt).getTime();
-        return bCreated - aCreated;
-      });
-    } else {
-      // Default: Sort by event start date (soonest first)
-      experiences.sort((a, b) => {
-        const aStart = new Date(a.dates.start).getTime();
-        const bStart = new Date(b.dates.start).getTime();
-        return aStart - bStart;
-      });
+    // Sort based on sortBy parameter
+    switch (sortBy) {
+      case 'newest':
+        // Sort by creation date (most recent first)
+        experiences.sort((a, b) => {
+          const aCreated = new Date(a.createdAt).getTime();
+          const bCreated = new Date(b.createdAt).getTime();
+          return bCreated - aCreated;
+        });
+        break;
+
+      case 'price_low':
+        // Sort by price (low to high)
+        experiences.sort((a, b) => a.totalFee - b.totalFee);
+        break;
+
+      case 'price_high':
+        // Sort by price (high to low)
+        experiences.sort((a, b) => b.totalFee - a.totalFee);
+        break;
+
+      case 'date_asc':
+        // Sort by event start date (earliest first)
+        experiences.sort((a, b) => {
+          const aStart = new Date(a.dates.start).getTime();
+          const bStart = new Date(b.dates.start).getTime();
+          return aStart - bStart;
+        });
+        break;
+
+      case 'date_desc':
+        // Sort by event start date (latest first)
+        experiences.sort((a, b) => {
+          const aStart = new Date(a.dates.start).getTime();
+          const bStart = new Date(b.dates.start).getTime();
+          return bStart - aStart;
+        });
+        break;
+
+      default:
+        // Default: Sort by creation date (newest first)
+        experiences.sort((a, b) => {
+          const aCreated = new Date(a.createdAt).getTime();
+          const bCreated = new Date(b.createdAt).getTime();
+          return bCreated - aCreated;
+        });
     }
 
     // Apply limit if provided

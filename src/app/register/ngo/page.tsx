@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { PasswordInput } from '@/components/ui/PasswordInput';
 import { Textarea } from '@/components/ui/Textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { validatePassword } from '@/lib/utils/validation';
@@ -282,10 +283,9 @@ export default function RegisterNGOPage() {
                     />
 
                     <div>
-                      <Input
+                      <PasswordInput
                         id="password"
                         name="password"
-                        type="password"
                         label="Password"
                         value={accountData.password}
                         onChange={(e) => {
@@ -327,10 +327,9 @@ export default function RegisterNGOPage() {
                       )}
                     </div>
 
-                    <Input
+                    <PasswordInput
                       id="confirmPassword"
                       name="confirmPassword"
-                      type="password"
                       label="Confirm Password"
                       value={accountData.confirmPassword}
                       onChange={handleAccountChange}

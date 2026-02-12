@@ -71,8 +71,10 @@ export async function verifyToken(token: string): Promise<{
 
     // Check if token has expired
     const now = new Date();
-    const expiresAt = tokenData.expiresAt.toDate
-      ? tokenData.expiresAt.toDate()
+    const expiresAt = tokenData.expiresAt instanceof Date
+      ? tokenData.expiresAt
+      : (tokenData.expiresAt as any).toDate
+      ? (tokenData.expiresAt as any).toDate()
       : new Date(tokenData.expiresAt);
 
     if (now > expiresAt) {

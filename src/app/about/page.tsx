@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'About Foreignteer',
     description: 'Our mission to connect travellers with meaningful volunteering',
-    url: 'https://foreignteer.com/about',
+    url: 'https://www.foreignteer.com/about',
   },
 };
 

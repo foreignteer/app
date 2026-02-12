@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { PasswordInput } from '@/components/ui/PasswordInput';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 
 function LoginForm() {
@@ -92,9 +93,8 @@ function LoginForm() {
               autoComplete="email"
             />
 
-            <Input
+            <PasswordInput
               id="password"
-              type="password"
               label="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

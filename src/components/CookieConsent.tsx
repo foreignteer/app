@@ -49,7 +49,7 @@ export default function CookieConsent() {
                     We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic.
                     By clicking "Accept All", you consent to our use of cookies.{' '}
                     <Link href="/cookies" className="text-[#21B3B1] hover:underline font-medium">
-                      Learn more
+                      Learn more about cookies
                     </Link>
                   </p>
                 </div>

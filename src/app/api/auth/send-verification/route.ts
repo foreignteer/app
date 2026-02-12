@@ -126,8 +126,11 @@ export async function POST(request: NextRequest) {
               <p><strong>The Foreignteer Team</strong></p>
             </div>
             <div class="footer">
-              <p>&copy; 2025 Foreignteer. All rights reserved.</p>
+              <p>&copy; 2026 Foreignteer. All rights reserved.</p>
               <p>Connecting travellers with meaningful volunteering experiences worldwide.</p>
+              <p style="margin-top: 15px; font-size: 12px;">
+                <a href="https://foreignteer.com/unsubscribe?email=${encodeURIComponent(user.email)}" style="color: #C9F0EF; text-decoration: underline;">Unsubscribe</a> from our emails
+              </p>
             </div>
           </body>
         </html>
@@ -155,7 +158,10 @@ export async function POST(request: NextRequest) {
         Need help? Email info@foreignteer.com
 
         The Foreignteer Team
-        © 2025 Foreignteer
+        © 2026 Foreignteer
+
+        ---
+        Unsubscribe: https://foreignteer.com/unsubscribe?email=${encodeURIComponent(user.email)}
       `,
     });
 

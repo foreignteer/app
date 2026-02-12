@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { PasswordInput } from '@/components/ui/PasswordInput';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { validatePassword, getPasswordStrength } from '@/lib/utils/validation';
 import { CheckCircle, XCircle } from 'lucide-react';
@@ -152,10 +153,9 @@ export default function RegisterPage() {
             />
 
             <div>
-              <Input
+              <PasswordInput
                 id="password"
                 name="password"
-                type="password"
                 label="Password"
                 value={formData.password}
                 onChange={(e) => {
@@ -240,10 +240,9 @@ export default function RegisterPage() {
               )}
             </div>
 
-            <Input
+            <PasswordInput
               id="confirmPassword"
               name="confirmPassword"
-              type="password"
               label="Confirm Password"
               value={formData.confirmPassword}
               onChange={handleChange}

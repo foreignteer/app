@@ -10,10 +10,12 @@ export default function robots(): MetadataRoute.Robots {
         '/api/*',
         '/login',
         '/register',
+        '/register/ngo',
         '/reset-password',
         '/forgot-password',
+        '/verify-email',
       ],
     },
-    sitemap: 'https://foreignteer.com/sitemap.xml',
+    sitemap: 'https://www.foreignteer.com/sitemap.xml',
   };
 }

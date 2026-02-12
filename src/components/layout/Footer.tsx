@@ -180,12 +180,12 @@ export default function Footer() {
             <p className="text-sm text-text-light text-center md:text-left">
               &copy; {currentYear} Foreignteer. All rights reserved.
             </p>
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
               <a
                 href="https://www.facebook.com/foreignteer"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-text-light hover:text-[#21B3B1] transition-colors"
+                className="text-text-light hover:text-[#21B3B1] transition-colors p-3 min-w-[48px] min-h-[48px] flex items-center justify-center hover:bg-gray-100 rounded-lg"
                 aria-label="Follow us on Facebook"
               >
                 <Facebook size={20} />
@@ -194,7 +194,7 @@ export default function Footer() {
                 href="https://www.instagram.com/foreignteer/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-text-light hover:text-[#21B3B1] transition-colors"
+                className="text-text-light hover:text-[#21B3B1] transition-colors p-3 min-w-[48px] min-h-[48px] flex items-center justify-center hover:bg-gray-100 rounded-lg"
                 aria-label="Follow us on Instagram"
               >
                 <Instagram size={20} />
@@ -203,7 +203,7 @@ export default function Footer() {
                 href="https://www.linkedin.com/company/foreignteer"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-text-light hover:text-[#21B3B1] transition-colors"
+                className="text-text-light hover:text-[#21B3B1] transition-colors p-3 min-w-[48px] min-h-[48px] flex items-center justify-center hover:bg-gray-100 rounded-lg"
                 aria-label="Follow us on LinkedIn"
               >
                 <Linkedin size={20} />

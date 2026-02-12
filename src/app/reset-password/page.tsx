@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { PasswordInput } from '@/components/ui/PasswordInput';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 
 function ResetPasswordForm() {
@@ -190,9 +191,8 @@ function ResetPasswordForm() {
               </div>
             )}
 
-            <Input
+            <PasswordInput
               id="newPassword"
-              type="password"
               label="New Password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
@@ -202,9 +202,8 @@ function ResetPasswordForm() {
               autoFocus
             />
 
-            <Input
+            <PasswordInput
               id="confirmPassword"
-              type="password"
               label="Confirm New Password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}

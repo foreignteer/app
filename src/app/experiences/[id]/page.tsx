@@ -299,39 +299,28 @@ export default async function ExperienceDetailPage({ params, searchParams }: Exp
               </CardContent>
             </Card>
 
-            {/* NGO Card */}
-            {ngo && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Hosted By</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {ngo.logoUrl && (
-                      <div className="relative h-20 w-20 rounded-lg overflow-hidden">
-                        <Image
-                          src={ngo.logoUrl}
-                          alt={ngo.name}
-                          fill
-                          className="object-contain"
-                        />
-                      </div>
-                    )}
-                    <div>
-                      <h3 className="font-semibold text-text-primary mb-1">{ngo.name}</h3>
-                      <p className="text-sm text-text-muted line-clamp-3">{ngo.description}</p>
-                    </div>
-                    {ngo.publicSlug && (
-                      <Link href={`/ngos/${ngo.publicSlug}`}>
-                        <Button variant="outline" size="sm" fullWidth>
-                          View Organisation
-                        </Button>
-                      </Link>
-                    )}
+            {/* Verified Partner Badge */}
+            <Card>
+              <CardContent className="p-6">
+                <div className="text-center space-y-3">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-[#C9F0EF] rounded-full">
+                    <CheckCircle className="w-8 h-8 text-[#21B3B1]" />
                   </div>
-                </CardContent>
-              </Card>
-            )}
+                  <div>
+                    <h3 className="font-semibold text-[#4A4A4A] mb-1">Verified Partner</h3>
+                    <p className="text-sm text-[#7A7A7A]">
+                      This experience is hosted by a verified partner organisation.
+                      You'll receive their contact details after booking.
+                    </p>
+                  </div>
+                  <Link href="/partners">
+                    <Button variant="outline" size="sm" fullWidth className="mt-2">
+                      View All Partners
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>

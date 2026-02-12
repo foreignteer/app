@@ -70,7 +70,7 @@ const pwaConfig = withPWA({
       },
     },
     {
-      urlPattern: /^https:\/\/foreignteer\.com\/api\/.*/i,
+      urlPattern: /^https:\/\/www\.foreignteer\.com\/api\/.*/i,
       handler: 'NetworkFirst',
       options: {
         cacheName: 'api-cache',

@@ -55,10 +55,22 @@ export async function sendEmail(options: EmailOptions): Promise<void> {
 
   try {
     const response = await apiInstance.sendTransacEmail(sendSmtpEmail);
-    console.log('Email sent successfully:', response);
-  } catch (error) {
-    console.error('Failed to send email:', error);
-    throw new Error('Failed to send email');
+    console.log('✅ Email sent successfully to:', options.to[0].email);
+    console.log('Response:', JSON.stringify(response, null, 2));
+  } catch (error: any) {
+    console.error('❌ Failed to send email to:', options.to[0].email);
+    console.error('Error details:', {
+      message: error.message,
+      response: error.response?.body || error.response,
+      status: error.status || error.statusCode,
+    });
+
+    // Provide more specific error messages
+    if (error.response?.body?.message) {
+      throw new Error(`Email error: ${error.response.body.message}`);
+    }
+
+    throw new Error(`Failed to send email: ${error.message || 'Unknown error'}`);
   }
 }
 
@@ -134,8 +146,11 @@ export async function sendWelcomeEmail(email: string, name: string): Promise<voi
             <p><strong>The Foreignteer Team</strong></p>
           </div>
           <div class="footer">
-            <p>&copy; 2025 Foreignteer. All rights reserved.</p>
+            <p>&copy; 2026 Foreignteer. All rights reserved.</p>
             <p>Connecting travellers with meaningful volunteering experiences worldwide.</p>
+            <p style="margin-top: 15px; font-size: 12px;">
+              <a href="https://foreignteer.com/unsubscribe?email=${encodeURIComponent(email)}" style="color: #C9F0EF; text-decoration: underline;">Unsubscribe</a> from our emails
+            </p>
           </div>
         </body>
       </html>
@@ -158,6 +173,9 @@ export async function sendWelcomeEmail(email: string, name: string): Promise<voi
 
       Happy volunteering!
       The Foreignteer Team
+
+      ---
+      Unsubscribe: https://foreignteer.com/unsubscribe?email=${encodeURIComponent(email)}
     `,
   });
 }
@@ -171,6 +189,9 @@ export async function sendBookingConfirmationEmail(
   bookingDetails: {
     experienceTitle: string;
     ngoName: string;
+    ngoEmail?: string;
+    ngoPhone?: string;
+    ngoWebsite?: string;
     date: string;
     location: string;
     price: string;
@@ -254,10 +275,6 @@ export async function sendBookingConfirmationEmail(
                 <span>${bookingDetails.experienceTitle}</span>
               </div>
               <div class="detail-row">
-                <strong>Organisation:</strong>
-                <span>${bookingDetails.ngoName}</span>
-              </div>
-              <div class="detail-row">
                 <strong>Date:</strong>
                 <span>${bookingDetails.date}</span>
               </div>
@@ -271,11 +288,37 @@ export async function sendBookingConfirmationEmail(
               </div>
             </div>
 
+            <div style="background-color: #C9F0EF; border-left: 4px solid #21B3B1; padding: 20px; margin: 20px 0; border-radius: 4px;">
+              <h3 style="color: #21B3B1; margin-top: 0;">Your Partner Organisation</h3>
+              <p style="margin: 10px 0;"><strong>${bookingDetails.ngoName}</strong></p>
+              ${bookingDetails.ngoEmail ? `
+                <p style="margin: 5px 0;">
+                  <strong>Email:</strong>
+                  <a href="mailto:${bookingDetails.ngoEmail}" style="color: #21B3B1;">${bookingDetails.ngoEmail}</a>
+                </p>
+              ` : ''}
+              ${bookingDetails.ngoPhone ? `
+                <p style="margin: 5px 0;">
+                  <strong>Phone:</strong> ${bookingDetails.ngoPhone}
+                </p>
+              ` : ''}
+              ${bookingDetails.ngoWebsite ? `
+                <p style="margin: 5px 0;">
+                  <strong>Website:</strong>
+                  <a href="${bookingDetails.ngoWebsite}" style="color: #21B3B1;" target="_blank">${bookingDetails.ngoWebsite}</a>
+                </p>
+              ` : ''}
+              <p style="margin-top: 15px; font-size: 14px; color: #7A7A7A;">
+                The organisation will contact you directly with specific instructions about your volunteering experience.
+              </p>
+            </div>
+
             <p><strong>What happens next?</strong></p>
             <ul>
               <li>Check your dashboard for all booking details</li>
               <li>You'll receive a reminder email closer to the date</li>
-              <li>The NGO will contact you with specific instructions</li>
+              <li>The organisation will contact you directly with specific instructions</li>
+              <li>Please reach out to them if you have any questions</li>
             </ul>
 
             <p style="text-align: center;">
@@ -288,7 +331,11 @@ export async function sendBookingConfirmationEmail(
             <p><strong>The Foreignteer Team</strong></p>
           </div>
           <div class="footer">
-            <p>&copy; 2025 Foreignteer. All rights reserved.</p>
+            <p>&copy; 2026 Foreignteer. All rights reserved.</p>
+            <p>Connecting travellers with meaningful volunteering experiences worldwide.</p>
+            <p style="margin-top: 15px; font-size: 12px;">
+              <a href="https://foreignteer.com/unsubscribe?email=${encodeURIComponent(email)}" style="color: #C9F0EF; text-decoration: underline;">Unsubscribe</a> from our emails
+            </p>
           </div>
         </body>
       </html>
@@ -302,15 +349,23 @@ export async function sendBookingConfirmationEmail(
 
       BOOKING DETAILS:
       Experience: ${bookingDetails.experienceTitle}
-      Organisation: ${bookingDetails.ngoName}
       Date: ${bookingDetails.date}
       Location: ${bookingDetails.location}
       Total: ${bookingDetails.price}
 
+      YOUR PARTNER ORGANISATION:
+      ${bookingDetails.ngoName}
+      ${bookingDetails.ngoEmail ? `Email: ${bookingDetails.ngoEmail}` : ''}
+      ${bookingDetails.ngoPhone ? `Phone: ${bookingDetails.ngoPhone}` : ''}
+      ${bookingDetails.ngoWebsite ? `Website: ${bookingDetails.ngoWebsite}` : ''}
+
+      The organisation will contact you directly with specific instructions about your volunteering experience.
+
       What happens next?
       - Check your dashboard for all booking details
       - You'll receive a reminder email closer to the date
-      - The NGO will contact you with specific instructions
+      - The organisation will contact you with specific instructions
+      - Please reach out to them if you have any questions
 
       View your bookings: https://foreignteer.com/dashboard/user
 
@@ -318,6 +373,9 @@ export async function sendBookingConfirmationEmail(
 
       We can't wait for you to make a difference!
       The Foreignteer Team
+
+      ---
+      Unsubscribe: https://foreignteer.com/unsubscribe?email=${encodeURIComponent(email)}
     `,
   });
 }
@@ -419,7 +477,11 @@ export async function sendNGOApprovalEmail(
             <p><strong>The Foreignteer Partner Team</strong></p>
           </div>
           <div class="footer">
-            <p>&copy; 2025 Foreignteer. All rights reserved.</p>
+            <p>&copy; 2026 Foreignteer. All rights reserved.</p>
+            <p>Connecting travellers with meaningful volunteering experiences worldwide.</p>
+            <p style="margin-top: 15px; font-size: 12px;">
+              <a href="https://foreignteer.com/unsubscribe?email=${encodeURIComponent(email)}" style="color: #C9F0EF; text-decoration: underline;">Unsubscribe</a> from our emails
+            </p>
           </div>
         </body>
       </html>
@@ -449,6 +511,9 @@ export async function sendNGOApprovalEmail(
 
       Thank you for partnering with us to create meaningful impact!
       The Foreignteer Partner Team
+
+      ---
+      Unsubscribe: https://foreignteer.com/unsubscribe?email=${encodeURIComponent(email)}
     `,
   });
 }
@@ -542,7 +607,11 @@ export async function sendPasswordResetEmail(
             <p><strong>The Foreignteer Team</strong></p>
           </div>
           <div class="footer">
-            <p>&copy; 2025 Foreignteer. All rights reserved.</p>
+            <p>&copy; 2026 Foreignteer. All rights reserved.</p>
+            <p>Connecting travellers with meaningful volunteering experiences worldwide.</p>
+            <p style="margin-top: 15px; font-size: 12px;">
+              <a href="https://foreignteer.com/unsubscribe?email=${encodeURIComponent(email)}" style="color: #C9F0EF; text-decoration: underline;">Unsubscribe</a> from our emails
+            </p>
           </div>
         </body>
       </html>
@@ -564,6 +633,9 @@ export async function sendPasswordResetEmail(
       Questions? Email info@foreignteer.com
 
       The Foreignteer Team
+
+      ---
+      Unsubscribe: https://foreignteer.com/unsubscribe?email=${encodeURIComponent(email)}
     `,
   });
 }

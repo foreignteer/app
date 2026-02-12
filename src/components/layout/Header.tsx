@@ -24,10 +24,10 @@ export default function Header() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3" aria-label="Foreignteer Home">
             <Image
               src="/images/foreignteer-logo.png"
-              alt="Foreignteer"
+              alt="Foreignteer Logo"
               width={160}
               height={40}
               className="h-10 w-auto"
@@ -93,7 +93,7 @@ export default function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 text-text-primary"
+            className="md:hidden p-3 text-text-primary min-w-[48px] min-h-[48px] flex items-center justify-center hover:bg-gray-100 rounded-lg transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
