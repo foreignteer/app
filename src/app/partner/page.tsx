@@ -106,6 +106,27 @@ export default function PartnerPage() {
         </div>
       </div>
 
+      {/* Meet Our Partners Section */}
+      <div className="bg-gradient-to-br from-[#C9F0EF] to-[#F6C98D] py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-white/30 rounded-full mb-4">
+            <Heart className="w-8 h-8 text-[#21B3B1]" />
+          </div>
+          <h2 className="text-3xl font-bold text-[#4A4A4A] mb-4">
+            Meet Our Verified Partner Organisations
+          </h2>
+          <p className="text-lg text-[#4A4A4A] mb-8 max-w-2xl mx-auto">
+            See the amazing nonprofits and NGOs already using Foreignteer to connect with passionate volunteers worldwide.
+          </p>
+          <Link href="/partners">
+            <Button size="lg" className="bg-[#21B3B1] hover:bg-[#168E8C] text-white font-medium px-8 py-4 rounded-lg text-lg">
+              <Users className="w-5 h-5 mr-2" />
+              View All Partners
+            </Button>
+          </Link>
+        </div>
+      </div>
+
       {/* How It Works for NGOs */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
