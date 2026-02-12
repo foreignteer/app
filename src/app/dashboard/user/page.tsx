@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useBookings } from '@/lib/hooks/useBookings';
 import { useAuth } from '@/lib/hooks/useAuth';
-import { Calendar, MapPin, Users, ArrowRight } from 'lucide-react';
+import { Calendar, MapPin, Users, ArrowRight, Mail } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { format } from 'date-fns';
 import { Experience } from '@/lib/types/experience';
@@ -244,6 +244,29 @@ export default function UserDashboard() {
                       Edit Profile
                     </Button>
                   </Link>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card variant="elevated">
+            <CardContent className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-[#21B3B1]/10 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Mail className="w-6 h-6 text-[#21B3B1]" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-text-primary mb-2">
+                    Need Help?
+                  </h3>
+                  <p className="text-sm text-text-muted mb-4">
+                    Have questions about your bookings or volunteering? Our support team is here to help.
+                  </p>
+                  <a href="mailto:volunteer@foreignteer.com">
+                    <Button variant="outline" size="sm">
+                      Contact Support
+                    </Button>
+                  </a>
                 </div>
               </div>
             </CardContent>

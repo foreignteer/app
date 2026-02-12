@@ -81,8 +81,14 @@ export default function PartnerPage() {
       <div className="bg-[#21B3B1] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl font-bold mb-4 text-white">Partner With Foreignteer</h1>
-          <p className="text-xl text-white max-w-3xl mx-auto mb-8">
+          <p className="text-xl text-white max-w-3xl mx-auto mb-4">
             Join our network of verified NGOs and connect with passionate volunteers ready to make a difference
+          </p>
+          <p className="text-white/90 mb-8">
+            Questions? Contact us at{' '}
+            <a href="mailto:partner@foreignteer.com" className="underline hover:text-white font-semibold">
+              partner@foreignteer.com
+            </a>
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/register/ngo">

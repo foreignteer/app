@@ -95,10 +95,10 @@ export default function NGORegistrationSuccessPage() {
 
           <div className="text-center text-sm text-text-muted pt-4 border-t">
             <p>
-              Have questions?{' '}
-              <Link href="/contact" className="text-primary hover:text-primary-dark">
-                Contact us
-              </Link>
+              Have questions? Email us at{' '}
+              <a href="mailto:partner@foreignteer.com" className="text-primary hover:text-primary-dark font-semibold">
+                partner@foreignteer.com
+              </a>
             </p>
           </div>
         </CardContent>
