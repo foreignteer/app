@@ -146,6 +146,7 @@ export async function PATCH(
     const {
       name,
       description,
+      logoUrl,
       jurisdiction,
       serviceLocations,
       website,
@@ -179,6 +180,7 @@ export async function PATCH(
     await adminDb.collection('ngos').doc(id).update({
       name: name.trim(),
       description: description.trim(),
+      logoUrl: logoUrl || null,
       jurisdiction: jurisdiction.trim(),
       serviceLocations,
       website: website?.trim() || null,

@@ -6,12 +6,15 @@ import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/lib/hooks/useAuth';
-import { Building2, Save, AlertCircle, CheckCircle } from 'lucide-react';
+import { Building2, Save, AlertCircle, CheckCircle, Upload, X } from 'lucide-react';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '@/lib/firebase/client';
 
 interface NGOData {
   id: string;
   name: string;
   description: string;
+  logoUrl?: string;
   jurisdiction: string;
   serviceLocations: string[];
   website?: string;
@@ -55,6 +58,9 @@ export default function NGOProfilePage() {
   // Form fields
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [logoUrl, setLogoUrl] = useState('');
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
   const [jurisdiction, setJurisdiction] = useState('');
   const [serviceLocations, setServiceLocations] = useState<string[]>([]);
   const [newLocation, setNewLocation] = useState('');
@@ -94,6 +100,7 @@ export default function NGOProfilePage() {
       // Populate form fields
       setName(data.ngo.name || '');
       setDescription(data.ngo.description || '');
+      setLogoUrl(data.ngo.logoUrl || '');
       setJurisdiction(data.ngo.jurisdiction || '');
       setServiceLocations(data.ngo.serviceLocations || []);
       setWebsite(data.ngo.website || '');
@@ -139,6 +146,54 @@ export default function NGOProfilePage() {
     setServiceLocations(serviceLocations.filter((l) => l !== location));
   };
 
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setError('Logo file size must be less than 5MB');
+        return;
+      }
+
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        setError('Logo must be an image file');
+        return;
+      }
+
+      setLogoFile(file);
+      setError('');
+    }
+  };
+
+  const handleRemoveLogo = () => {
+    setLogoFile(null);
+    setLogoUrl('');
+  };
+
+  const uploadLogo = async (): Promise<string | null> => {
+    if (!logoFile || !user?.ngoId) return logoUrl || null;
+
+    setUploadingLogo(true);
+    try {
+      const fileExtension = logoFile.name.split('.').pop();
+      const fileName = `ngo-logos/${user.ngoId}-${Date.now()}.${fileExtension}`;
+      const storageRef = ref(storage, fileName);
+
+      await uploadBytes(storageRef, logoFile);
+      const downloadURL = await getDownloadURL(storageRef);
+
+      setLogoUrl(downloadURL);
+      setLogoFile(null);
+      return downloadURL;
+    } catch (err) {
+      console.error('Error uploading logo:', err);
+      throw new Error('Failed to upload logo');
+    } finally {
+      setUploadingLogo(false);
+    }
+  };
+
   const handleSave = async () => {
     setError('');
     setSuccess('');
@@ -175,6 +230,12 @@ export default function NGOProfilePage() {
         finalCauses[index] = `Other: ${otherCause.trim()}`;
       }
 
+      // Upload logo if there's a new file
+      let uploadedLogoUrl = logoUrl;
+      if (logoFile) {
+        uploadedLogoUrl = await uploadLogo() || logoUrl;
+      }
+
       const token = await firebaseUser!.getIdToken();
       const response = await fetch(`/api/ngos/${user!.ngoId}`, {
         method: 'PATCH',
@@ -185,6 +246,7 @@ export default function NGOProfilePage() {
         body: JSON.stringify({
           name: name.trim(),
           description: description.trim(),
+          logoUrl: uploadedLogoUrl || null,
           jurisdiction: jurisdiction.trim(),
           serviceLocations,
           website: website.trim() || null,
@@ -346,6 +408,69 @@ export default function NGOProfilePage() {
                 className="w-full px-4 py-2 border border-[#E6EAEA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#21B3B1]"
                 placeholder="Your organisation name"
               />
+            </div>
+
+            {/* Logo Upload */}
+            <div>
+              <label className="block text-sm font-medium text-[#4A4A4A] mb-2">
+                Organisation Logo
+              </label>
+              <p className="text-sm text-[#7A7A7A] mb-3">
+                Upload your logo to be displayed on the Verified Partners page (Max 5MB, Image files only)
+              </p>
+
+              {(logoUrl || logoFile) ? (
+                <div className="space-y-3">
+                  <div className="relative inline-block">
+                    <img
+                      src={logoFile ? URL.createObjectURL(logoFile) : logoUrl}
+                      alt="Organisation logo"
+                      className="w-32 h-32 object-cover rounded-lg border-2 border-[#E6EAEA]"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleRemoveLogo}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <div>
+                    <label className="cursor-pointer inline-flex items-center gap-2 text-sm text-[#21B3B1] hover:text-[#168E8C]">
+                      <Upload className="w-4 h-4" />
+                      Change Logo
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleLogoChange}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                </div>
+              ) : (
+                <div className="border-2 border-dashed border-[#E6EAEA] rounded-lg p-6 text-center hover:border-[#21B3B1] transition-colors">
+                  <label className="cursor-pointer">
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="w-12 h-12 bg-[#C9F0EF] rounded-full flex items-center justify-center">
+                        <Upload className="w-6 h-6 text-[#21B3B1]" />
+                      </div>
+                      <span className="text-sm font-medium text-[#4A4A4A]">
+                        Click to upload logo
+                      </span>
+                      <span className="text-xs text-[#7A7A7A]">
+                        PNG, JPG, GIF up to 5MB
+                      </span>
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleLogoChange}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+              )}
             </div>
 
             {/* Description */}
