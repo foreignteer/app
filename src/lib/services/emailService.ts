@@ -639,3 +639,189 @@ export async function sendPasswordResetEmail(
     `,
   });
 }
+
+/**
+ * Send attendance confirmation email
+ */
+export async function sendAttendanceConfirmationEmail(
+  email: string,
+  name: string,
+  details: {
+    experienceTitle: string;
+    ngoName: string;
+    date: string;
+  }
+): Promise<void> {
+  await sendEmail({
+    to: [{ email, name }],
+    subject: `Attendance Confirmed - ${details.experienceTitle}`,
+    htmlContent: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #4A4A4A; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="background: linear-gradient(135deg, #21B3B1 0%, #168E8C 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+            <h1 style="color: white; margin: 0; font-size: 28px;">✓ Attendance Confirmed!</h1>
+          </div>
+          <div style="background: #ffffff; padding: 30px; border: 1px solid #E6EAEA; border-top: none; border-radius: 0 0 10px 10px;">
+            <p>Hi ${name},</p>
+
+            <p>Great news! Your attendance has been confirmed for:</p>
+
+            <div style="background-color: #C9F0EF; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <p style="margin: 0; font-size: 18px; font-weight: bold; color: #21B3B1;">${details.experienceTitle}</p>
+              <p style="margin: 10px 0 0 0; color: #4A4A4A;">
+                <strong>Organisation:</strong> ${details.ngoName}<br>
+                <strong>Date:</strong> ${details.date}
+              </p>
+            </div>
+
+            <p>Both you and ${details.ngoName} have confirmed your attendance. Thank you for making a difference!</p>
+
+            <p><strong>We'd love to hear about your experience!</strong></p>
+            <p>You'll receive a separate email inviting you to rate and review your volunteering experience. Your feedback helps other volunteers find great opportunities and helps organisations improve.</p>
+
+            <p style="text-align: center; margin: 30px 0;">
+              <a href="https://foreignteer.com/dashboard/user/bookings" style="display: inline-block; background-color: #21B3B1; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: 600;">View My Bookings</a>
+            </p>
+
+            <p>Thank you for being part of the Foreignteer community!</p>
+            <p><strong>The Foreignteer Team</strong></p>
+          </div>
+          <div style="background-color: #FAF5EC; padding: 20px; text-align: center; color: #7A7A7A; font-size: 12px; border-radius: 0 0 10px 10px;">
+            <p>&copy; 2026 Foreignteer. All rights reserved.</p>
+            <p>Connecting travellers with meaningful volunteering experiences worldwide.</p>
+            <p style="margin-top: 15px;">
+              <a href="https://foreignteer.com/unsubscribe?email=${encodeURIComponent(email)}" style="color: #8FA6A1; text-decoration: underline;">Unsubscribe</a>
+            </p>
+          </div>
+        </body>
+      </html>
+    `,
+    textContent: `
+      Attendance Confirmed!
+
+      Hi ${name},
+
+      Great news! Your attendance has been confirmed for:
+
+      ${details.experienceTitle}
+      Organisation: ${details.ngoName}
+      Date: ${details.date}
+
+      Both you and ${details.ngoName} have confirmed your attendance. Thank you for making a difference!
+
+      We'd love to hear about your experience! You'll receive a separate email inviting you to rate and review your volunteering experience.
+
+      View your bookings: https://foreignteer.com/dashboard/user/bookings
+
+      Thank you for being part of the Foreignteer community!
+      The Foreignteer Team
+
+      ---
+      Unsubscribe: https://foreignteer.com/unsubscribe?email=${encodeURIComponent(email)}
+    `,
+  });
+}
+
+/**
+ * Send review invitation email
+ */
+export async function sendReviewInvitationEmail(
+  email: string,
+  name: string,
+  details: {
+    experienceTitle: string;
+    bookingId: string;
+  }
+): Promise<void> {
+  const reviewUrl = `https://foreignteer.com/dashboard/user/bookings?review=${details.bookingId}`;
+
+  await sendEmail({
+    to: [{ email, name }],
+    subject: `Share Your Experience - ${details.experienceTitle}`,
+    htmlContent: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #4A4A4A; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="background: linear-gradient(135deg, #F6C98D 0%, #21B3B1 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+            <h1 style="color: white; margin: 0; font-size: 28px;">💫 How Was Your Experience?</h1>
+          </div>
+          <div style="background: #ffffff; padding: 30px; border: 1px solid #E6EAEA; border-top: none; border-radius: 0 0 10px 10px;">
+            <p>Hi ${name},</p>
+
+            <p>Thank you for completing your volunteering experience: <strong>${details.experienceTitle}</strong></p>
+
+            <p>Your feedback is incredibly valuable! Please take a moment to:</p>
+
+            <div style="background-color: #FAF5EC; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #F6C98D;">
+              <p style="margin: 0 0 10px 0;"><strong>⭐ Rate your experience (1-5 stars)</strong></p>
+              <p style="margin: 0 0 10px 0;"><strong>✍️ Share your story</strong> - What did you enjoy? What impact did you make?</p>
+              <p style="margin: 0;"><strong>📸 (Optional) Submit a testimonial</strong> - Inspire future volunteers!</p>
+            </div>
+
+            <p><strong>Why your review matters:</strong></p>
+            <ul style="color: #7A7A7A; font-size: 14px;">
+              <li>Help other volunteers find great opportunities</li>
+              <li>Support organisations in improving their programmes</li>
+              <li>Build trust in the Foreignteer community</li>
+              <li>Inspire others to volunteer</li>
+            </ul>
+
+            <p style="text-align: center; margin: 30px 0;">
+              <a href="${reviewUrl}" style="display: inline-block; background-color: #21B3B1; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: 600;">Leave a Review</a>
+            </p>
+
+            <p style="font-size: 14px; color: #7A7A7A;">This should only take 2-3 minutes. Your honest feedback helps everyone!</p>
+
+            <p>Thank you for making a difference!</p>
+            <p><strong>The Foreignteer Team</strong></p>
+          </div>
+          <div style="background-color: #FAF5EC; padding: 20px; text-align: center; color: #7A7A7A; font-size: 12px; border-radius: 0 0 10px 10px;">
+            <p>&copy; 2026 Foreignteer. All rights reserved.</p>
+            <p>Connecting travellers with meaningful volunteering experiences worldwide.</p>
+            <p style="margin-top: 15px;">
+              <a href="https://foreignteer.com/unsubscribe?email=${encodeURIComponent(email)}" style="color: #8FA6A1; text-decoration: underline;">Unsubscribe</a>
+            </p>
+          </div>
+        </body>
+      </html>
+    `,
+    textContent: `
+      How Was Your Experience?
+
+      Hi ${name},
+
+      Thank you for completing your volunteering experience: ${details.experienceTitle}
+
+      Your feedback is incredibly valuable! Please take a moment to:
+
+      ⭐ Rate your experience (1-5 stars)
+      ✍️ Share your story - What did you enjoy? What impact did you make?
+      📸 (Optional) Submit a testimonial - Inspire future volunteers!
+
+      Why your review matters:
+      - Help other volunteers find great opportunities
+      - Support organisations in improving their programmes
+      - Build trust in the Foreignteer community
+      - Inspire others to volunteer
+
+      Leave a review here: ${reviewUrl}
+
+      This should only take 2-3 minutes. Your honest feedback helps everyone!
+
+      Thank you for making a difference!
+      The Foreignteer Team
+
+      ---
+      Unsubscribe: https://foreignteer.com/unsubscribe?email=${encodeURIComponent(email)}
+    `,
+  });
+}

@@ -113,6 +113,10 @@ export async function POST(request: NextRequest) {
       answers: answers || {},
       appliedAt: now,
       ...(isInstantConfirm && { confirmedAt: now }), // Only set confirmedAt if instant
+      // Attendance tracking - default values
+      volunteerCheckedIn: false,
+      ngoCheckedIn: false,
+      attendanceStatus: 'pending' as const,
     };
 
     const bookingRef = await adminDb.collection('bookings').add(booking);
