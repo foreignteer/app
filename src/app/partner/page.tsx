@@ -181,7 +181,7 @@ export default function PartnerPage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-[#4A4A4A] mb-4">What to Expect as a Partner</h2>
             <p className="text-lg text-[#7A7A7A] max-w-2xl mx-auto">
-              Every experience is designed to be simple, effective, and impactful for your organization
+              Every experience is designed to be simple, effective, and impactful for your organisation
             </p>
           </div>
 
@@ -248,7 +248,7 @@ export default function PartnerPage() {
               </div>
               <h3 className="text-xl font-semibold text-text-primary mb-3">Grow Your Impact</h3>
               <p className="text-text-muted">
-                Increase your organization's visibility and reach more people who care about your mission
+                Increase your organisation's visibility and reach more people who care about your mission
               </p>
             </CardContent>
           </Card>
@@ -270,7 +270,7 @@ export default function PartnerPage() {
           <h3 className="text-2xl font-bold text-text-primary mb-6">What You Get</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[
-              'Dedicated organization profile page',
+              'Dedicated organisation profile page',
               'Unlimited experience listings',
               'Applicant management dashboard',
               'Custom application forms',
@@ -305,8 +305,8 @@ export default function PartnerPage() {
                 answer: 'Registration and basic platform access are completely free. We charge a small service fee per confirmed booking to support platform maintenance and growth.',
               },
               {
-                question: 'What types of organizations can join?',
-                answer: 'We work with registered nonprofits, NGOs, charities, and community organizations that have a clear social or environmental mission and can provide safe, meaningful volunteer experiences.',
+                question: 'What types of organisations can join?',
+                answer: 'We work with registered nonprofits, NGOs, charities, and community organisations that have a clear social or environmental mission and can provide safe, meaningful volunteer experiences.',
               },
               {
                 question: 'How long does verification take?',

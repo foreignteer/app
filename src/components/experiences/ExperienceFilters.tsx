@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
+import { CityAutocomplete } from '@/components/experiences/CityAutocomplete';
 import { Search, X } from 'lucide-react';
 import { CAUSE_CATEGORIES } from '@/lib/constants/categories';
 import { COUNTRIES } from '@/lib/constants/countries';
@@ -90,14 +91,9 @@ export function ExperienceFilters({ onFilterChange }: ExperienceFiltersProps) {
 
         {/* Location Filters */}
         <div className="space-y-4">
-          <Input
-            id="city"
-            name="city"
-            type="text"
-            label="City"
-            placeholder="e.g., London"
-            value={filters.city}
-            onChange={(e) => handleChange('city', e.target.value)}
+          <CityAutocomplete
+            value={filters.city || ''}
+            onChange={(value) => handleChange('city', value)}
           />
 
           <div>

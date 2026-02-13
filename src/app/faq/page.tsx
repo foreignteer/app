@@ -32,7 +32,7 @@ const faqs: FAQItem[] = [
   {
     question: 'What is Instant Confirmation?',
     answer:
-      'Some experiences offer Instant Confirmation, meaning your booking is automatically approved upon submission. Others require NGO approval, where the organization reviews your application before confirming your participation. You can filter experiences by Instant Confirmation availability.',
+      'Some experiences offer Instant Confirmation, meaning your booking is automatically approved upon submission. Others require NGO approval, where the organisation reviews your application before confirming your participation. You can filter experiences by Instant Confirmation availability.',
   },
   {
     question: 'Can I cancel my booking?',
@@ -47,7 +47,7 @@ const faqs: FAQItem[] = [
   {
     question: 'How do I become a partner NGO?',
     answer:
-      'Visit our "Partner With Us" page and fill out the partnership application form. Our team will review your organization and contact you with next steps. Once approved, you can create experiences and manage volunteer applications through your NGO dashboard.',
+      'Visit our "Partner With Us" page and fill out the partnership application form. Our team will review your organisation and contact you with next steps. Once approved, you can create experiences and manage volunteer applications through your NGO dashboard.',
   },
   {
     question: 'What documents do I need to volunteer abroad?',

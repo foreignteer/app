@@ -69,7 +69,7 @@ export default function AboutPage() {
               </h1>
               <p className="text-lg text-[#7A7A7A] leading-relaxed">
                 Foreignteer was born from a simple observation: travellers want to connect
-                authentically with the places they visit, and local organizations need helping
+                authentically with the places they visit, and local organisations need helping
                 hands — even for just an hour or two.
               </p>
             </div>
@@ -171,7 +171,7 @@ export default function AboutPage() {
                 </p>
                 <p>
                   <strong className="text-[#2C3E3A]">Foreignteer bridges this gap.</strong> We connect
-                  travellers who want to give back with vetted organizations that have
+                  travellers who want to give back with vetted organisations that have
                   real, immediate needs — creating genuine impact without the logistical
                   complexity.
                 </p>

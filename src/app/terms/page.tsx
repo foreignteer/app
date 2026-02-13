@@ -68,7 +68,7 @@ export default function TermsOfServicePage() {
             <h2 className="text-2xl font-semibold text-[#2C3E3A] mb-4">4. NGO Partners</h2>
             <p className="text-[#4A4A4A] leading-relaxed mb-4">
               <strong>Verification:</strong> While we vet all NGO partners, Foreignteer is not responsible for
-              the actions, quality, or safety of experiences provided by partner organizations.
+              the actions, quality, or safety of experiences provided by partner organisations.
             </p>
             <p className="text-[#4A4A4A] leading-relaxed mb-4">
               <strong>Direct Relationship:</strong> The volunteering relationship is between you and the NGO.

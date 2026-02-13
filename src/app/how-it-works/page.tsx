@@ -139,7 +139,7 @@ export default function HowItWorksPage() {
                   </li>
                   <li className="flex items-start gap-2 text-sm text-text-muted">
                     <CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                    Public organization profile
+                    Public organisation profile
                   </li>
                 </ul>
               </CardContent>
@@ -228,7 +228,7 @@ export default function HowItWorksPage() {
               <div className="text-4xl mb-4">🌍</div>
               <h3 className="text-xl font-semibold text-text-primary mb-3">Global Impact</h3>
               <p className="text-text-muted">
-                Connect with verified NGOs and organizations making a difference worldwide
+                Connect with verified NGOs and organisations making a difference worldwide
               </p>
             </CardContent>
           </Card>
@@ -238,7 +238,7 @@ export default function HowItWorksPage() {
               <div className="text-4xl mb-4">🤝</div>
               <h3 className="text-xl font-semibold text-text-primary mb-3">Trusted Platform</h3>
               <p className="text-text-muted">
-                All organizations are vetted and approved. Your personal information is kept secure
+                All organisations are vetted and approved. Your personal information is kept secure
               </p>
             </CardContent>
           </Card>
