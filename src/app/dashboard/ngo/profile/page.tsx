@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { Building2, Save, AlertCircle, CheckCircle, Upload, X } from 'lucide-react';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '@/lib/firebase/client';
+import { storage } from '@/lib/firebase/config';
 
 interface NGOData {
   id: string;
