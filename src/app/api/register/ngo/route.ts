@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
       password,
       name,
       description,
+      entityType,
       jurisdiction,
       serviceLocations,
       website,
@@ -38,7 +39,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!name || !description || !jurisdiction || !serviceLocations || !contactEmail || !causes) {
+    if (!name || !description || !entityType || !jurisdiction || !serviceLocations || !contactEmail || !causes) {
       return NextResponse.json(
         { error: 'Missing required organisation information' },
         { status: 400 }
@@ -109,6 +110,7 @@ export async function POST(request: NextRequest) {
       const ngoData = {
         name,
         description,
+        entityType,
         jurisdiction,
         serviceLocations,
         website: website || null,
@@ -148,6 +150,7 @@ export async function POST(request: NextRequest) {
           email,
           contactEmail,
           description,
+          entityType,
           jurisdiction,
           serviceLocations,
           causes,

@@ -1020,6 +1020,7 @@ export async function sendNGORegistrationNotificationToAdmin(
     email: string;
     contactEmail: string;
     description: string;
+    entityType: string;
     jurisdiction: string;
     serviceLocations: string[];
     causes: string[];
@@ -1045,6 +1046,7 @@ export async function sendNGORegistrationNotificationToAdmin(
         <p><strong>Email:</strong> ${ngoDetails.email}</p>
         <p><strong>Organisation Email:</strong> ${ngoDetails.contactEmail}</p>
         ${ngoDetails.website ? `<p><strong>Website:</strong> <a href="${ngoDetails.website}">${ngoDetails.website}</a></p>` : ''}
+        <p><strong>Entity Type:</strong> ${ngoDetails.entityType}</p>
         <p><strong>Jurisdiction:</strong> ${ngoDetails.jurisdiction}</p>
         <p><strong>Service Locations:</strong> ${ngoDetails.serviceLocations.join(', ')}</p>
         <p><strong>Causes:</strong> ${ngoDetails.causes.join(', ')}</p>
@@ -1075,6 +1077,7 @@ export async function sendNGORegistrationNotificationToAdmin(
       - Email: ${ngoDetails.email}
       - Organisation Email: ${ngoDetails.contactEmail}
       ${ngoDetails.website ? `- Website: ${ngoDetails.website}` : ''}
+      - Entity Type: ${ngoDetails.entityType}
       - Jurisdiction: ${ngoDetails.jurisdiction}
       - Service Locations: ${ngoDetails.serviceLocations.join(', ')}
       - Causes: ${ngoDetails.causes.join(', ')}

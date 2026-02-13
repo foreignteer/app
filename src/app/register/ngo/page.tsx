@@ -32,6 +32,18 @@ const CAUSE_CATEGORIES = [
   'Mental Health & Wellbeing',
 ];
 
+const ENTITY_TYPES = [
+  'Registered Charity',
+  'Non-Profit Organisation',
+  'Social Enterprise',
+  'Community Interest Company (CIC)',
+  'Foundation',
+  'Trust',
+  'Association',
+  'For-Profit with CSR Programme',
+  'Other',
+];
+
 export default function RegisterNGOPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -53,6 +65,7 @@ export default function RegisterNGOPage() {
   const [orgData, setOrgData] = useState({
     name: '',
     description: '',
+    entityType: '',
     jurisdiction: '',
     serviceLocations: '',
     website: '',
@@ -117,6 +130,10 @@ export default function RegisterNGOPage() {
       setError('Please provide a description of your organisation');
       return false;
     }
+    if (!orgData.entityType) {
+      setError('Please select your entity type');
+      return false;
+    }
     if (!orgData.jurisdiction.trim()) {
       setError('Please enter your jurisdiction');
       return false;
@@ -179,6 +196,7 @@ export default function RegisterNGOPage() {
         // Organisation info
         name: orgData.name,
         description: orgData.description,
+        entityType: orgData.entityType,
         jurisdiction: orgData.jurisdiction,
         serviceLocations: orgData.serviceLocations.split(',').map((loc) => loc.trim()),
         website: orgData.website || undefined,
@@ -449,6 +467,33 @@ export default function RegisterNGOPage() {
                       required
                       helperText="Minimum 50 characters"
                     />
+
+                    <div>
+                      <label
+                        htmlFor="entityType"
+                        className="block text-sm font-medium text-text-primary mb-2"
+                      >
+                        Entity Type <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        id="entityType"
+                        name="entityType"
+                        value={orgData.entityType}
+                        onChange={handleOrgChange}
+                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                        required
+                      >
+                        <option value="">Select entity type...</option>
+                        {ENTITY_TYPES.map((type) => (
+                          <option key={type} value={type}>
+                            {type}
+                          </option>
+                        ))}
+                      </select>
+                      <p className="mt-1 text-sm text-text-muted">
+                        Legal structure of your organisation
+                      </p>
+                    </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <Input

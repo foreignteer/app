@@ -21,6 +21,7 @@ interface NGO {
   id: string;
   name: string;
   logoUrl?: string;
+  entityType?: string;
   jurisdiction: string;
   serviceLocations: string[];
   description: string;
@@ -317,6 +318,14 @@ export default function AdminNGOsPage() {
                       </p>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
+                        {ngo.entityType && (
+                          <div className="flex items-center gap-2">
+                            <Building2 className="w-4 h-4 text-text-muted" />
+                            <span className="text-text-muted">Entity Type:</span>
+                            <span className="text-text-primary">{ngo.entityType}</span>
+                          </div>
+                        )}
+
                         <div className="flex items-center gap-2">
                           <Globe className="w-4 h-4 text-text-muted" />
                           <span className="text-text-muted">Jurisdiction:</span>
@@ -415,16 +424,32 @@ export default function AdminNGOsPage() {
 
                       {ngo.rejectionReason && (
                         <div className="mt-4 pt-4 border-t">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleApproval(ngo.id, true)}
-                            disabled={updatingId === ngo.id}
-                            isLoading={updatingId === ngo.id}
-                          >
-                            <CheckCircle className="w-4 h-4 mr-2" />
-                            Re-review & Approve
-                          </Button>
+                          <p className="text-sm text-text-muted mb-3">
+                            {ngo.resubmittedAt
+                              ? `Resubmitted on ${format(new Date(ngo.resubmittedAt), 'dd MMM yyyy')} - Review again:`
+                              : 'Review this rejected application:'}
+                          </p>
+                          <div className="flex gap-3">
+                            <Button
+                              variant="success"
+                              size="sm"
+                              onClick={() => handleApproval(ngo.id, true)}
+                              disabled={updatingId === ngo.id}
+                              isLoading={updatingId === ngo.id}
+                            >
+                              <CheckCircle className="w-4 h-4 mr-2" />
+                              Approve
+                            </Button>
+                            <Button
+                              variant="danger"
+                              size="sm"
+                              onClick={() => handleApproval(ngo.id, false)}
+                              disabled={updatingId === ngo.id}
+                            >
+                              <XCircle className="w-4 h-4 mr-2" />
+                              Reject Again
+                            </Button>
+                          </div>
                         </div>
                       )}
                     </div>
