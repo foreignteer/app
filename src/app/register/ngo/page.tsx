@@ -83,7 +83,7 @@ export default function RegisterNGOPage() {
     });
   };
 
-  const handleOrgChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleOrgChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setOrgData({
       ...orgData,
       [e.target.name]: e.target.value,
