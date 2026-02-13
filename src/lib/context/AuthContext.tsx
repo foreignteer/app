@@ -60,6 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           displayName: userData.displayName || firebaseUser.displayName || '',
           avatar: userData.avatar || firebaseUser.photoURL || undefined,
           role,
+          ngoId: userData.ngoId, // For NGO users
           countryOfOrigin: userData.countryOfOrigin,
           volunteeringExperience: userData.volunteeringExperience,
           jobTitle: userData.jobTitle,

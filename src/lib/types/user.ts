@@ -6,6 +6,7 @@ export interface User {
   displayName: string;
   avatar?: string;
   role: UserRole;
+  ngoId?: string; // For NGO users
   countryOfOrigin?: string;
   volunteeringExperience?: string;
   jobTitle?: string;
