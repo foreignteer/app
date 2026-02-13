@@ -57,6 +57,9 @@ export async function GET(request: NextRequest) {
         ...data,
         createdAt: data.createdAt?.toDate(),
         updatedAt: data.updatedAt?.toDate(),
+        approvedAt: data.approvedAt?.toDate(),
+        rejectedAt: data.rejectedAt?.toDate(),
+        resubmittedAt: data.resubmittedAt?.toDate(),
       });
     });
 
