@@ -126,10 +126,10 @@ export async function PATCH(
     // Send email notification
     try {
       if (approved) {
-        await sendNGOApprovalEmail(userEmail, userName, ngoName);
+        await sendNGOApprovalEmail(userEmail, ngoName, userName);
         console.log(`Approval email sent to ${userEmail} for NGO: ${ngoName}`);
       } else {
-        await sendNGORejectionEmail(userEmail, userName, ngoName, rejectionReason);
+        await sendNGORejectionEmail(userEmail, ngoName, userName, rejectionReason);
         console.log(`Rejection email sent to ${userEmail} for NGO: ${ngoName}`);
       }
     } catch (emailError) {

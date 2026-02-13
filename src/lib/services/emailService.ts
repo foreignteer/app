@@ -519,6 +519,190 @@ export async function sendNGOApprovalEmail(
 }
 
 /**
+ * Send NGO rejection notification email
+ */
+export async function sendNGORejectionEmail(
+  email: string,
+  ngoName: string,
+  contactName: string,
+  rejectionReason: string
+): Promise<void> {
+  await sendEmail({
+    to: [{ email, name: contactName }],
+    subject: `Application Update for ${ngoName}`,
+    from: {
+      email: 'partner@foreignteer.com',
+      name: 'Foreignteer Partner Team',
+    },
+    replyTo: {
+      email: 'partner@foreignteer.com',
+      name: 'Foreignteer Partner Team',
+    },
+    htmlContent: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body {
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              line-height: 1.6;
+              color: #4A4A4A;
+              max-width: 600px;
+              margin: 0 auto;
+              padding: 20px;
+            }
+            .header {
+              background-color: #7A7A7A;
+              color: white;
+              padding: 30px 20px;
+              text-align: center;
+              border-radius: 8px 8px 0 0;
+            }
+            .content {
+              background-color: #FAF5EC;
+              padding: 30px 20px;
+            }
+            .reason-box {
+              background-color: #FEF3F2;
+              border-left: 4px solid #EF4444;
+              padding: 15px;
+              margin: 20px 0;
+            }
+            .option-box {
+              background-color: #EFF6FF;
+              border: 1px solid #3B82F6;
+              padding: 15px;
+              margin: 15px 0;
+              border-radius: 6px;
+            }
+            .button {
+              display: inline-block;
+              background-color: #21B3B1;
+              color: white;
+              padding: 12px 24px;
+              text-decoration: none;
+              border-radius: 6px;
+              margin: 10px 5px;
+            }
+            .button-secondary {
+              display: inline-block;
+              background-color: white;
+              color: #21B3B1;
+              border: 2px solid #21B3B1;
+              padding: 10px 24px;
+              text-decoration: none;
+              border-radius: 6px;
+              margin: 10px 5px;
+            }
+            .footer {
+              background-color: #4A4A4A;
+              color: white;
+              padding: 20px;
+              text-align: center;
+              font-size: 14px;
+              border-radius: 0 0 8px 8px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1>Application Update</h1>
+            <p style="color: #E6EAEA;">${ngoName}</p>
+          </div>
+          <div class="content">
+            <p>Hi ${contactName},</p>
+
+            <p>Thank you for your interest in joining Foreignteer. After reviewing your application for <strong>${ngoName}</strong>, we're unable to approve it at this time.</p>
+
+            <div class="reason-box">
+              <h3 style="margin-top: 0; color: #DC2626;">Reason for Not Approving:</h3>
+              <p style="margin-bottom: 0;">${rejectionReason}</p>
+            </div>
+
+            <h3>What You Can Do Next:</h3>
+
+            <div class="option-box">
+              <h4 style="margin-top: 0; color: #1D4ED8;">Option 1: Edit Your Profile & Resubmit</h4>
+              <p>If you can address the concerns mentioned above, you can update your organisation profile and request another review.</p>
+              <p><strong>Steps:</strong></p>
+              <ol>
+                <li>Log in to your account</li>
+                <li>Go to "NGO Profile" in your dashboard</li>
+                <li>Update the necessary information</li>
+                <li>Click "Submit for Review" to request re-approval</li>
+              </ol>
+              <p style="text-align: center;">
+                <a href="https://foreignteer.com/dashboard/ngo/profile" class="button">Edit Your Profile</a>
+              </p>
+            </div>
+
+            <div class="option-box">
+              <h4 style="margin-top: 0; color: #1D4ED8;">Option 2: Create a New Account</h4>
+              <p>If there are fundamental issues with the registration, you may create a new account with corrected information.</p>
+              <p style="text-align: center;">
+                <a href="https://foreignteer.com/register/ngo" class="button-secondary">Create New Account</a>
+              </p>
+            </div>
+
+            <p><strong>Have Questions?</strong></p>
+            <p>If you'd like more details about why your application wasn't approved or need guidance on how to address the issues, please don't hesitate to contact us at <a href="mailto:partner@foreignteer.com">partner@foreignteer.com</a>.</p>
+
+            <p>We appreciate your interest in Foreignteer and hope to work with you in the future.</p>
+            <p><strong>The Foreignteer Partner Team</strong></p>
+          </div>
+          <div class="footer">
+            <p>&copy; 2026 Foreignteer. All rights reserved.</p>
+            <p>Connecting travellers with meaningful volunteering experiences worldwide.</p>
+            <p style="margin-top: 15px; font-size: 12px;">
+              <a href="https://foreignteer.com/unsubscribe?email=${encodeURIComponent(email)}" style="color: #C9F0EF; text-decoration: underline;">Unsubscribe</a> from our emails
+            </p>
+          </div>
+        </body>
+      </html>
+    `,
+    textContent: `
+      Application Update for ${ngoName}
+
+      Hi ${contactName},
+
+      Thank you for your interest in joining Foreignteer. After reviewing your application for ${ngoName}, we're unable to approve it at this time.
+
+      REASON FOR NOT APPROVING:
+      ${rejectionReason}
+
+      WHAT YOU CAN DO NEXT:
+
+      Option 1: Edit Your Profile & Resubmit
+      If you can address the concerns mentioned above, you can update your organisation profile and request another review.
+
+      Steps:
+      1. Log in to your account
+      2. Go to "NGO Profile" in your dashboard
+      3. Update the necessary information
+      4. Click "Submit for Review" to request re-approval
+
+      Edit your profile: https://foreignteer.com/dashboard/ngo/profile
+
+      Option 2: Create a New Account
+      If there are fundamental issues with the registration, you may create a new account with corrected information.
+
+      Create new account: https://foreignteer.com/register/ngo
+
+      HAVE QUESTIONS?
+      If you'd like more details about why your application wasn't approved or need guidance on how to address the issues, please contact us at partner@foreignteer.com.
+
+      We appreciate your interest in Foreignteer and hope to work with you in the future.
+
+      The Foreignteer Partner Team
+
+      ---
+      Unsubscribe: https://foreignteer.com/unsubscribe?email=${encodeURIComponent(email)}
+    `,
+  });
+}
+
+/**
  * Send password reset email
  */
 export async function sendPasswordResetEmail(
@@ -1007,321 +1191,6 @@ export async function sendNGORegistrationConfirmationToNGO(
       ---
       Visit Foreignteer: https://foreignteer.com
       Unsubscribe: https://foreignteer.com/unsubscribe?email=${encodeURIComponent(email)}
-    `,
-  });
-}
-
-/**
- * Send NGO approval notification email
- */
-export async function sendNGOApprovalEmail(
-  email: string,
-  contactName: string,
-  ngoName: string
-): Promise<void> {
-  const contactEmail = 'hello@foreignteer.com';
-
-  await sendEmail({
-    to: [{ email, name: contactName }],
-    subject: `🎉 ${ngoName} Has Been Approved!`,
-    htmlContent: `
-      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
-        <div style="background: linear-gradient(135deg, #21B3B1 0%, #168E8C 100%); padding: 40px 20px; text-align: center;">
-          <h1 style="color: #ffffff; margin: 0; font-size: 28px;">Congratulations!</h1>
-          <p style="color: #C9F0EF; margin: 8px 0 0 0; font-size: 16px;">Your organisation has been approved</p>
-        </div>
-
-        <div style="padding: 32px 24px;">
-          <p style="font-size: 16px; color: #4A4A4A; line-height: 1.6; margin-bottom: 24px;">
-            Hi ${contactName},
-          </p>
-
-          <p style="font-size: 16px; color: #4A4A4A; line-height: 1.6;">
-            Great news! <strong>${ngoName}</strong> has been approved and is now part of the Foreignteer community. You can now start creating volunteering experiences and connecting with volunteers from around the world.
-          </p>
-
-          <div style="background-color: #C9F0EF; border-left: 4px solid #21B3B1; padding: 16px; margin: 24px 0; border-radius: 4px;">
-            <h3 style="color: #168E8C; margin-top: 0; font-size: 18px;">🚀 What to Do Next</h3>
-
-            <div style="margin: 12px 0;">
-              <strong style="color: #4A4A4A;">1. Log in to Your Dashboard</strong>
-              <p style="color: #4A4A4A; margin: 4px 0 12px 0;">
-                Access your NGO dashboard at
-                <a href="https://foreignteer.com/dashboard/ngo" style="color: #21B3B1; text-decoration: none; font-weight: 600;">foreignteer.com/dashboard/ngo</a>
-              </p>
-            </div>
-
-            <div style="margin: 12px 0;">
-              <strong style="color: #4A4A4A;">2. Complete Your Profile</strong>
-              <p style="color: #4A4A4A; margin: 4px 0 12px 0;">
-                Add your logo, banner image, and detailed organisation description to attract volunteers
-              </p>
-            </div>
-
-            <div style="margin: 12px 0;">
-              <strong style="color: #4A4A4A;">3. Create Your First Experience</strong>
-              <p style="color: #4A4A4A; margin: 4px 0 12px 0;">
-                List your first volunteering opportunity with dates, location, and requirements
-              </p>
-            </div>
-
-            <div style="margin: 12px 0;">
-              <strong style="color: #4A4A4A;">4. Manage Applications</strong>
-              <p style="color: #4A4A4A; margin: 4px 0 12px 0;">
-                Review volunteer applications and confirm bookings from your dashboard
-              </p>
-            </div>
-          </div>
-
-          <div style="background-color: #FAF5EC; border: 1px solid #F6C98D; padding: 16px; margin: 24px 0; border-radius: 8px;">
-            <h4 style="color: #4A4A4A; margin-top: 0; font-size: 16px;">📚 Platform Navigation Guide</h4>
-            <ul style="color: #4A4A4A; margin: 8px 0; padding-left: 20px;">
-              <li style="margin: 8px 0;"><strong>Dashboard:</strong> Overview of your experiences and bookings</li>
-              <li style="margin: 8px 0;"><strong>My Experiences:</strong> Create and manage volunteering opportunities</li>
-              <li style="margin: 8px 0;"><strong>Applicants:</strong> Review and approve volunteer applications</li>
-              <li style="margin: 8px 0;"><strong>Attendance:</strong> Track volunteer check-ins and reviews</li>
-              <li style="margin: 8px 0;"><strong>NGO Profile:</strong> Update your organisation details and branding</li>
-            </ul>
-          </div>
-
-          <div style="text-align: center; margin: 32px 0;">
-            <a href="https://foreignteer.com/dashboard/ngo" style="display: inline-block; background-color: #21B3B1; color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
-              Go to Dashboard
-            </a>
-          </div>
-
-          <div style="background-color: #F6F9F9; border: 1px solid #E6EAEA; padding: 16px; margin: 24px 0; border-radius: 8px;">
-            <h4 style="color: #4A4A4A; margin-top: 0; font-size: 16px;">💡 Tips for Success</h4>
-            <ul style="color: #4A4A4A; margin: 8px 0; padding-left: 20px;">
-              <li style="margin: 8px 0;">Use high-quality photos to showcase your work and impact</li>
-              <li style="margin: 8px 0;">Write clear, engaging descriptions that highlight what volunteers will do</li>
-              <li style="margin: 8px 0;">Respond promptly to volunteer applications and questions</li>
-              <li style="margin: 8px 0;">Update experience availability regularly to avoid overbooking</li>
-            </ul>
-          </div>
-
-          <div style="background-color: #F6F9F9; border: 1px solid #E6EAEA; padding: 16px; margin: 24px 0; border-radius: 8px;">
-            <h4 style="color: #4A4A4A; margin-top: 0; font-size: 16px;">💬 Need Help?</h4>
-            <p style="color: #4A4A4A; margin: 8px 0;">
-              Our team is here to support you. Contact us at:
-              <a href="mailto:${contactEmail}" style="color: #21B3B1; text-decoration: none; font-weight: 600;">${contactEmail}</a>
-            </p>
-          </div>
-
-          <p style="font-size: 16px; color: #4A4A4A; line-height: 1.6; margin-top: 24px;">
-            We're excited to have you on board and can't wait to see the impact you'll create!
-          </p>
-
-          <p style="font-size: 16px; color: #4A4A4A;">
-            Best regards,<br>
-            <strong>The Foreignteer Team</strong>
-          </p>
-
-          <hr style="border: none; border-top: 1px solid #E6EAEA; margin: 24px 0;">
-
-          <p style="font-size: 12px; color: #7A7A7A; text-align: center;">
-            <a href="https://foreignteer.com" style="color: #21B3B1; text-decoration: none;">Visit Foreignteer</a> |
-            <a href="https://foreignteer.com/partner" style="color: #21B3B1; text-decoration: none;">Partner Guidelines</a> |
-            <a href="mailto:${contactEmail}" style="color: #21B3B1; text-decoration: none;">Contact Us</a>
-          </p>
-        </div>
-      </div>
-    `,
-    textContent: `
-      Congratulations! Your Organisation Has Been Approved
-
-      Hi ${contactName},
-
-      Great news! ${ngoName} has been approved and is now part of the Foreignteer community. You can now start creating volunteering experiences and connecting with volunteers from around the world.
-
-      WHAT TO DO NEXT:
-
-      1. Log in to Your Dashboard
-         Access your NGO dashboard at https://foreignteer.com/dashboard/ngo
-
-      2. Complete Your Profile
-         Add your logo, banner image, and detailed organisation description
-
-      3. Create Your First Experience
-         List your first volunteering opportunity with dates, location, and requirements
-
-      4. Manage Applications
-         Review volunteer applications and confirm bookings from your dashboard
-
-      PLATFORM NAVIGATION GUIDE:
-
-      - Dashboard: Overview of your experiences and bookings
-      - My Experiences: Create and manage volunteering opportunities
-      - Applicants: Review and approve volunteer applications
-      - Attendance: Track volunteer check-ins and reviews
-      - NGO Profile: Update your organisation details and branding
-
-      TIPS FOR SUCCESS:
-
-      - Use high-quality photos to showcase your work and impact
-      - Write clear, engaging descriptions that highlight what volunteers will do
-      - Respond promptly to volunteer applications and questions
-      - Update experience availability regularly to avoid overbooking
-
-      NEED HELP?
-
-      Our team is here to support you. Contact us at: ${contactEmail}
-
-      We're excited to have you on board and can't wait to see the impact you'll create!
-
-      Best regards,
-      The Foreignteer Team
-
-      ---
-      Visit Foreignteer: https://foreignteer.com
-      Partner Guidelines: https://foreignteer.com/partner
-    `,
-  });
-}
-
-/**
- * Send NGO rejection notification email
- */
-export async function sendNGORejectionEmail(
-  email: string,
-  contactName: string,
-  ngoName: string,
-  rejectionReason: string
-): Promise<void> {
-  const contactEmail = 'hello@foreignteer.com';
-
-  await sendEmail({
-    to: [{ email, name: contactName }],
-    subject: `Application Update for ${ngoName}`,
-    htmlContent: `
-      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
-        <div style="background: linear-gradient(135deg, #7A7A7A 0%, #4A4A4A 100%); padding: 40px 20px; text-align: center;">
-          <h1 style="color: #ffffff; margin: 0; font-size: 28px;">Application Update</h1>
-          <p style="color: #E6EAEA; margin: 8px 0 0 0; font-size: 16px;">${ngoName}</p>
-        </div>
-
-        <div style="padding: 32px 24px;">
-          <p style="font-size: 16px; color: #4A4A4A; line-height: 1.6; margin-bottom: 24px;">
-            Hi ${contactName},
-          </p>
-
-          <p style="font-size: 16px; color: #4A4A4A; line-height: 1.6;">
-            Thank you for your interest in joining Foreignteer. After reviewing your application for <strong>${ngoName}</strong>, we're unable to approve it at this time.
-          </p>
-
-          <div style="background-color: #FEF3F2; border-left: 4px solid #EF4444; padding: 16px; margin: 24px 0; border-radius: 4px;">
-            <h3 style="color: #DC2626; margin-top: 0; font-size: 18px;">Reason for Not Approving</h3>
-            <p style="color: #4A4A4A; margin: 8px 0; line-height: 1.6;">
-              ${rejectionReason}
-            </p>
-          </div>
-
-          <div style="background-color: #EFF6FF; border-left: 4px solid #3B82F6; padding: 16px; margin: 24px 0; border-radius: 4px;">
-            <h3 style="color: #1D4ED8; margin-top: 0; font-size: 18px;">📝 What You Can Do Next</h3>
-
-            <div style="margin: 16px 0;">
-              <strong style="color: #4A4A4A;">Option 1: Edit Your Profile & Resubmit</strong>
-              <p style="color: #4A4A4A; margin: 4px 0 12px 0;">
-                If you can address the concerns mentioned above, you can update your organisation profile and request another review.
-              </p>
-              <ul style="color: #4A4A4A; margin: 8px 0; padding-left: 20px;">
-                <li style="margin: 4px 0;">Log in to your account</li>
-                <li style="margin: 4px 0;">Go to "NGO Profile" in your dashboard</li>
-                <li style="margin: 4px 0;">Update the necessary information</li>
-                <li style="margin: 4px 0;">Click "Submit for Review" to request re-approval</li>
-              </ul>
-              <div style="margin: 16px 0;">
-                <a href="https://foreignteer.com/dashboard/ngo/profile" style="display: inline-block; background-color: #21B3B1; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px;">
-                  Edit Your Profile
-                </a>
-              </div>
-            </div>
-
-            <div style="margin: 16px 0; padding-top: 16px; border-top: 1px solid #BFDBFE;">
-              <strong style="color: #4A4A4A;">Option 2: Create a New Account</strong>
-              <p style="color: #4A4A4A; margin: 4px 0 12px 0;">
-                If there are fundamental issues with the registration, you may create a new account with corrected information.
-              </p>
-              <div style="margin: 16px 0;">
-                <a href="https://foreignteer.com/register/ngo" style="display: inline-block; background-color: #ffffff; color: #21B3B1; border: 2px solid #21B3B1; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px;">
-                  Create New Account
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div style="background-color: #F6F9F9; border: 1px solid #E6EAEA; padding: 16px; margin: 24px 0; border-radius: 8px;">
-            <h4 style="color: #4A4A4A; margin-top: 0; font-size: 16px;">💬 Have Questions?</h4>
-            <p style="color: #4A4A4A; margin: 8px 0;">
-              If you'd like more details about why your application wasn't approved or need guidance on how to address the issues, please don't hesitate to contact us:
-            </p>
-            <p style="color: #4A4A4A; margin: 8px 0;">
-              <a href="mailto:${contactEmail}" style="color: #21B3B1; text-decoration: none; font-weight: 600;">${contactEmail}</a>
-            </p>
-          </div>
-
-          <p style="font-size: 16px; color: #4A4A4A; line-height: 1.6; margin-top: 24px;">
-            We appreciate your interest in Foreignteer and hope to work with you in the future.
-          </p>
-
-          <p style="font-size: 16px; color: #4A4A4A;">
-            Best regards,<br>
-            <strong>The Foreignteer Team</strong>
-          </p>
-
-          <hr style="border: none; border-top: 1px solid #E6EAEA; margin: 24px 0;">
-
-          <p style="font-size: 12px; color: #7A7A7A; text-align: center;">
-            <a href="https://foreignteer.com" style="color: #21B3B1; text-decoration: none;">Visit Foreignteer</a> |
-            <a href="https://foreignteer.com/faq" style="color: #21B3B1; text-decoration: none;">FAQs</a> |
-            <a href="mailto:${contactEmail}" style="color: #21B3B1; text-decoration: none;">Contact Us</a>
-          </p>
-        </div>
-      </div>
-    `,
-    textContent: `
-      Application Update for ${ngoName}
-
-      Hi ${contactName},
-
-      Thank you for your interest in joining Foreignteer. After reviewing your application for ${ngoName}, we're unable to approve it at this time.
-
-      REASON FOR NOT APPROVING:
-
-      ${rejectionReason}
-
-      WHAT YOU CAN DO NEXT:
-
-      Option 1: Edit Your Profile & Resubmit
-
-      If you can address the concerns mentioned above, you can update your organisation profile and request another review.
-
-      Steps:
-      1. Log in to your account
-      2. Go to "NGO Profile" in your dashboard
-      3. Update the necessary information
-      4. Click "Submit for Review" to request re-approval
-
-      Edit your profile: https://foreignteer.com/dashboard/ngo/profile
-
-      Option 2: Create a New Account
-
-      If there are fundamental issues with the registration, you may create a new account with corrected information.
-
-      Create new account: https://foreignteer.com/register/ngo
-
-      HAVE QUESTIONS?
-
-      If you'd like more details about why your application wasn't approved or need guidance on how to address the issues, please contact us at: ${contactEmail}
-
-      We appreciate your interest in Foreignteer and hope to work with you in the future.
-
-      Best regards,
-      The Foreignteer Team
-
-      ---
-      Visit Foreignteer: https://foreignteer.com
-      FAQs: https://foreignteer.com/faq
     `,
   });
 }
