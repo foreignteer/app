@@ -5,6 +5,7 @@ import Link from 'next/link';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { useAuth } from '@/lib/hooks/useAuth';
 import {
   Building2,
   Calendar,
@@ -28,6 +29,7 @@ interface DashboardStats {
 }
 
 export default function AdminDashboard() {
+  const { firebaseUser } = useAuth();
   const [stats, setStats] = useState<DashboardStats>({
     totalUsers: 0,
     totalNGOs: 0,
@@ -39,20 +41,19 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchStats();
-  }, []);
+    if (firebaseUser) {
+      fetchStats();
+    }
+  }, [firebaseUser]);
 
   const fetchStats = async () => {
+    if (!firebaseUser) {
+      setLoading(false);
+      return;
+    }
+
     try {
-      const authModule = await import('@/lib/firebase/config');
-      const currentUser = authModule.auth.currentUser;
-
-      if (!currentUser) {
-        setLoading(false);
-        return;
-      }
-
-      const token = await currentUser.getIdToken();
+      const token = await firebaseUser.getIdToken();
       const response = await fetch('/api/admin/stats', {
         headers: {
           Authorization: `Bearer ${token}`,
