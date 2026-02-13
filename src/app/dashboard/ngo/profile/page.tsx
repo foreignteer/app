@@ -283,7 +283,7 @@ export default function NGOProfilePage() {
                       onClick={handleSubmitForReview}
                       disabled={saving}
                       isLoading={saving}
-                      className="bg-[#21B3B1] hover:bg-[#168E8C] text-white border-[#21B3B1]"
+                      className="!bg-[#21B3B1] hover:!bg-[#168E8C] !text-white !border-[#21B3B1]"
                     >
                       Submit for Review
                     </Button>
@@ -491,7 +491,7 @@ export default function NGOProfilePage() {
                 onClick={handleSave}
                 disabled={saving}
                 isLoading={saving}
-                className="bg-[#21B3B1] hover:bg-[#168E8C] text-white border-[#21B3B1]"
+                className="!bg-[#21B3B1] hover:!bg-[#168E8C] !text-white !border-[#21B3B1]"
               >
                 <Save className="w-4 h-4 mr-2" />
                 Save Changes
@@ -503,7 +503,7 @@ export default function NGOProfilePage() {
                   disabled={saving}
                   isLoading={saving}
                   variant="outline"
-                  className="border-[#21B3B1] text-[#21B3B1] hover:bg-[#C9F0EF]"
+                  className="!border-[#21B3B1] !text-[#21B3B1] hover:!bg-[#C9F0EF]"
                 >
                   Submit for Review
                 </Button>
