@@ -46,6 +46,7 @@ export default function AdminNGOsPage() {
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | 'pending' | 'approved'>('all');
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [expandedNGOs, setExpandedNGOs] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (user && firebaseUser) {
@@ -149,6 +150,18 @@ export default function AdminNGOsPage() {
     } finally {
       setUpdatingId(null);
     }
+  };
+
+  const toggleExpanded = (ngoId: string) => {
+    setExpandedNGOs((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(ngoId)) {
+        newSet.delete(ngoId);
+      } else {
+        newSet.add(ngoId);
+      }
+      return newSet;
+    });
   };
 
   const pendingNGOs = ngos.filter((ngo) => !ngo.approved && !ngo.rejectionReason);
@@ -313,9 +326,19 @@ export default function AdminNGOsPage() {
                         </div>
                       </div>
 
-                      <p className="text-text-primary mb-4 line-clamp-2">
-                        {ngo.description}
-                      </p>
+                      <div className="mb-4">
+                        <p className={`text-text-primary ${expandedNGOs.has(ngo.id) ? '' : 'line-clamp-2'}`}>
+                          {ngo.description}
+                        </p>
+                        {ngo.description && ngo.description.length > 150 && (
+                          <button
+                            onClick={() => toggleExpanded(ngo.id)}
+                            className="text-sm text-primary hover:text-primary-dark mt-2 font-medium"
+                          >
+                            {expandedNGOs.has(ngo.id) ? '← Show less' : 'View full details →'}
+                          </button>
+                        )}
+                      </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
                         {ngo.entityType && (
