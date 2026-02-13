@@ -29,6 +29,10 @@ interface NGO {
   contactEmail: string;
   publicSlug: string;
   approved: boolean;
+  rejectionReason?: string;
+  rejectedAt?: Date;
+  approvedAt?: Date;
+  resubmittedAt?: Date;
   createdBy: string;
   createdAt: Date;
   updatedAt: Date;
