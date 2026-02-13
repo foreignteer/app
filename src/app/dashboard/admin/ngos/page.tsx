@@ -177,7 +177,7 @@ export default function AdminNGOsPage() {
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold text-text-primary mb-2">
-            NGO Management
+            NGO Management <span className="text-xs text-green-600">[v2.13]</span>
           </h1>
           <p className="text-text-muted">
             Review and approve NGO registration requests
