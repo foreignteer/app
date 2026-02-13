@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -9,6 +10,8 @@ import { Badge } from '@/components/ui/Badge';
 import { useBookings } from '@/lib/hooks/useBookings';
 import { Booking } from '@/lib/types/booking';
 import { Experience } from '@/lib/types/experience';
+import { CheckInButton } from '@/components/bookings/CheckInButton';
+import { ReviewModal } from '@/components/bookings/ReviewModal';
 import {
   Calendar,
   MapPin,
@@ -17,15 +20,22 @@ import {
   Clock,
   AlertCircle,
   XCircle,
+  Star,
 } from 'lucide-react';
 import { format } from 'date-fns';
 
-export default function UserBookingsPage() {
-  const { bookings, loading, cancelBooking } = useBookings();
+function BookingsContent() {
+  const searchParams = useSearchParams();
+  const { bookings, loading, cancelBooking, refetch } = useBookings();
   const [experiences, setExperiences] = useState<
     Record<string, Experience | null>
   >({});
   const [cancellingId, setCancellingId] = useState<string | null>(null);
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [selectedBookingForReview, setSelectedBookingForReview] = useState<{
+    bookingId: string;
+    experienceTitle: string;
+  } | null>(null);
 
   // Fetch experience details for each booking
   useEffect(() => {
@@ -59,6 +69,24 @@ export default function UserBookingsPage() {
     }
   }, [bookings]);
 
+  // Handle URL parameter for auto-opening review modal
+  useEffect(() => {
+    const reviewParam = searchParams.get('review');
+    if (reviewParam && bookings.length > 0 && Object.keys(experiences).length > 0) {
+      const booking = bookings.find((b) => b.id === reviewParam);
+      if (booking && booking.attendanceStatus === 'confirmed' && !booking.rating) {
+        const experience = experiences[booking.experienceId];
+        if (experience) {
+          setSelectedBookingForReview({
+            bookingId: booking.id,
+            experienceTitle: experience.title,
+          });
+          setReviewModalOpen(true);
+        }
+      }
+    }
+  }, [searchParams, bookings, experiences]);
+
   const handleCancelBooking = async (bookingId: string) => {
     if (!confirm('Are you sure you want to cancel this booking?')) {
       return;
@@ -73,6 +101,21 @@ export default function UserBookingsPage() {
     } finally {
       setCancellingId(null);
     }
+  };
+
+  const handleCheckIn = () => {
+    // Refresh bookings after check-in
+    refetch();
+  };
+
+  const handleOpenReviewModal = (bookingId: string, experienceTitle: string) => {
+    setSelectedBookingForReview({ bookingId, experienceTitle });
+    setReviewModalOpen(true);
+  };
+
+  const handleReviewSuccess = () => {
+    // Refresh bookings after review submission
+    refetch();
   };
 
   const getStatusBadge = (status: string) => {
@@ -327,12 +370,15 @@ export default function UserBookingsPage() {
                   <div className="space-y-4">
                     {pastBookings.map((booking) => {
                       const experience = experiences[booking.experienceId];
+                      const experienceEndDate = experience?.dates?.end
+                        ? new Date(experience.dates.end)
+                        : new Date();
                       return (
                         <div
                           key={booking.id}
-                          className="border border-gray-200 rounded-lg p-6 opacity-75"
+                          className="border border-gray-200 rounded-lg p-6"
                         >
-                          <div className="flex items-start justify-between">
+                          <div className="flex items-start justify-between mb-4">
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-2">
                                 {getStatusBadge(booking.status)}
@@ -361,6 +407,69 @@ export default function UserBookingsPage() {
                               )}
                             </div>
                           </div>
+
+                          {/* Check-in Section */}
+                          {booking.status === 'completed' && experience && (
+                            <div className="mb-4">
+                              <CheckInButton
+                                booking={booking}
+                                experienceEndDate={experienceEndDate}
+                                onCheckIn={handleCheckIn}
+                              />
+                            </div>
+                          )}
+
+                          {/* Review Section */}
+                          {booking.attendanceStatus === 'confirmed' && (
+                            <div className="mb-4">
+                              {booking.rating ? (
+                                <div className="bg-[#F6F9F9] border border-[#E6EAEA] rounded-lg p-4">
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <div className="flex items-center">
+                                      {[1, 2, 3, 4, 5].map((star) => (
+                                        <Star
+                                          key={star}
+                                          className={`w-4 h-4 ${
+                                            star <= (booking.rating || 0)
+                                              ? 'fill-[#F6C98D] stroke-[#F6C98D]'
+                                              : 'stroke-[#E6EAEA]'
+                                          }`}
+                                        />
+                                      ))}
+                                    </div>
+                                    <span className="text-sm font-medium text-[#4A4A4A]">
+                                      Your Review
+                                    </span>
+                                  </div>
+                                  {booking.review && (
+                                    <p className="text-sm text-[#7A7A7A] mt-2">
+                                      {booking.review}
+                                    </p>
+                                  )}
+                                  <p className="text-xs text-[#7A7A7A] mt-2">
+                                    {booking.reviewApproved
+                                      ? '✓ Published'
+                                      : 'Pending moderation'}
+                                  </p>
+                                </div>
+                              ) : (
+                                <Button
+                                  onClick={() =>
+                                    handleOpenReviewModal(
+                                      booking.id,
+                                      experience?.title || 'Experience'
+                                    )
+                                  }
+                                  size="sm"
+                                  className="!bg-[#F6C98D] hover:!bg-[#F2B56B] !text-[#4A4A4A]"
+                                >
+                                  <Star className="w-4 h-4 mr-2" />
+                                  Write a Review
+                                </Button>
+                              )}
+                            </div>
+                          )}
+
                           {booking.cancelledAt && (
                             <div className="mt-4 text-xs text-text-muted">
                               Cancelled on{' '}
@@ -389,6 +498,37 @@ export default function UserBookingsPage() {
           </>
         )}
       </div>
+
+      {/* Review Modal */}
+      {selectedBookingForReview && (
+        <ReviewModal
+          isOpen={reviewModalOpen}
+          onClose={() => {
+            setReviewModalOpen(false);
+            setSelectedBookingForReview(null);
+          }}
+          bookingId={selectedBookingForReview.bookingId}
+          experienceTitle={selectedBookingForReview.experienceTitle}
+          onSuccess={handleReviewSuccess}
+        />
+      )}
     </DashboardLayout>
+  );
+}
+
+export default function UserBookingsPage() {
+  return (
+    <Suspense
+      fallback={
+        <DashboardLayout requiredRole="user">
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-text-muted">Loading your bookings...</p>
+          </div>
+        </DashboardLayout>
+      }
+    >
+      <BookingsContent />
+    </Suspense>
   );
 }

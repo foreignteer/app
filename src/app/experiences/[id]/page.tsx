@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { MapPin, Calendar, Users, Heart, AlertCircle, CheckCircle } from 'lucide-react';
+import { MapPin, Calendar, Users, Heart, AlertCircle, CheckCircle, Star } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -82,6 +82,50 @@ async function getNGO(ngoId: string): Promise<NGO | null> {
   }
 }
 
+interface Review {
+  id: string;
+  rating: number;
+  review: string;
+  reviewSubmittedAt: Date;
+  userName: string;
+}
+
+async function getApprovedReviews(experienceId: string): Promise<Review[]> {
+  try {
+    const bookingsSnapshot = await adminDb
+      .collection('bookings')
+      .where('experienceId', '==', experienceId)
+      .where('reviewApproved', '==', true)
+      .orderBy('reviewSubmittedAt', 'desc')
+      .limit(10)
+      .get();
+
+    const reviews = await Promise.all(
+      bookingsSnapshot.docs.map(async (doc) => {
+        const booking = doc.data();
+
+        // Fetch user name
+        const userRef = adminDb.collection('users').doc(booking.userId);
+        const userDoc = await userRef.get();
+        const userData = userDoc.data();
+
+        return {
+          id: doc.id,
+          rating: booking.rating,
+          review: booking.review,
+          reviewSubmittedAt: booking.reviewSubmittedAt.toDate(),
+          userName: userData?.name || userData?.displayName || 'Anonymous',
+        };
+      })
+    );
+
+    return reviews;
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    return [];
+  }
+}
+
 export default async function ExperienceDetailPage({ params, searchParams }: ExperienceDetailPageProps) {
   const { id } = await params;
   const { date } = await searchParams;
@@ -92,6 +136,10 @@ export default async function ExperienceDetailPage({ params, searchParams }: Exp
   }
 
   const ngo = await getNGO(experience.ngoId);
+  const reviews = await getApprovedReviews(id);
+  const averageRating = reviews.length > 0
+    ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+    : 0;
   const spotsLeft = experience.capacity - experience.currentBookings;
   const isFull = spotsLeft <= 0;
   const bookUrl = date
@@ -323,6 +371,65 @@ export default async function ExperienceDetailPage({ params, searchParams }: Exp
             </Card>
           </div>
         </div>
+
+        {/* Reviews Section */}
+        {reviews.length > 0 && (
+          <div className="mt-12">
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-[#4A4A4A] mb-2">Volunteer Reviews</h2>
+              <div className="flex items-center gap-2">
+                <div className="flex items-center">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star
+                      key={star}
+                      className={`w-5 h-5 ${
+                        star <= Math.round(averageRating)
+                          ? 'fill-[#F6C98D] stroke-[#F6C98D]'
+                          : 'stroke-[#E6EAEA]'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-lg font-semibold text-[#4A4A4A]">
+                  {averageRating.toFixed(1)}
+                </span>
+                <span className="text-sm text-[#7A7A7A]">
+                  ({reviews.length} {reviews.length === 1 ? 'review' : 'reviews'})
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {reviews.map((review) => (
+                <Card key={review.id}>
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <p className="font-semibold text-[#4A4A4A]">{review.userName}</p>
+                        <p className="text-xs text-[#7A7A7A]">
+                          {format(new Date(review.reviewSubmittedAt), 'MMM yyyy')}
+                        </p>
+                      </div>
+                      <div className="flex items-center">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            className={`w-4 h-4 ${
+                              star <= review.rating
+                                ? 'fill-[#F6C98D] stroke-[#F6C98D]'
+                                : 'stroke-[#E6EAEA]'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <p className="text-sm text-[#4A4A4A] leading-relaxed">{review.review}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -14,6 +14,7 @@ import {
   FileText,
   CheckCircle,
   X,
+  Star,
 } from 'lucide-react';
 
 interface DashboardSidebarProps {
@@ -32,6 +33,7 @@ export default function DashboardSidebar({ role, onClose }: DashboardSidebarProp
       label: 'Experience Approvals',
       icon: Calendar,
     },
+    { href: '/dashboard/admin/reviews', label: 'Review Moderation', icon: Star },
     { href: '/dashboard/admin/users', label: 'Users', icon: Users },
   ];
 
@@ -46,6 +48,11 @@ export default function DashboardSidebar({ role, onClose }: DashboardSidebarProp
       href: '/dashboard/ngo/applicants',
       label: 'Applicants',
       icon: Users,
+    },
+    {
+      href: '/dashboard/ngo/attendance',
+      label: 'Attendance',
+      icon: CheckCircle,
     },
     {
       href: '/dashboard/ngo/profile',
