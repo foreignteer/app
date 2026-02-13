@@ -288,6 +288,11 @@ export default function AdminNGOsPage() {
                                 <CheckCircle className="w-3 h-3 mr-1" />
                                 Approved
                               </Badge>
+                            ) : ngo.rejectionReason ? (
+                              <Badge variant="danger" size="sm">
+                                <XCircle className="w-3 h-3 mr-1" />
+                                Rejected
+                              </Badge>
                             ) : (
                               <Badge variant="warning" size="sm">
                                 <Clock className="w-3 h-3 mr-1" />
@@ -297,6 +302,8 @@ export default function AdminNGOsPage() {
                           </div>
                           <p className="text-sm text-text-muted">
                             Registered on {format(new Date(ngo.createdAt), 'dd MMM yyyy')}
+                            {ngo.rejectedAt && ` • Rejected on ${format(new Date(ngo.rejectedAt), 'dd MMM yyyy')}`}
+                            {ngo.approvedAt && ` • Approved on ${format(new Date(ngo.approvedAt), 'dd MMM yyyy')}`}
                           </p>
                         </div>
                       </div>
@@ -349,8 +356,21 @@ export default function AdminNGOsPage() {
                         </a>
                       )}
 
-                      {/* Action Buttons */}
-                      {!ngo.approved && (
+                      {/* Rejection Reason */}
+                      {ngo.rejectionReason && (
+                        <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                          <h4 className="text-sm font-semibold text-red-900 mb-2">
+                            Rejection Reason:
+                          </h4>
+                          <p className="text-sm text-red-800">{ngo.rejectionReason}</p>
+                          <p className="text-xs text-red-600 mt-2">
+                            NGO has been notified and can edit their profile to resubmit for review.
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Action Buttons - Only for pending (not yet approved or rejected) */}
+                      {!ngo.approved && !ngo.rejectionReason && (
                         <div className="flex gap-3 mt-4 pt-4 border-t">
                           <Button
                             variant="success"
@@ -374,6 +394,7 @@ export default function AdminNGOsPage() {
                         </div>
                       )}
 
+                      {/* Revoke/Re-review buttons for approved or rejected NGOs */}
                       {ngo.approved && (
                         <div className="mt-4 pt-4 border-t">
                           <Button
@@ -384,6 +405,21 @@ export default function AdminNGOsPage() {
                           >
                             <XCircle className="w-4 h-4 mr-2" />
                             Revoke Approval
+                          </Button>
+                        </div>
+                      )}
+
+                      {ngo.rejectionReason && (
+                        <div className="mt-4 pt-4 border-t">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleApproval(ngo.id, true)}
+                            disabled={updatingId === ngo.id}
+                            isLoading={updatingId === ngo.id}
+                          >
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Re-review & Approve
                           </Button>
                         </div>
                       )}
