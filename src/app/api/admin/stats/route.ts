@@ -36,8 +36,6 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    console.log('=== STATS API CALLED ===');
-
     // Fetch real statistics from Firestore
     const [usersSnapshot, ngosSnapshot, experiencesSnapshot, bookingsSnapshot] = await Promise.all([
       adminDb.collection('users').get(),
@@ -45,8 +43,6 @@ export async function GET(request: NextRequest) {
       adminDb.collection('experiences').get(),
       adminDb.collection('bookings').get(),
     ]);
-
-    console.log(`Fetched ${ngosSnapshot.size} NGO documents from Firestore`);
 
     let totalUsers = 0;
     let totalNGOs = ngosSnapshot.size;
@@ -87,38 +83,29 @@ export async function GET(request: NextRequest) {
     });
 
     // Count pending NGO approvals (not yet approved)
-    console.log('=== Analyzing NGO Documents ===');
     ngosSnapshot.forEach((doc: FirebaseFirestore.QueryDocumentSnapshot) => {
       const data = doc.data();
-      console.log(`NGO: ${data.name}, approved field: ${data.approved}, type: ${typeof data.approved}`);
-
       // Count as pending if NOT explicitly approved (handles false, undefined, null)
       if (data.approved !== true) {
         pendingNGOs++;
-        console.log(`  ↳ COUNTED AS PENDING`);
-      } else {
-        console.log(`  ↳ COUNTED AS APPROVED`);
       }
     });
 
-    console.log(`=== FINAL COUNTS: Total NGOs: ${totalNGOs}, Pending NGOs: ${pendingNGOs} ===`);
-
-    const responseData = {
-      totalUsers,
-      totalNGOs,
-      totalExperiences,
-      publishedExperiences,
-      draftExperiences,
-      pendingExperiences,
-      totalBookings,
-      pendingBookings,
-      confirmedBookings,
-      pendingNGOs,
-    };
-
-    console.log('=== RESPONSE BEING SENT ===', JSON.stringify(responseData, null, 2));
-
-    return NextResponse.json(responseData, { status: 200 });
+    return NextResponse.json(
+      {
+        totalUsers,
+        totalNGOs,
+        totalExperiences,
+        publishedExperiences,
+        draftExperiences,
+        pendingExperiences,
+        totalBookings,
+        pendingBookings,
+        confirmedBookings,
+        pendingNGOs,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Error fetching admin stats:', error);
     return NextResponse.json(

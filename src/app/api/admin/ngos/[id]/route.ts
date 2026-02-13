@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminAuth, adminDb } from '@/lib/firebase/admin';
+import { sendNGOApprovalEmail, sendNGORejectionEmail } from '@/lib/services/emailService';
 
 export async function PATCH(
   request: NextRequest,
@@ -43,7 +44,7 @@ export async function PATCH(
 
     // Parse the request body
     const body = await request.json();
-    const { approved } = body;
+    const { approved, rejectionReason } = body;
 
     if (typeof approved !== 'boolean') {
       return NextResponse.json(
@@ -52,24 +53,105 @@ export async function PATCH(
       );
     }
 
-    // Update the NGO
-    await adminDb.collection('ngos').doc(id).update({
+    // If rejecting, require a rejection reason
+    if (approved === false && (!rejectionReason || rejectionReason.trim() === '')) {
+      return NextResponse.json(
+        { error: 'Rejection reason is required when rejecting an NGO' },
+        { status: 400 }
+      );
+    }
+
+    // Fetch the NGO document first to get details for email
+    const ngoDoc = await adminDb.collection('ngos').doc(id).get();
+
+    if (!ngoDoc.exists) {
+      return NextResponse.json(
+        { error: 'NGO not found' },
+        { status: 404 }
+      );
+    }
+
+    const ngoData = ngoDoc.data();
+    if (!ngoData) {
+      return NextResponse.json(
+        { error: 'NGO data not found' },
+        { status: 404 }
+      );
+    }
+
+    // Get the user who created this NGO to send them an email
+    const createdBy = ngoData.createdBy;
+    if (!createdBy) {
+      return NextResponse.json(
+        { error: 'NGO creator not found' },
+        { status: 500 }
+      );
+    }
+
+    const userDoc = await adminDb.collection('users').doc(createdBy).get();
+    const userData = userDoc.data();
+
+    if (!userData || !userData.email) {
+      return NextResponse.json(
+        { error: 'User email not found' },
+        { status: 500 }
+      );
+    }
+
+    const userEmail = userData.email;
+    const userName = userData.displayName || 'there';
+    const ngoName = ngoData.name || 'Your organisation';
+
+    // Prepare update data
+    const updateData: any = {
       approved,
       updatedAt: new Date(),
-    });
+    };
+
+    if (approved) {
+      // Approving: clear any previous rejection data
+      updateData.rejectionReason = null;
+      updateData.rejectedAt = null;
+      updateData.approvedAt = new Date();
+    } else {
+      // Rejecting: add rejection data
+      updateData.rejectionReason = rejectionReason.trim();
+      updateData.rejectedAt = new Date();
+      updateData.approvedAt = null;
+    }
+
+    // Update the NGO
+    await adminDb.collection('ngos').doc(id).update(updateData);
+
+    // Send email notification
+    try {
+      if (approved) {
+        await sendNGOApprovalEmail(userEmail, userName, ngoName);
+        console.log(`Approval email sent to ${userEmail} for NGO: ${ngoName}`);
+      } else {
+        await sendNGORejectionEmail(userEmail, userName, ngoName, rejectionReason);
+        console.log(`Rejection email sent to ${userEmail} for NGO: ${ngoName}`);
+      }
+    } catch (emailError) {
+      // Log email error but don't fail the request
+      console.error('Error sending email notification:', emailError);
+    }
 
     // Fetch the updated NGO
-    const ngoDoc = await adminDb.collection('ngos').doc(id).get();
-    const ngoData = ngoDoc.data();
+    const updatedNgoDoc = await adminDb.collection('ngos').doc(id).get();
+    const updatedNgoData = updatedNgoDoc.data();
 
     return NextResponse.json(
       {
         success: true,
+        message: approved ? 'NGO approved successfully' : 'NGO rejected successfully',
         ngo: {
-          id: ngoDoc.id,
-          ...ngoData,
-          createdAt: ngoData?.createdAt?.toDate(),
-          updatedAt: ngoData?.updatedAt?.toDate(),
+          id: updatedNgoDoc.id,
+          ...updatedNgoData,
+          createdAt: updatedNgoData?.createdAt?.toDate(),
+          updatedAt: updatedNgoData?.updatedAt?.toDate(),
+          approvedAt: updatedNgoData?.approvedAt?.toDate(),
+          rejectedAt: updatedNgoData?.rejectedAt?.toDate(),
         },
       },
       { status: 200 }

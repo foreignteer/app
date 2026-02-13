@@ -82,6 +82,27 @@ export default function AdminNGOsPage() {
   const handleApproval = async (ngoId: string, approved: boolean) => {
     if (!user || !firebaseUser) return;
 
+    let rejectionReason = '';
+
+    // If rejecting, prompt for reason
+    if (!approved) {
+      rejectionReason = window.prompt(
+        'Please provide a reason for rejection (this will be sent to the NGO):'
+      ) || '';
+
+      // If user cancelled or provided empty reason, don't proceed
+      if (!rejectionReason.trim()) {
+        alert('Rejection cancelled - a reason must be provided.');
+        return;
+      }
+    } else {
+      // Confirm approval
+      const confirmApprove = window.confirm(
+        'Approve this NGO? An approval email will be sent to the organisation.'
+      );
+      if (!confirmApprove) return;
+    }
+
     setUpdatingId(ngoId);
     setError(null);
 
@@ -93,18 +114,33 @@ export default function AdminNGOsPage() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ approved }),
+        body: JSON.stringify({
+          approved,
+          ...(rejectionReason && { rejectionReason }),
+        }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update NGO');
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to update NGO');
       }
+
+      const data = await response.json();
+
+      // Show success message
+      alert(
+        approved
+          ? '✅ NGO approved successfully! Approval email sent.'
+          : '✅ NGO rejected. Rejection email sent with details.'
+      );
 
       // Refresh the list
       await fetchNGOs();
     } catch (err) {
       console.error('Error updating NGO:', err);
-      setError(err instanceof Error ? err.message : 'Failed to update NGO');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to update NGO';
+      setError(errorMessage);
+      alert(`Error: ${errorMessage}`);
     } finally {
       setUpdatingId(null);
     }

@@ -65,7 +65,6 @@ export default function AdminDashboard() {
       }
 
       const data = await response.json();
-      console.log('Admin stats received:', data); // Debug log
       setStats({
         totalUsers: data.totalUsers,
         totalNGOs: data.totalNGOs,
@@ -76,7 +75,6 @@ export default function AdminDashboard() {
       });
     } catch (error) {
       console.error('Error fetching admin stats:', error);
-      console.error('Full error details:', JSON.stringify(error, null, 2)); // More detailed error
       // Keep default stats if fetch fails
       setStats({
         totalUsers: 0,
