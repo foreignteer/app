@@ -15,6 +15,7 @@ interface NGOData {
   name: string;
   description: string;
   logoUrl?: string;
+  entityType?: string;
   jurisdiction: string;
   serviceLocations: string[];
   website?: string;
@@ -46,6 +47,18 @@ const CAUSE_CATEGORIES = [
   'Mental Health & Wellbeing',
 ];
 
+const ENTITY_TYPES = [
+  'Registered Charity',
+  'Non-Profit Organisation',
+  'Social Enterprise',
+  'Community Interest Company (CIC)',
+  'Foundation',
+  'Trust',
+  'Association',
+  'For-Profit with CSR Programme',
+  'Other',
+];
+
 export default function NGOProfilePage() {
   const { user, firebaseUser } = useAuth();
   const router = useRouter();
@@ -61,6 +74,7 @@ export default function NGOProfilePage() {
   const [logoUrl, setLogoUrl] = useState('');
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [entityType, setEntityType] = useState('');
   const [jurisdiction, setJurisdiction] = useState('');
   const [serviceLocations, setServiceLocations] = useState<string[]>([]);
   const [newLocation, setNewLocation] = useState('');
@@ -101,6 +115,7 @@ export default function NGOProfilePage() {
       setName(data.ngo.name || '');
       setDescription(data.ngo.description || '');
       setLogoUrl(data.ngo.logoUrl || '');
+      setEntityType(data.ngo.entityType || '');
       setJurisdiction(data.ngo.jurisdiction || '');
       setServiceLocations(data.ngo.serviceLocations || []);
       setWebsite(data.ngo.website || '');
@@ -247,6 +262,7 @@ export default function NGOProfilePage() {
           name: name.trim(),
           description: description.trim(),
           logoUrl: uploadedLogoUrl || null,
+          entityType: entityType || null,
           jurisdiction: jurisdiction.trim(),
           serviceLocations,
           website: website.trim() || null,
@@ -485,6 +501,28 @@ export default function NGOProfilePage() {
                 className="w-full px-4 py-2 border border-[#E6EAEA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#21B3B1]"
                 placeholder="Tell us about your organisation and its mission"
               />
+            </div>
+
+            {/* Entity Type */}
+            <div>
+              <label className="block text-sm font-medium text-[#4A4A4A] mb-2">
+                Entity Type *
+              </label>
+              <select
+                value={entityType}
+                onChange={(e) => setEntityType(e.target.value)}
+                className="w-full px-4 py-2.5 border border-[#E6EAEA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#21B3B1]"
+              >
+                <option value="">Select entity type...</option>
+                {ENTITY_TYPES.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+              <p className="mt-1 text-sm text-[#7A7A7A]">
+                Legal structure of your organisation
+              </p>
             </div>
 
             {/* Jurisdiction */}
