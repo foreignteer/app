@@ -825,3 +825,188 @@ export async function sendReviewInvitationEmail(
     `,
   });
 }
+
+/**
+ * Send NGO registration notification to admin
+ */
+export async function sendNGORegistrationNotificationToAdmin(
+  ngoDetails: {
+    name: string;
+    contactName: string;
+    email: string;
+    contactEmail: string;
+    description: string;
+    jurisdiction: string;
+    serviceLocations: string[];
+    causes: string[];
+    website?: string;
+    ngoId: string;
+  }
+): Promise<void> {
+  const adminEmail = process.env.ADMIN_EMAIL || 'hello@foreignteer.com';
+  const adminDashboardUrl = 'https://foreignteer.com/dashboard/admin/ngos';
+
+  await sendEmail({
+    to: [{ email: adminEmail, name: 'Foreignteer Admin' }],
+    subject: `New NGO Registration: ${ngoDetails.name}`,
+    htmlContent: `
+      <h2 style="color: #21B3B1;">New NGO Registration</h2>
+
+      <p>A new NGO has registered and is pending approval:</p>
+
+      <div style="background-color: #FAF5EC; border-left: 4px solid #21B3B1; padding: 16px; margin: 20px 0;">
+        <h3 style="color: #4A4A4A; margin-top: 0;">Organisation Details</h3>
+        <p><strong>Name:</strong> ${ngoDetails.name}</p>
+        <p><strong>Contact Person:</strong> ${ngoDetails.contactName}</p>
+        <p><strong>Email:</strong> ${ngoDetails.email}</p>
+        <p><strong>Organisation Email:</strong> ${ngoDetails.contactEmail}</p>
+        ${ngoDetails.website ? `<p><strong>Website:</strong> <a href="${ngoDetails.website}">${ngoDetails.website}</a></p>` : ''}
+        <p><strong>Jurisdiction:</strong> ${ngoDetails.jurisdiction}</p>
+        <p><strong>Service Locations:</strong> ${ngoDetails.serviceLocations.join(', ')}</p>
+        <p><strong>Causes:</strong> ${ngoDetails.causes.join(', ')}</p>
+      </div>
+
+      <div style="background-color: #F6F9F9; border: 1px solid #E6EAEA; padding: 16px; margin: 20px 0; border-radius: 8px;">
+        <p><strong>Description:</strong></p>
+        <p style="white-space: pre-wrap;">${ngoDetails.description}</p>
+      </div>
+
+      <p>
+        <a href="${adminDashboardUrl}"
+           style="display: inline-block; background-color: #21B3B1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600;">
+          Review in Admin Dashboard
+        </a>
+      </p>
+
+      <p style="color: #7A7A7A; font-size: 14px; margin-top: 30px;">
+        This registration requires your approval before the NGO can create experiences.
+      </p>
+    `,
+    textContent: `
+      New NGO Registration: ${ngoDetails.name}
+
+      Organisation Details:
+      - Name: ${ngoDetails.name}
+      - Contact Person: ${ngoDetails.contactName}
+      - Email: ${ngoDetails.email}
+      - Organisation Email: ${ngoDetails.contactEmail}
+      ${ngoDetails.website ? `- Website: ${ngoDetails.website}` : ''}
+      - Jurisdiction: ${ngoDetails.jurisdiction}
+      - Service Locations: ${ngoDetails.serviceLocations.join(', ')}
+      - Causes: ${ngoDetails.causes.join(', ')}
+
+      Description:
+      ${ngoDetails.description}
+
+      Review in Admin Dashboard: ${adminDashboardUrl}
+    `,
+  });
+}
+
+/**
+ * Send registration confirmation to NGO
+ */
+export async function sendNGORegistrationConfirmationToNGO(
+  email: string,
+  contactName: string,
+  ngoName: string
+): Promise<void> {
+  const contactEmail = 'hello@foreignteer.com';
+
+  await sendEmail({
+    to: [{ email, name: contactName }],
+    subject: `Registration Received - ${ngoName}`,
+    htmlContent: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #21B3B1 0%, #168E8C 100%); padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
+          <h1 style="color: white; margin: 0; font-size: 28px;">Thank You for Registering!</h1>
+        </div>
+
+        <div style="background-color: #ffffff; padding: 30px; border: 1px solid #E6EAEA; border-top: none; border-radius: 0 0 8px 8px;">
+          <p style="font-size: 16px; color: #4A4A4A;">Hi ${contactName},</p>
+
+          <p style="font-size: 16px; color: #4A4A4A; line-height: 1.6;">
+            Thank you for registering <strong>${ngoName}</strong> with Foreignteer! We're excited to welcome you to our community of organisations creating meaningful volunteering experiences.
+          </p>
+
+          <div style="background-color: #C9F0EF; border-left: 4px solid #21B3B1; padding: 16px; margin: 24px 0; border-radius: 4px;">
+            <h3 style="color: #4A4A4A; margin-top: 0; font-size: 18px;">📋 What Happens Next?</h3>
+            <ol style="color: #4A4A4A; margin: 0; padding-left: 20px;">
+              <li style="margin: 8px 0;"><strong>Review Process:</strong> Our admin team will review your organisation details (typically within 1-2 business days)</li>
+              <li style="margin: 8px 0;"><strong>Email Notification:</strong> You'll receive an email once your organisation is approved</li>
+              <li style="margin: 8px 0;"><strong>Create Experiences:</strong> After approval, you can start creating volunteering opportunities</li>
+            </ol>
+          </div>
+
+          <div style="background-color: #FAF5EC; padding: 20px; margin: 24px 0; border-radius: 8px;">
+            <h3 style="color: #4A4A4A; margin-top: 0; font-size: 18px;">🚀 In the Meantime...</h3>
+            <ul style="color: #4A4A4A; margin: 0; padding-left: 20px;">
+              <li style="margin: 8px 0;">Explore existing experiences on our platform to see what volunteers are looking for</li>
+              <li style="margin: 8px 0;">Prepare descriptions and photos for your first volunteering experience</li>
+              <li style="margin: 8px 0;">Think about dates, capacity, and requirements for your programmes</li>
+              <li style="margin: 8px 0;">Review our <a href="https://foreignteer.com/partner" style="color: #21B3B1;">Partner Guidelines</a></li>
+            </ul>
+          </div>
+
+          <div style="background-color: #F6F9F9; border: 1px solid #E6EAEA; padding: 16px; margin: 24px 0; border-radius: 8px;">
+            <h4 style="color: #4A4A4A; margin-top: 0; font-size: 16px;">💬 Questions or Need Help?</h4>
+            <p style="color: #4A4A4A; margin: 8px 0;">
+              Our team is here to support you. Feel free to reach out at:
+              <a href="mailto:${contactEmail}" style="color: #21B3B1; text-decoration: none; font-weight: 600;">${contactEmail}</a>
+            </p>
+          </div>
+
+          <p style="font-size: 16px; color: #4A4A4A; line-height: 1.6; margin-top: 24px;">
+            We're looking forward to working with you to create impactful volunteering experiences!
+          </p>
+
+          <p style="font-size: 16px; color: #4A4A4A;">
+            Best regards,<br>
+            <strong>The Foreignteer Team</strong>
+          </p>
+
+          <hr style="border: none; border-top: 1px solid #E6EAEA; margin: 24px 0;">
+
+          <p style="font-size: 12px; color: #7A7A7A; text-align: center;">
+            <a href="https://foreignteer.com" style="color: #21B3B1; text-decoration: none;">Visit Foreignteer</a> |
+            <a href="https://foreignteer.com/faq" style="color: #21B3B1; text-decoration: none;">FAQs</a> |
+            <a href="mailto:${contactEmail}" style="color: #21B3B1; text-decoration: none;">Contact Us</a>
+          </p>
+        </div>
+      </div>
+    `,
+    textContent: `
+      Thank You for Registering!
+
+      Hi ${contactName},
+
+      Thank you for registering ${ngoName} with Foreignteer! We're excited to welcome you to our community of organisations creating meaningful volunteering experiences.
+
+      WHAT HAPPENS NEXT?
+
+      1. Review Process: Our admin team will review your organisation details (typically within 1-2 business days)
+      2. Email Notification: You'll receive an email once your organisation is approved
+      3. Create Experiences: After approval, you can start creating volunteering opportunities
+
+      IN THE MEANTIME...
+
+      - Explore existing experiences on our platform to see what volunteers are looking for
+      - Prepare descriptions and photos for your first volunteering experience
+      - Think about dates, capacity, and requirements for your programmes
+      - Review our Partner Guidelines at https://foreignteer.com/partner
+
+      QUESTIONS OR NEED HELP?
+
+      Our team is here to support you. Feel free to reach out at: ${contactEmail}
+
+      We're looking forward to working with you to create impactful volunteering experiences!
+
+      Best regards,
+      The Foreignteer Team
+
+      ---
+      Visit Foreignteer: https://foreignteer.com
+      Unsubscribe: https://foreignteer.com/unsubscribe?email=${encodeURIComponent(email)}
+    `,
+  });
+}

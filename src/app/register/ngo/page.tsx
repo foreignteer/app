@@ -13,13 +13,23 @@ import { CheckCircle, XCircle, ArrowLeft, Building2 } from 'lucide-react';
 
 const CAUSE_CATEGORIES = [
   'Education',
-  'Environment',
+  'Environment & Sustainability',
   'Community Development',
   'Healthcare',
   'Animal Welfare',
   'Arts & Culture',
   'Human Rights',
   'Poverty Alleviation',
+  'Children & Youth',
+  'Elderly Care',
+  'Disability Support',
+  'Women Empowerment',
+  'Refugee & Migration Support',
+  'Food Security & Nutrition',
+  'Water & Sanitation',
+  'Climate Action',
+  'Sports & Recreation',
+  'Mental Health & Wellbeing',
 ];
 
 export default function RegisterNGOPage() {
@@ -51,6 +61,7 @@ export default function RegisterNGOPage() {
 
   // Causes (checkboxes)
   const [selectedCauses, setSelectedCauses] = useState<string[]>([]);
+  const [otherCause, setOtherCause] = useState('');
 
   const handleAccountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAccountData({
@@ -118,8 +129,12 @@ export default function RegisterNGOPage() {
       setError('Please enter a contact email address');
       return false;
     }
-    if (selectedCauses.length === 0) {
+    if (selectedCauses.length === 0 && !otherCause.trim()) {
       setError('Please select at least one cause category');
+      return false;
+    }
+    if (selectedCauses.includes('Other') && !otherCause.trim()) {
+      setError('Please specify your cause category');
       return false;
     }
     return true;
@@ -149,6 +164,13 @@ export default function RegisterNGOPage() {
 
     try {
       // Prepare the registration data
+      const finalCauses = [...selectedCauses];
+      if (selectedCauses.includes('Other') && otherCause.trim()) {
+        // Replace "Other" with the actual custom cause
+        const index = finalCauses.indexOf('Other');
+        finalCauses[index] = `Other: ${otherCause.trim()}`;
+      }
+
       const registrationData = {
         // Account info
         contactName: accountData.contactName,
@@ -161,7 +183,7 @@ export default function RegisterNGOPage() {
         serviceLocations: orgData.serviceLocations.split(',').map((loc) => loc.trim()),
         website: orgData.website || undefined,
         contactEmail: orgData.contactEmail,
-        causes: selectedCauses,
+        causes: finalCauses,
       };
 
       const response = await fetch('/api/register/ngo', {
@@ -502,7 +524,35 @@ export default function RegisterNGOPage() {
                             <span className="text-sm text-text-primary">{cause}</span>
                           </label>
                         ))}
+                        {/* Other option */}
+                        <label
+                          className={`flex items-center gap-2 p-3 border rounded-lg cursor-pointer transition-colors ${
+                            selectedCauses.includes('Other')
+                              ? 'border-primary bg-primary-light'
+                              : 'border-gray-300 hover:border-primary'
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedCauses.includes('Other')}
+                            onChange={() => handleCauseToggle('Other')}
+                            className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                          />
+                          <span className="text-sm text-text-primary">Other</span>
+                        </label>
                       </div>
+                      {selectedCauses.includes('Other') && (
+                        <div className="mt-3">
+                          <Input
+                            name="otherCause"
+                            label="Please specify your cause"
+                            value={otherCause}
+                            onChange={(e) => setOtherCause(e.target.value)}
+                            placeholder="e.g., Technology Education, Marine Conservation"
+                            required
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminAuth, adminDb } from '@/lib/firebase/admin';
+import {
+  sendNGORegistrationNotificationToAdmin,
+  sendNGORegistrationConfirmationToNGO,
+} from '@/lib/services/emailService';
 
 // Helper function to generate URL-friendly slug
 function generateSlug(name: string): string {
@@ -134,6 +138,29 @@ export async function POST(request: NextRequest) {
         createdAt: now,
         updatedAt: now,
       });
+
+      // Send email notifications
+      try {
+        // Send notification to admin
+        await sendNGORegistrationNotificationToAdmin({
+          name,
+          contactName,
+          email,
+          contactEmail,
+          description,
+          jurisdiction,
+          serviceLocations,
+          causes,
+          website,
+          ngoId,
+        });
+
+        // Send confirmation to NGO
+        await sendNGORegistrationConfirmationToNGO(email, contactName, name);
+      } catch (emailError) {
+        // Log email errors but don't fail the registration
+        console.error('Error sending registration emails:', emailError);
+      }
 
       return NextResponse.json(
         {
