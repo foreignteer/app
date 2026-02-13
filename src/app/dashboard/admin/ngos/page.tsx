@@ -40,6 +40,7 @@ interface NGO {
 }
 
 export default function AdminNGOsPage() {
+  // Force cache invalidation - 2026-02-13
   const { user, firebaseUser } = useAuth();
   const [ngos, setNgos] = useState<NGO[]>([]);
   const [loading, setLoading] = useState(true);
