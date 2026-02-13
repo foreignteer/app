@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
     // Count pending NGO approvals
     ngosSnapshot.forEach((doc: FirebaseFirestore.QueryDocumentSnapshot) => {
       const data = doc.data();
-      if (data.verificationStatus === 'pending') {
+      if (data.approved === false) {
         pendingNGOs++;
       }
     });
