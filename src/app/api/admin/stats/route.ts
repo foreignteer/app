@@ -82,11 +82,11 @@ export async function GET(request: NextRequest) {
       else if (data.status === 'confirmed') confirmedBookings++;
     });
 
-    // Count pending NGO approvals (not yet approved)
+    // Count pending NGO approvals (not yet approved AND not rejected)
     ngosSnapshot.forEach((doc: FirebaseFirestore.QueryDocumentSnapshot) => {
       const data = doc.data();
-      // Count as pending if NOT explicitly approved (handles false, undefined, null)
-      if (data.approved !== true) {
+      // Count as pending if NOT approved AND NOT rejected
+      if (data.approved !== true && !data.rejectionReason) {
         pendingNGOs++;
       }
     });

@@ -150,8 +150,8 @@ export default function AdminNGOsPage() {
     }
   };
 
-  const pendingNGOs = ngos.filter((ngo) => !ngo.approved);
-  const approvedNGOs = ngos.filter((ngo) => ngo.approved);
+  const pendingNGOs = ngos.filter((ngo) => !ngo.approved && !ngo.rejectionReason);
+  const approvedNGOs = ngos.filter((ngo) => ngo.approved === true);
 
   const displayedNGOs =
     filter === 'pending' ? pendingNGOs : filter === 'approved' ? approvedNGOs : ngos;
@@ -305,7 +305,7 @@ export default function AdminNGOsPage() {
                             )}
                           </div>
                           <p className="text-sm text-text-muted">
-                            Registered on {format(new Date(ngo.createdAt), 'dd MMM yyyy')}
+                            {ngo.createdAt && `Registered on ${format(new Date(ngo.createdAt), 'dd MMM yyyy')}`}
                             {ngo.rejectedAt && ` • Rejected on ${format(new Date(ngo.rejectedAt), 'dd MMM yyyy')}`}
                             {ngo.approvedAt && ` • Approved on ${format(new Date(ngo.approvedAt), 'dd MMM yyyy')}`}
                           </p>
