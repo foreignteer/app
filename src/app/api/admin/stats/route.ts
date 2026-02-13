@@ -88,8 +88,11 @@ export async function GET(request: NextRequest) {
       // Count as pending if NOT explicitly approved (handles false, undefined, null)
       if (data.approved !== true) {
         pendingNGOs++;
+        console.log(`Pending NGO found: ${data.name}, approved field: ${data.approved}`);
       }
     });
+
+    console.log(`Total NGOs: ${totalNGOs}, Pending NGOs: ${pendingNGOs}`);
 
     return NextResponse.json(
       {
