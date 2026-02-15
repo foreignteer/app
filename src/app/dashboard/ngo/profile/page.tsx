@@ -187,12 +187,13 @@ export default function NGOProfilePage() {
   };
 
   const uploadLogo = async (): Promise<string | null> => {
-    if (!logoFile || !user?.ngoId) return logoUrl || null;
+    if (!logoFile || !user?.uid) return logoUrl || null;
 
     setUploadingLogo(true);
     try {
       const fileExtension = logoFile.name.split('.').pop();
-      const fileName = `ngo-logos/${user.ngoId}-${Date.now()}.${fileExtension}`;
+      // Use user's UID for the folder to match storage rules
+      const fileName = `ngo-logos/${user.uid}/logo-${Date.now()}.${fileExtension}`;
       const storageRef = ref(storage, fileName);
 
       await uploadBytes(storageRef, logoFile);
