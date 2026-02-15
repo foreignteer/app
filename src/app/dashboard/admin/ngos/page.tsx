@@ -328,10 +328,10 @@ export default function AdminNGOsPage() {
                       </div>
 
                       <div className="mb-4">
-                        <p className={`text-text-primary ${expandedNGOs.has(ngo.id) ? '' : 'line-clamp-2'}`}>
+                        <p className={`text-text-primary ${expandedNGOs.has(ngo.id) ? '' : 'line-clamp-3'}`}>
                           {ngo.description}
                         </p>
-                        {ngo.description && ngo.description.length > 150 && (
+                        {ngo.description && ngo.description.length > 80 && (
                           <button
                             onClick={() => toggleExpanded(ngo.id)}
                             className="text-sm text-primary hover:text-primary-dark mt-2 font-medium"
