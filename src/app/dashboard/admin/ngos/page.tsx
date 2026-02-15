@@ -386,7 +386,6 @@ export default function AdminNGOsPage() {
                             ))}
                           </div>
                         </div>
-                      </div>
 
                         {ngo.website && (
                           <div className="col-span-2">
