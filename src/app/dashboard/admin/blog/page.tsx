@@ -5,6 +5,7 @@ import { useAuth } from '@/lib/hooks/useAuth';
 import { BlogPost, BlogPostFormData } from '@/lib/types/blog';
 import { Loader2, Plus, Edit2, Trash2, Eye, EyeOff, Save, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import RichTextEditor from '@/components/ui/RichTextEditor';
 
 export default function AdminBlogPage() {
   const { firebaseUser } = useAuth();
@@ -299,85 +300,13 @@ export default function AdminBlogPage() {
                 <label className="block text-sm font-medium text-[#4A4A4A] mb-2">
                   Content <span className="text-red-500">*</span>
                 </label>
-
-                {/* Formatting Toolbar */}
-                <div className="flex flex-wrap gap-2 mb-2 p-2 bg-gray-50 rounded-t-lg border border-b-0 border-[#E6EAEA]">
-                  <button
-                    type="button"
-                    onClick={() => insertFormatting('<h2>', '</h2>')}
-                    className="px-3 py-1 text-sm bg-white border border-[#E6EAEA] rounded hover:bg-gray-50"
-                    title="Heading 2"
-                  >
-                    H2
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => insertFormatting('<h3>', '</h3>')}
-                    className="px-3 py-1 text-sm bg-white border border-[#E6EAEA] rounded hover:bg-gray-50"
-                    title="Heading 3"
-                  >
-                    H3
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => insertFormatting('<strong>', '</strong>')}
-                    className="px-3 py-1 text-sm font-bold bg-white border border-[#E6EAEA] rounded hover:bg-gray-50"
-                    title="Bold"
-                  >
-                    B
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => insertFormatting('<em>', '</em>')}
-                    className="px-3 py-1 text-sm italic bg-white border border-[#E6EAEA] rounded hover:bg-gray-50"
-                    title="Italic"
-                  >
-                    I
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => insertFormatting('<a href="">', '</a>')}
-                    className="px-3 py-1 text-sm bg-white border border-[#E6EAEA] rounded hover:bg-gray-50"
-                    title="Link"
-                  >
-                    Link
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => insertFormatting('<ul>\n  <li>', '</li>\n</ul>')}
-                    className="px-3 py-1 text-sm bg-white border border-[#E6EAEA] rounded hover:bg-gray-50"
-                    title="Bullet List"
-                  >
-                    • List
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => insertFormatting('<p>', '</p>')}
-                    className="px-3 py-1 text-sm bg-white border border-[#E6EAEA] rounded hover:bg-gray-50"
-                    title="Paragraph"
-                  >
-                    ¶
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => insertFormatting('<img src="" alt="" />')}
-                    className="px-3 py-1 text-sm bg-white border border-[#E6EAEA] rounded hover:bg-gray-50"
-                    title="Image"
-                  >
-                    🖼️
-                  </button>
-                </div>
-
-                <textarea
-                  ref={contentRef}
+                <RichTextEditor
                   value={formData.content}
-                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  rows={20}
-                  className="w-full px-4 py-3 border border-[#E6EAEA] rounded-b-lg focus:outline-none focus:ring-2 focus:ring-[#21B3B1] font-mono text-sm"
-                  placeholder="Write your blog post content (HTML supported)..."
+                  onChange={(value) => setFormData({ ...formData, content: value })}
+                  placeholder="Write your blog post content..."
                 />
                 <p className="text-xs text-[#7A7A7A] mt-1">
-                  Use the toolbar buttons or write HTML directly
+                  Use the visual editor to format your content
                 </p>
               </div>
 

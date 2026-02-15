@@ -5,6 +5,7 @@ import { useAuth } from '@/lib/hooks/useAuth';
 import { Testimonial, TestimonialFormData } from '@/lib/types/testimonial';
 import { Loader2, Plus, Edit2, Trash2, Eye, EyeOff, Save, X, GripVertical, Star } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import RichTextEditor from '@/components/ui/RichTextEditor';
 
 export default function AdminTestimonialsPage() {
   const { firebaseUser } = useAuth();
@@ -323,13 +324,14 @@ export default function AdminTestimonialsPage() {
                 <label className="block text-sm font-medium text-[#4A4A4A] mb-2">
                   Testimonial Content <span className="text-red-500">*</span>
                 </label>
-                <textarea
+                <RichTextEditor
                   value={formData.content}
-                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  rows={6}
-                  className="w-full px-4 py-2 border border-[#E6EAEA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#21B3B1]"
+                  onChange={(value) => setFormData({ ...formData, content: value })}
                   placeholder="Write the testimonial..."
                 />
+                <p className="text-xs text-[#7A7A7A] mt-1">
+                  Format the testimonial text using the editor toolbar
+                </p>
               </div>
 
               {/* Image URL */}
