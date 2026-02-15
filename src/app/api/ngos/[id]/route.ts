@@ -153,6 +153,7 @@ export async function PATCH(
       website,
       contactEmail,
       causes,
+      featuredOnPartnerList,
     } = body;
 
     // Validate required fields
@@ -188,6 +189,7 @@ export async function PATCH(
       website: website?.trim() || null,
       contactEmail: contactEmail.trim(),
       causes,
+      featuredOnPartnerList: featuredOnPartnerList || false,
       updatedAt: new Date(),
     });
 

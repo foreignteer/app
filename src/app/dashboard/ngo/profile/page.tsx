@@ -82,6 +82,7 @@ export default function NGOProfilePage() {
   const [contactEmail, setContactEmail] = useState('');
   const [selectedCauses, setSelectedCauses] = useState<string[]>([]);
   const [otherCause, setOtherCause] = useState('');
+  const [featuredOnPartnerList, setFeaturedOnPartnerList] = useState(false);
 
   useEffect(() => {
     if (user && firebaseUser) {
@@ -120,6 +121,7 @@ export default function NGOProfilePage() {
       setServiceLocations(data.ngo.serviceLocations || []);
       setWebsite(data.ngo.website || '');
       setContactEmail(data.ngo.contactEmail || '');
+      setFeaturedOnPartnerList(data.ngo.featuredOnPartnerList || false);
 
       // Handle causes including custom "Other:" entries
       const causes = data.ngo.causes || [];
@@ -269,6 +271,7 @@ export default function NGOProfilePage() {
           website: website.trim() || null,
           contactEmail: contactEmail.trim(),
           causes: finalCauses,
+          featuredOnPartnerList,
         }),
       });
 
@@ -647,6 +650,26 @@ export default function NGOProfilePage() {
                   placeholder="Please specify other cause category"
                 />
               )}
+            </div>
+
+            {/* Feature on Partner List */}
+            <div className="bg-[#C9F0EF] border border-[#21B3B1] rounded-lg p-4">
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={featuredOnPartnerList}
+                  onChange={(e) => setFeaturedOnPartnerList(e.target.checked)}
+                  className="w-5 h-5 mt-0.5 text-[#21B3B1] border-[#21B3B1] rounded focus:ring-[#21B3B1]"
+                />
+                <div>
+                  <span className="text-sm font-medium text-[#4A4A4A] block">
+                    Feature on Verified Partners Page
+                  </span>
+                  <span className="text-xs text-[#7A7A7A] block mt-1">
+                    Once approved, your organization will appear on our public Verified Partners list, showcasing your logo, name, country, and causes to potential volunteers.
+                  </span>
+                </div>
+              </label>
             </div>
 
             {/* Save Button */}

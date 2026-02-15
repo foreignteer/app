@@ -4,10 +4,11 @@ import { NGO } from '@/lib/types/ngo';
 
 export async function GET() {
   try {
-    // Fetch all approved NGOs
+    // Fetch all approved NGOs that are featured on partner list
     const ngosSnapshot = await adminDb
       .collection('ngos')
-      .where('approvalStatus', '==', 'approved')
+      .where('approved', '==', true)
+      .where('featuredOnPartnerList', '==', true)
       .get();
 
     const ngos: NGO[] = [];
