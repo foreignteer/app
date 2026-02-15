@@ -328,20 +328,27 @@ export default function AdminNGOsPage() {
                       </div>
 
                       <div className="mb-4">
-                        <p className={`text-text-primary ${expandedNGOs.has(ngo.id) ? '' : 'line-clamp-3'}`}>
+                        <p className="text-text-primary mb-3">
                           {ngo.description}
                         </p>
-                        {ngo.description && ngo.description.length > 80 && (
-                          <button
-                            onClick={() => toggleExpanded(ngo.id)}
-                            className="text-sm text-primary hover:text-primary-dark mt-2 font-medium"
-                          >
-                            {expandedNGOs.has(ngo.id) ? '← Show less' : 'View full details →'}
-                          </button>
-                        )}
+                        <button
+                          onClick={() => toggleExpanded(ngo.id)}
+                          className="text-sm text-primary hover:text-primary-dark font-medium inline-flex items-center gap-1"
+                        >
+                          {expandedNGOs.has(ngo.id) ? (
+                            <>
+                              <span>← Hide details</span>
+                            </>
+                          ) : (
+                            <>
+                              <span>View full profile →</span>
+                            </>
+                          )}
+                        </button>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
+                      {expandedNGOs.has(ngo.id) && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4 bg-[#FAF5EC] p-4 rounded-lg">
                         {ngo.entityType && (
                           <div className="flex items-center gap-2">
                             <Building2 className="w-4 h-4 text-text-muted" />
@@ -381,16 +388,20 @@ export default function AdminNGOsPage() {
                         </div>
                       </div>
 
-                      {ngo.website && (
-                        <a
-                          href={ngo.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary-dark"
-                        >
-                          Visit Website
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
+                        {ngo.website && (
+                          <div className="col-span-2">
+                            <a
+                              href={ngo.website}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary-dark"
+                            >
+                              Visit Website
+                              <ExternalLink className="w-4 h-4" />
+                            </a>
+                          </div>
+                        )}
+                      </div>
                       )}
 
                       {/* Rejection Reason */}
