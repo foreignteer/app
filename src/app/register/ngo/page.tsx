@@ -70,6 +70,9 @@ export default function RegisterNGOPage() {
     serviceLocations: '',
     website: '',
     contactEmail: '',
+    hasInsurance: false,
+    insuranceType: '',
+    insuranceCoverageLimit: '',
   });
 
   // Causes (checkboxes)
@@ -146,6 +149,14 @@ export default function RegisterNGOPage() {
       setError('Please enter a contact email address');
       return false;
     }
+    if (orgData.hasInsurance && !orgData.insuranceType.trim()) {
+      setError('Please specify your insurance type');
+      return false;
+    }
+    if (orgData.hasInsurance && !orgData.insuranceCoverageLimit.trim()) {
+      setError('Please specify your insurance coverage limit');
+      return false;
+    }
     if (selectedCauses.length === 0 && !otherCause.trim()) {
       setError('Please select at least one cause category');
       return false;
@@ -202,6 +213,10 @@ export default function RegisterNGOPage() {
         website: orgData.website || undefined,
         contactEmail: orgData.contactEmail,
         causes: finalCauses,
+        // Insurance info
+        hasInsurance: orgData.hasInsurance,
+        insuranceType: orgData.hasInsurance ? orgData.insuranceType : null,
+        insuranceCoverageLimit: orgData.hasInsurance ? orgData.insuranceCoverageLimit : null,
       };
 
       const response = await fetch('/api/register/ngo', {
@@ -541,6 +556,70 @@ export default function RegisterNGOPage() {
                         onChange={handleOrgChange}
                         placeholder="https://www.ngo.org"
                       />
+                    </div>
+
+                    {/* Insurance Information */}
+                    <div className="border-t pt-4 mt-4">
+                      <label className="block text-sm font-medium text-[#4A4A4A] mb-3">
+                        Insurance Coverage *
+                      </label>
+                      <p className="text-sm text-[#7A7A7A] mb-4">
+                        To ensure volunteer safety, we require NGOs to have appropriate insurance coverage for activities.
+                      </p>
+
+                      <div className="flex items-start mb-4">
+                        <div className="flex items-center h-5">
+                          <input
+                            id="hasInsurance"
+                            name="hasInsurance"
+                            type="checkbox"
+                            checked={orgData.hasInsurance}
+                            onChange={(e) => {
+                              setOrgData({
+                                ...orgData,
+                                hasInsurance: e.target.checked,
+                                insuranceType: e.target.checked ? orgData.insuranceType : '',
+                                insuranceCoverageLimit: e.target.checked ? orgData.insuranceCoverageLimit : '',
+                              });
+                            }}
+                            className="h-4 w-4 text-[#21B3B1] focus:ring-[#21B3B1] border-gray-300 rounded"
+                          />
+                        </div>
+                        <div className="ml-3">
+                          <label htmlFor="hasInsurance" className="text-sm font-medium text-[#4A4A4A]">
+                            We have relevant insurance to cover accidents during our experiences
+                          </label>
+                          <p className="text-xs text-[#7A7A7A] mt-1">
+                            e.g., Public Liability Insurance, Professional Indemnity Insurance
+                          </p>
+                        </div>
+                      </div>
+
+                      {orgData.hasInsurance && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-[#FAF5EC] border border-[#E6EAEA] rounded-lg">
+                          <Input
+                            id="insuranceType"
+                            name="insuranceType"
+                            label="Insurance Type"
+                            value={orgData.insuranceType}
+                            onChange={handleOrgChange}
+                            placeholder="e.g., Public Liability Insurance"
+                            required
+                            helperText="Type of insurance coverage"
+                          />
+
+                          <Input
+                            id="insuranceCoverageLimit"
+                            name="insuranceCoverageLimit"
+                            label="Coverage Limit"
+                            value={orgData.insuranceCoverageLimit}
+                            onChange={handleOrgChange}
+                            placeholder="e.g., £1,000,000 or £5,000,000"
+                            required
+                            helperText="Maximum coverage amount"
+                          />
+                        </div>
+                      )}
                     </div>
 
                     <div>

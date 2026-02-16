@@ -1025,6 +1025,9 @@ export async function sendNGORegistrationNotificationToAdmin(
     serviceLocations: string[];
     causes: string[];
     website?: string;
+    hasInsurance?: boolean;
+    insuranceType?: string;
+    insuranceCoverageLimit?: string;
     ngoId: string;
   }
 ): Promise<void> {
@@ -1050,6 +1053,9 @@ export async function sendNGORegistrationNotificationToAdmin(
         <p><strong>Jurisdiction:</strong> ${ngoDetails.jurisdiction}</p>
         <p><strong>Service Locations:</strong> ${ngoDetails.serviceLocations.join(', ')}</p>
         <p><strong>Causes:</strong> ${ngoDetails.causes.join(', ')}</p>
+        <p><strong>Has Insurance:</strong> ${ngoDetails.hasInsurance ? 'Yes' : 'No'}</p>
+        ${ngoDetails.hasInsurance && ngoDetails.insuranceType ? `<p><strong>Insurance Type:</strong> ${ngoDetails.insuranceType}</p>` : ''}
+        ${ngoDetails.hasInsurance && ngoDetails.insuranceCoverageLimit ? `<p><strong>Coverage Limit:</strong> ${ngoDetails.insuranceCoverageLimit}</p>` : ''}
       </div>
 
       <div style="background-color: #F6F9F9; border: 1px solid #E6EAEA; padding: 16px; margin: 20px 0; border-radius: 8px;">
@@ -1081,6 +1087,9 @@ export async function sendNGORegistrationNotificationToAdmin(
       - Jurisdiction: ${ngoDetails.jurisdiction}
       - Service Locations: ${ngoDetails.serviceLocations.join(', ')}
       - Causes: ${ngoDetails.causes.join(', ')}
+      - Has Insurance: ${ngoDetails.hasInsurance ? 'Yes' : 'No'}
+      ${ngoDetails.hasInsurance && ngoDetails.insuranceType ? `- Insurance Type: ${ngoDetails.insuranceType}` : ''}
+      ${ngoDetails.hasInsurance && ngoDetails.insuranceCoverageLimit ? `- Coverage Limit: ${ngoDetails.insuranceCoverageLimit}` : ''}
 
       Description:
       ${ngoDetails.description}

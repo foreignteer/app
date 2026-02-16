@@ -29,6 +29,9 @@ export async function POST(request: NextRequest) {
       website,
       contactEmail,
       causes,
+      hasInsurance,
+      insuranceType,
+      insuranceCoverageLimit,
     } = body;
 
     // Validate required fields
@@ -117,6 +120,9 @@ export async function POST(request: NextRequest) {
         contactEmail,
         publicSlug,
         causes,
+        hasInsurance: hasInsurance || false,
+        insuranceType: insuranceType || null,
+        insuranceCoverageLimit: insuranceCoverageLimit || null,
         approved: false, // Requires admin approval
         createdBy: userId,
         createdAt: now,
@@ -155,6 +161,9 @@ export async function POST(request: NextRequest) {
           serviceLocations,
           causes,
           website,
+          hasInsurance,
+          insuranceType,
+          insuranceCoverageLimit,
           ngoId,
         });
 
