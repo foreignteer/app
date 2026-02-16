@@ -553,10 +553,10 @@ export default function RegisterNGOPage() {
                     {/* Insurance Information */}
                     <div className="border-t pt-4 mt-4">
                       <label className="block text-sm font-medium text-[#4A4A4A] mb-3">
-                        Insurance Coverage *
+                        Insurance Coverage
                       </label>
                       <p className="text-sm text-[#7A7A7A] mb-4">
-                        To ensure volunteer safety, we require NGOs to have appropriate insurance coverage for activities.
+                        To ensure volunteer safety, we encourage NGOs to have appropriate insurance coverage for activities.
                       </p>
 
                       <div className="flex items-start mb-4">
