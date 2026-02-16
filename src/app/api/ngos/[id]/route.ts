@@ -154,6 +154,9 @@ export async function PATCH(
       contactEmail,
       causes,
       featuredOnPartnerList,
+      hasInsurance,
+      insuranceType,
+      insuranceCoverageLimit,
     } = body;
 
     // Validate required fields
@@ -190,6 +193,9 @@ export async function PATCH(
       contactEmail: contactEmail.trim(),
       causes,
       featuredOnPartnerList: featuredOnPartnerList || false,
+      hasInsurance: hasInsurance || false,
+      insuranceType: insuranceType || null,
+      insuranceCoverageLimit: insuranceCoverageLimit || null,
       updatedAt: new Date(),
     });
 

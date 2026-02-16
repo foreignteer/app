@@ -83,6 +83,9 @@ export default function NGOProfilePage() {
   const [selectedCauses, setSelectedCauses] = useState<string[]>([]);
   const [otherCause, setOtherCause] = useState('');
   const [featuredOnPartnerList, setFeaturedOnPartnerList] = useState(false);
+  const [hasInsurance, setHasInsurance] = useState(false);
+  const [insuranceType, setInsuranceType] = useState('');
+  const [insuranceCoverageLimit, setInsuranceCoverageLimit] = useState('');
 
   useEffect(() => {
     if (user && firebaseUser) {
@@ -122,6 +125,9 @@ export default function NGOProfilePage() {
       setWebsite(data.ngo.website || '');
       setContactEmail(data.ngo.contactEmail || '');
       setFeaturedOnPartnerList(data.ngo.featuredOnPartnerList || false);
+      setHasInsurance(data.ngo.hasInsurance || false);
+      setInsuranceType(data.ngo.insuranceType || '');
+      setInsuranceCoverageLimit(data.ngo.insuranceCoverageLimit || '');
 
       // Handle causes including custom "Other:" entries
       const causes = data.ngo.causes || [];
@@ -272,6 +278,9 @@ export default function NGOProfilePage() {
           contactEmail: contactEmail.trim(),
           causes: finalCauses,
           featuredOnPartnerList,
+          hasInsurance,
+          insuranceType: hasInsurance ? insuranceType : null,
+          insuranceCoverageLimit: hasInsurance ? insuranceCoverageLimit : null,
         }),
       });
 
@@ -649,6 +658,74 @@ export default function NGOProfilePage() {
                   className="mt-3 w-full px-4 py-2 border border-[#E6EAEA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#21B3B1]"
                   placeholder="Please specify other cause category"
                 />
+              )}
+            </div>
+
+            {/* Insurance Information */}
+            <div className="border-t pt-4 mt-4">
+              <label className="block text-sm font-medium text-[#4A4A4A] mb-3">
+                Insurance Coverage *
+              </label>
+              <p className="text-sm text-[#7A7A7A] mb-4">
+                To ensure volunteer safety, we require NGOs to have appropriate insurance coverage for activities.
+              </p>
+
+              <div className="flex items-start mb-4">
+                <div className="flex items-center h-5">
+                  <input
+                    id="hasInsurance"
+                    type="checkbox"
+                    checked={hasInsurance}
+                    onChange={(e) => {
+                      setHasInsurance(e.target.checked);
+                      if (!e.target.checked) {
+                        setInsuranceType('');
+                        setInsuranceCoverageLimit('');
+                      }
+                    }}
+                    className="h-4 w-4 text-[#21B3B1] focus:ring-[#21B3B1] border-gray-300 rounded"
+                  />
+                </div>
+                <div className="ml-3">
+                  <label htmlFor="hasInsurance" className="text-sm font-medium text-[#4A4A4A]">
+                    We have relevant insurance to cover accidents during our experiences
+                  </label>
+                  <p className="text-xs text-[#7A7A7A] mt-1">
+                    e.g., Public Liability Insurance, Professional Indemnity Insurance
+                  </p>
+                </div>
+              </div>
+
+              {hasInsurance && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-[#FAF5EC] border border-[#E6EAEA] rounded-lg">
+                  <div>
+                    <label className="block text-sm font-medium text-[#4A4A4A] mb-2">
+                      Insurance Type *
+                    </label>
+                    <input
+                      type="text"
+                      value={insuranceType}
+                      onChange={(e) => setInsuranceType(e.target.value)}
+                      className="w-full px-4 py-2 border border-[#E6EAEA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#21B3B1]"
+                      placeholder="e.g., Public Liability Insurance"
+                    />
+                    <p className="text-xs text-[#7A7A7A] mt-1">Type of insurance coverage</p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-[#4A4A4A] mb-2">
+                      Coverage Limit *
+                    </label>
+                    <input
+                      type="text"
+                      value={insuranceCoverageLimit}
+                      onChange={(e) => setInsuranceCoverageLimit(e.target.value)}
+                      className="w-full px-4 py-2 border border-[#E6EAEA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#21B3B1]"
+                      placeholder="e.g., £1,000,000 or £5,000,000"
+                    />
+                    <p className="text-xs text-[#7A7A7A] mt-1">Maximum coverage amount</p>
+                  </div>
+                </div>
               )}
             </div>
 
