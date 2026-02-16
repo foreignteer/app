@@ -149,14 +149,6 @@ export default function RegisterNGOPage() {
       setError('Please enter a contact email address');
       return false;
     }
-    if (orgData.hasInsurance && !orgData.insuranceType.trim()) {
-      setError('Please specify your insurance type');
-      return false;
-    }
-    if (orgData.hasInsurance && !orgData.insuranceCoverageLimit.trim()) {
-      setError('Please specify your insurance coverage limit');
-      return false;
-    }
     if (selectedCauses.length === 0 && !otherCause.trim()) {
       setError('Please select at least one cause category');
       return false;
@@ -600,22 +592,20 @@ export default function RegisterNGOPage() {
                           <Input
                             id="insuranceType"
                             name="insuranceType"
-                            label="Insurance Type"
+                            label="Insurance Type (Optional)"
                             value={orgData.insuranceType}
                             onChange={handleOrgChange}
                             placeholder="e.g., Public Liability Insurance"
-                            required
                             helperText="Type of insurance coverage"
                           />
 
                           <Input
                             id="insuranceCoverageLimit"
                             name="insuranceCoverageLimit"
-                            label="Coverage Limit"
+                            label="Coverage Limit (Optional)"
                             value={orgData.insuranceCoverageLimit}
                             onChange={handleOrgChange}
                             placeholder="e.g., £1,000,000 or £5,000,000"
-                            required
                             helperText="Maximum coverage amount"
                           />
                         </div>

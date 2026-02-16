@@ -700,7 +700,7 @@ export default function NGOProfilePage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-[#FAF5EC] border border-[#E6EAEA] rounded-lg">
                   <div>
                     <label className="block text-sm font-medium text-[#4A4A4A] mb-2">
-                      Insurance Type *
+                      Insurance Type (Optional)
                     </label>
                     <input
                       type="text"
@@ -714,7 +714,7 @@ export default function NGOProfilePage() {
 
                   <div>
                     <label className="block text-sm font-medium text-[#4A4A4A] mb-2">
-                      Coverage Limit *
+                      Coverage Limit (Optional)
                     </label>
                     <input
                       type="text"
