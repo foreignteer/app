@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
+import RichTextEditor from '@/components/ui/RichTextEditor';
 import ImageUpload from '@/components/forms/ImageUpload';
 import LocationPicker from '@/components/forms/LocationPicker';
 import { useAuth } from '@/lib/hooks/useAuth';
@@ -476,16 +477,19 @@ export default function EditExperiencePage() {
                 helperText={`${formData.summary.length}/150 characters`}
               />
 
-              <Textarea
-                id="description"
-                name="description"
-                label="Full Description *"
-                value={formData.description}
-                onChange={handleChange}
-                required
-                rows={8}
-                placeholder="Detailed description of the experience, what volunteers will do, what's included, etc."
-              />
+              <div>
+                <label className="block text-sm font-medium text-text-primary mb-2">
+                  Full Description *
+                </label>
+                <RichTextEditor
+                  value={formData.description}
+                  onChange={(value) => setFormData({ ...formData, description: value })}
+                  placeholder="Detailed description of the experience, what volunteers will do, what's included, etc."
+                />
+                <p className="text-sm text-text-muted mt-1">
+                  Use the toolbar to format your text with headings, bold, italic, and lists
+                </p>
+              </div>
 
               {/* Cause Categories - Multi-select */}
               <div>
