@@ -37,6 +37,9 @@ interface NGO {
   createdBy: string;
   createdAt: Date;
   updatedAt: Date;
+  hasInsurance?: boolean;
+  insuranceType?: string;
+  insuranceCoverageLimit?: string;
 }
 
 export default function AdminNGOsPage() {
@@ -400,6 +403,35 @@ export default function AdminNGOsPage() {
                             </a>
                           </div>
                         )}
+
+                        {/* Insurance Information */}
+                        <div className="col-span-2 pt-3 border-t border-[#E6EAEA]">
+                          <span className="text-text-muted font-medium">Insurance Coverage: </span>
+                          {ngo.hasInsurance ? (
+                            <div className="mt-2 p-3 bg-[#C9F0EF] border border-[#21B3B1] rounded-lg">
+                              <div className="flex items-center gap-2 mb-2">
+                                <CheckCircle className="w-4 h-4 text-[#21B3B1]" />
+                                <span className="text-sm font-medium text-[#4A4A4A]">
+                                  Has Insurance Coverage
+                                </span>
+                              </div>
+                              {ngo.insuranceType && (
+                                <div className="text-sm text-[#4A4A4A] ml-6">
+                                  <span className="font-medium">Type:</span> {ngo.insuranceType}
+                                </div>
+                              )}
+                              {ngo.insuranceCoverageLimit && (
+                                <div className="text-sm text-[#4A4A4A] ml-6">
+                                  <span className="font-medium">Coverage Limit:</span> {ngo.insuranceCoverageLimit}
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <span className="text-[#7A7A7A] text-sm">
+                              No insurance information provided
+                            </span>
+                          )}
+                        </div>
                       </div>
                       )}
 
