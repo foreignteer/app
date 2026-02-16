@@ -15,6 +15,7 @@ import {
   CheckCircle,
   X,
   Star,
+  BarChart3,
 } from 'lucide-react';
 
 interface DashboardSidebarProps {
@@ -27,6 +28,7 @@ export default function DashboardSidebar({ role, onClose }: DashboardSidebarProp
 
   const adminLinks = [
     { href: '/dashboard/admin', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/dashboard/admin/analytics', label: 'Analytics', icon: BarChart3 },
     { href: '/dashboard/admin/ngos', label: 'NGO Approvals', icon: Building2 },
     {
       href: '/dashboard/admin/experiences',
