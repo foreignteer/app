@@ -1,5 +1,3 @@
-import Link from 'next/link';
-import Image from 'next/image';
 import {
   Building2,
   Calendar,
@@ -174,15 +172,6 @@ export default function NGOUserManual() {
       {/* ── Cover ──────────────────────────────────────────────────────────── */}
       <div className="bg-[#21B3B1] text-white">
         <div className="max-w-4xl mx-auto px-6 py-16">
-          <Link href="/" className="inline-block mb-8 opacity-80 hover:opacity-100 transition-opacity">
-            <Image
-              src="/images/foreignteer-logo.png"
-              alt="Foreignteer"
-              width={160}
-              height={46}
-              className="brightness-0 invert"
-            />
-          </Link>
           <div className="flex items-start gap-6">
             <div className="w-20 h-20 rounded-3xl bg-white/20 flex items-center justify-center flex-shrink-0">
               <Building2 className="w-10 h-10 text-white" />
