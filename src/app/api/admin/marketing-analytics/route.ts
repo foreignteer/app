@@ -1,6 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminAuth, adminDb } from '@/lib/firebase/admin';
 
+interface StoredAnalyticsEvent {
+  id: string;
+  action: string;
+  category?: string;
+  label?: string;
+  value?: number;
+  userId?: string;
+  properties?: Record<string, any>;
+  timestamp: string | null;
+  url?: string;
+  pathname?: string;
+  referrer?: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_term?: string;
+  utm_content?: string;
+}
+
 export async function GET(request: NextRequest) {
   try {
     // Get the authorization token
@@ -49,11 +68,11 @@ export async function GET(request: NextRequest) {
       .orderBy('timestamp', 'desc')
       .get();
 
-    const events = eventsSnapshot.docs.map(doc => ({
+    const events: StoredAnalyticsEvent[] = eventsSnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
       timestamp: doc.data().timestamp?.toDate?.()?.toISOString() || null,
-    }));
+    } as StoredAnalyticsEvent));
 
     // Calculate conversion funnel metrics
     const funnelSteps = {
@@ -145,7 +164,7 @@ export async function GET(request: NextRequest) {
 
     // Traffic sources analysis
     const trafficSources: Record<string, number> = {};
-    events.forEach((event: any) => {
+    events.forEach((event) => {
       if (event.utm_source) {
         trafficSources[event.utm_source] = (trafficSources[event.utm_source] || 0) + 1;
       } else if (event.referrer) {
@@ -169,7 +188,7 @@ export async function GET(request: NextRequest) {
 
     // UTM Campaign analysis
     const campaigns: Record<string, number> = {};
-    events.forEach((event: any) => {
+    events.forEach((event) => {
       if (event.utm_campaign) {
         campaigns[event.utm_campaign] = (campaigns[event.utm_campaign] || 0) + 1;
       }
@@ -184,7 +203,7 @@ export async function GET(request: NextRequest) {
     const pageViews: Record<string, number> = {};
     events
       .filter(e => e.action === 'page_view')
-      .forEach((event: any) => {
+      .forEach((event) => {
         const page = event.pathname || event.label || 'Unknown';
         pageViews[page] = (pageViews[page] || 0) + 1;
       });
@@ -227,7 +246,7 @@ export async function GET(request: NextRequest) {
     const ctaClicks: Record<string, number> = {};
     events
       .filter(e => e.action === 'cta_click')
-      .forEach((event: any) => {
+      .forEach((event) => {
         const cta = event.label || 'Unknown';
         ctaClicks[cta] = (ctaClicks[cta] || 0) + 1;
       });
