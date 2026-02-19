@@ -176,6 +176,14 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link
+                  href="/refund-policy"
+                  className="text-text-light hover:text-primary transition-colors"
+                >
+                  Refund Policy
+                </Link>
+              </li>
+              <li>
                 <ManageCookies />
               </li>
             </ul>
