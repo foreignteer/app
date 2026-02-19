@@ -88,6 +88,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${montserrat.variable} ${lato.variable}`}>
       <body className="antialiased">
+        {/* Organization Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -95,9 +96,11 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'Organization',
               name: 'Foreignteer',
+              alternateName: 'Foreignteer Volunteering Platform',
               url: 'https://www.foreignteer.com',
               logo: 'https://www.foreignteer.com/images/foreignteer-logo.png',
-              description: 'Micro-volunteering platform connecting travellers with local causes',
+              description: 'Micro-volunteering platform connecting travelers with meaningful volunteering experiences worldwide',
+              foundingDate: '2025',
               sameAs: [
                 'https://www.facebook.com/foreignteer',
                 'https://www.instagram.com/foreignteer/',
@@ -107,6 +110,33 @@ export default function RootLayout({
                 '@type': 'ContactPoint',
                 contactType: 'Customer Service',
                 email: 'info@foreignteer.com',
+                areaServed: 'Worldwide',
+                availableLanguage: ['English'],
+              },
+              address: {
+                '@type': 'PostalAddress',
+                addressLocality: 'Hong Kong',
+                addressCountry: 'HK',
+              },
+            }),
+          }}
+        />
+        {/* WebSite Schema for Search Box */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: 'Foreignteer',
+              url: 'https://www.foreignteer.com',
+              potentialAction: {
+                '@type': 'SearchAction',
+                target: {
+                  '@type': 'EntryPoint',
+                  urlTemplate: 'https://www.foreignteer.com/experiences?search={search_term_string}',
+                },
+                'query-input': 'required name=search_term_string',
               },
             }),
           }}
