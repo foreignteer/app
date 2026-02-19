@@ -26,6 +26,7 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [marketingConsent, setMarketingConsent] = useState(true); // Pre-ticked per GDPR requirement
+  const [hasTravelInsurance, setHasTravelInsurance] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
 
   useEffect(() => {
@@ -64,7 +65,7 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      const userCredential = await signUp(formData.email, formData.password, formData.displayName);
+      const userCredential = await signUp(formData.email, formData.password, formData.displayName, hasTravelInsurance);
 
       // Track successful registration
       AnalyticsEvents.USER_REGISTER_COMPLETE(userCredential.user.uid);
@@ -300,6 +301,32 @@ export default function RegisterPage() {
                 <label htmlFor="marketing" className="text-text-primary">
                   I'd like to receive updates about new volunteering opportunities, impact stories, and travel tips from Foreignteer (you can unsubscribe anytime)
                 </label>
+              </div>
+            </div>
+
+            {/* Travel Insurance Declaration */}
+            <div className="flex items-start">
+              <div className="flex items-center h-5">
+                <input
+                  id="travelInsurance"
+                  name="travelInsurance"
+                  type="checkbox"
+                  checked={hasTravelInsurance}
+                  onChange={(e) => setHasTravelInsurance(e.target.checked)}
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                />
+              </div>
+              <div className="ml-3 text-sm">
+                <label htmlFor="travelInsurance" className="text-text-primary">
+                  I confirm that I have valid travel insurance that covers volunteering activities
+                </label>
+                <p className="text-xs text-text-muted mt-1">
+                  Travel insurance is strongly recommended for all volunteering experiences. See our{' '}
+                  <Link href="/refund-policy" className="text-primary hover:text-primary-dark">
+                    refund policy
+                  </Link>{' '}
+                  for more information.
+                </p>
               </div>
             </div>
 

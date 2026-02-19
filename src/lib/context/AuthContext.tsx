@@ -23,7 +23,7 @@ interface AuthContextType {
   firebaseUser: FirebaseUser | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, displayName: string) => Promise<UserCredential>;
+  signUp: (email: string, password: string, displayName: string, hasTravelInsurance?: boolean) => Promise<UserCredential>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   confirmPasswordReset: (oobCode: string, newPassword: string) => Promise<void>;
@@ -112,7 +112,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await signInWithEmailAndPassword(auth, email, password);
   };
 
-  const signUp = async (email: string, password: string, displayName: string): Promise<UserCredential> => {
+  const signUp = async (email: string, password: string, displayName: string, hasTravelInsurance?: boolean): Promise<UserCredential> => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
     // Update profile with display name
@@ -127,6 +127,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       role: 'user',
       profileCompleted: false,
       emailVerified: false,
+      hasTravelInsurance: hasTravelInsurance ?? false,
       createdAt: new Date(),
       updatedAt: new Date(),
     }, { merge: true });

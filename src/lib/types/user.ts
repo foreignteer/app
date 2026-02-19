@@ -20,6 +20,7 @@ export interface User {
     phone: string;
     relationship: string;
   };
+  hasTravelInsurance?: boolean; // Whether user has travel insurance
   profileCompleted: boolean;
   createdAt: Date;
   updatedAt: Date;
