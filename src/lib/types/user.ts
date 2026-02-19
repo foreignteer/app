@@ -1,4 +1,5 @@
 export type UserRole = 'admin' | 'ngo' | 'user';
+export type NGORole = 'owner' | 'staff';
 
 export interface User {
   uid: string;
@@ -7,6 +8,7 @@ export interface User {
   avatar?: string;
   role: UserRole;
   ngoId?: string; // For NGO users
+  ngoRole?: NGORole; // For NGO users: 'owner' or 'staff'
   countryOfOrigin?: string;
   volunteeringExperience?: string;
   jobTitle?: string;

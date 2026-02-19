@@ -9,6 +9,7 @@ import { useAuth } from '@/lib/hooks/useAuth';
 import { useBookings } from '@/lib/hooks/useBookings';
 import { Experience } from '@/lib/types/experience';
 import { CheckCircle, Clock, X, AlertCircle } from 'lucide-react';
+import { AnalyticsEvents } from '@/lib/analytics/tracker';
 
 interface BookingFormProps {
   experience: Experience;
@@ -83,8 +84,16 @@ export default function BookingForm({
     }
 
     try {
-      await createBooking(experience.id, formData);
+      const booking = await createBooking(experience.id, formData);
       setSuccess(true);
+
+      // Track successful booking completion
+      AnalyticsEvents.BOOKING_COMPLETE(
+        booking?.id || '',
+        experience.id,
+        experience.totalFee || experience.platformServiceFee || 0,
+        user.uid
+      );
 
       // Call onSuccess callback if provided
       if (onSuccess) {

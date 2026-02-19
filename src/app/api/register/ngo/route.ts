@@ -142,9 +142,23 @@ export async function POST(request: NextRequest) {
         displayName: contactName,
         role: 'ngo',
         ngoId, // Link user to NGO
+        ngoRole: 'owner', // First registrant is always owner
         profileCompleted: true,
         createdAt: now,
         updatedAt: now,
+      });
+
+      // Create team member record for the owner
+      await adminDb.collection('ngoTeamMembers').add({
+        ngoId,
+        userId,
+        ngoRole: 'owner',
+        email,
+        displayName: contactName,
+        invitedBy: userId,
+        invitedAt: now,
+        joinedAt: now,
+        status: 'active',
       });
 
       // Send email notifications

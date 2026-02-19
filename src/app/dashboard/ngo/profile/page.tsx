@@ -6,7 +6,7 @@ import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/lib/hooks/useAuth';
-import { Building2, Save, AlertCircle, CheckCircle, Upload, X } from 'lucide-react';
+import { Building2, Save, AlertCircle, CheckCircle, Upload, X, Lock } from 'lucide-react';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/lib/firebase/config';
 
@@ -337,6 +337,46 @@ export default function NGOProfilePage() {
       <DashboardLayout requiredRole="ngo">
         <div className="flex items-center justify-center min-h-screen">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  // Staff members cannot edit NGO profile
+  if (user?.ngoRole === 'staff') {
+    return (
+      <DashboardLayout requiredRole="ngo">
+        <div className="space-y-6">
+          <div>
+            <h1 className="text-3xl font-bold text-[#4A4A4A] mb-2">NGO Profile</h1>
+            <p className="text-[#7A7A7A]">Organisation information</p>
+          </div>
+          <Card>
+            <CardContent className="p-8 text-center">
+              <div className="w-14 h-14 bg-[#FAF5EC] border border-[#E6EAEA] rounded-full flex items-center justify-center mx-auto mb-4">
+                <Lock className="w-6 h-6 text-[#8FA6A1]" />
+              </div>
+              <h2 className="text-lg font-semibold text-[#4A4A4A] mb-2">Owner access required</h2>
+              <p className="text-[#7A7A7A] text-sm max-w-sm mx-auto">
+                Only NGO owners can edit the organisation profile. Contact your NGO owner if you need
+                to make changes.
+              </p>
+            </CardContent>
+          </Card>
+          {ngoData && (
+            <Card>
+              <CardContent className="p-6 space-y-3">
+                <h3 className="font-semibold text-[#4A4A4A]">{ngoData.name}</h3>
+                <p className="text-sm text-[#7A7A7A]">{ngoData.description}</p>
+                <p className="text-sm text-[#7A7A7A]">
+                  <span className="font-medium text-[#4A4A4A]">Jurisdiction:</span> {ngoData.jurisdiction}
+                </p>
+                <p className="text-sm text-[#7A7A7A]">
+                  <span className="font-medium text-[#4A4A4A]">Contact:</span> {ngoData.contactEmail}
+                </p>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </DashboardLayout>
     );

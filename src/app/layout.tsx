@@ -5,6 +5,7 @@ import { AuthProvider } from "@/lib/context/AuthContext";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CookieConsent from "@/components/CookieConsent";
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -110,6 +111,7 @@ export default function RootLayout({
             }),
           }}
         />
+        <GoogleAnalytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX'} />
         <AuthProvider>
           <div className="flex flex-col min-h-screen">
             <Header />

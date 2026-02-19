@@ -16,6 +16,9 @@ import {
   X,
   Star,
   BarChart3,
+  TrendingUp,
+  Award,
+  Users2,
 } from 'lucide-react';
 
 interface DashboardSidebarProps {
@@ -29,6 +32,7 @@ export default function DashboardSidebar({ role, onClose }: DashboardSidebarProp
   const adminLinks = [
     { href: '/dashboard/admin', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/dashboard/admin/analytics', label: 'Analytics', icon: BarChart3 },
+    { href: '/dashboard/admin/marketing', label: 'Marketing Analytics', icon: TrendingUp },
     { href: '/dashboard/admin/ngos', label: 'NGO Approvals', icon: Building2 },
     {
       href: '/dashboard/admin/experiences',
@@ -61,11 +65,17 @@ export default function DashboardSidebar({ role, onClose }: DashboardSidebarProp
       label: 'NGO Profile',
       icon: Building2,
     },
+    {
+      href: '/dashboard/ngo/team',
+      label: 'Team',
+      icon: Users2,
+    },
   ];
 
   const userLinks = [
     { href: '/dashboard/user', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/dashboard/user/bookings', label: 'My Bookings', icon: Calendar },
+    { href: '/dashboard/user/impact', label: 'My Impact', icon: Award },
     { href: '/dashboard/user/profile', label: 'Profile', icon: User },
   ];
 

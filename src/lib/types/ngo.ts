@@ -24,3 +24,30 @@ export interface NGOFormData {
   website?: string;
   contactEmail: string;
 }
+
+export interface NGOTeamMember {
+  id: string;
+  ngoId: string;
+  userId: string;
+  ngoRole: 'owner' | 'staff';
+  email: string;
+  displayName: string;
+  invitedBy: string;
+  invitedAt: Date;
+  joinedAt?: Date;
+  status: 'active' | 'removed';
+}
+
+export interface NGOInvitation {
+  id: string;
+  ngoId: string;
+  ngoName: string;
+  invitedEmail: string;
+  ngoRole: 'staff';
+  invitedBy: string;
+  createdAt: Date;
+  expiresAt: Date;
+  used: boolean;
+  usedAt?: Date;
+  usedBy?: string;
+}

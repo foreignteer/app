@@ -8,6 +8,7 @@ import { ExperienceFilters } from '@/components/experiences/ExperienceFilters';
 import { MobileFilterDrawer } from '@/components/experiences/MobileFilterDrawer';
 import { Experience, ExperienceFilters as ExperienceFiltersType, SortOption } from '@/lib/types/experience';
 import { Loader2, ArrowUpDown, Grid3x3, Map } from 'lucide-react';
+import { AnalyticsEvents } from '@/lib/analytics/tracker';
 
 // Dynamically import map to avoid SSR issues with Leaflet
 const ExperienceMap = dynamic(
@@ -30,6 +31,10 @@ export default function ExperiencesPage() {
   const [error, setError] = useState('');
   const [filters, setFilters] = useState<ExperienceFiltersType>({});
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
+
+  useEffect(() => {
+    AnalyticsEvents.EXPERIENCE_LIST_VIEW();
+  }, []);
 
   useEffect(() => {
     fetchExperiences();
@@ -69,6 +74,16 @@ export default function ExperiencesPage() {
   };
 
   const handleFilterChange = (newFilters: ExperienceFiltersType) => {
+    // Track which filters are being applied
+    if (newFilters.causeCategory && newFilters.causeCategory !== filters.causeCategory) {
+      AnalyticsEvents.EXPERIENCE_FILTER_APPLIED('cause', newFilters.causeCategory);
+    }
+    if (newFilters.country && newFilters.country !== filters.country) {
+      AnalyticsEvents.EXPERIENCE_FILTER_APPLIED('country', newFilters.country);
+    }
+    if (newFilters.search && newFilters.search !== filters.search) {
+      AnalyticsEvents.EXPERIENCE_FILTER_APPLIED('search', newFilters.search);
+    }
     setFilters(newFilters);
   };
 

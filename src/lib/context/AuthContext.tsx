@@ -61,6 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           avatar: userData.avatar || firebaseUser.photoURL || undefined,
           role,
           ngoId: userData.ngoId, // For NGO users
+          ngoRole: userData.ngoRole, // 'owner' | 'staff'
           countryOfOrigin: userData.countryOfOrigin,
           volunteeringExperience: userData.volunteeringExperience,
           jobTitle: userData.jobTitle,
@@ -132,9 +133,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Send custom verification email via Brevo (from info@foreignteer.com)
     try {
+      const idToken = await userCredential.user.getIdToken();
       await fetch('/api/auth/send-verification', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}`,
+        },
         body: JSON.stringify({ userId: userCredential.user.uid }),
       });
     } catch (error) {
@@ -199,9 +204,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!firebaseUser) throw new Error('No user logged in');
 
     // Send custom verification email via Brevo
+    const idToken = await firebaseUser.getIdToken();
     const response = await fetch('/api/auth/send-verification', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${idToken}`,
+      },
       body: JSON.stringify({ userId: firebaseUser.uid }),
     });
 

@@ -1,6 +1,9 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Metadata } from 'next';
+import { sanitizeContent } from '@/lib/utils/sanitize';
+import { ExperienceTracker, BookingLink } from '@/components/experiences/ExperienceTracker';
 import { MapPin, Calendar, Users, Heart, AlertCircle, CheckCircle, Star } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -13,6 +16,47 @@ import { format } from 'date-fns';
 interface ExperienceDetailPageProps {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ date?: string }>;
+}
+
+export async function generateMetadata({ params }: ExperienceDetailPageProps): Promise<Metadata> {
+  try {
+    const { id } = await params;
+    const docRef = adminDb.collection('experiences').doc(id);
+    const doc = await docRef.get();
+
+    if (!doc.exists) {
+      return { title: 'Experience Not Found - Foreignteer' };
+    }
+
+    const data = doc.data()!;
+    const title = `${data.title} - Volunteer Experience | Foreignteer`;
+    const description = data.shortDescription || data.description?.replace(/<[^>]*>/g, '').substring(0, 160) || 'Join this volunteering experience with Foreignteer.';
+    const image = data.imageUrl || data.images?.[0];
+
+    return {
+      title,
+      description,
+      keywords: [data.country, data.city, ...(data.causeCategories || []), 'volunteering', 'micro-volunteering'].filter(Boolean).join(', '),
+      openGraph: {
+        title: data.title,
+        description,
+        url: `https://www.foreignteer.com/experiences/${id}`,
+        type: 'website',
+        images: image ? [{ url: image, width: 1200, height: 630, alt: data.title }] : [],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: data.title,
+        description,
+        images: image ? [image] : [],
+      },
+    };
+  } catch {
+    return {
+      title: 'Volunteering Experience - Foreignteer',
+      description: 'Discover micro-volunteering experiences worldwide with Foreignteer.',
+    };
+  }
 }
 
 async function getExperience(id: string, instanceDate?: string): Promise<Experience | null> {
@@ -148,6 +192,14 @@ export default async function ExperienceDetailPage({ params, searchParams }: Exp
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ExperienceTracker
+        experienceId={experience.id}
+        experienceTitle={experience.title}
+        country={experience.country}
+        city={experience.city}
+        causeCategories={experience.causeCategories}
+        image={experience.images?.[0]}
+      />
       {/* Hero Image */}
       <div className="relative h-96 w-full">
         <Image
@@ -184,7 +236,7 @@ export default async function ExperienceDetailPage({ params, searchParams }: Exp
               <CardContent>
                 <div
                   className="prose prose-sm max-w-none text-text-primary"
-                  dangerouslySetInnerHTML={{ __html: experience.description }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeContent(experience.description) }}
                 />
               </CardContent>
             </Card>
@@ -337,11 +389,15 @@ export default async function ExperienceDetailPage({ params, searchParams }: Exp
                       </div>
                     </div>
                   ) : (
-                    <Link href={bookUrl}>
+                    <BookingLink
+                      href={bookUrl}
+                      experienceId={experience.id}
+                      experienceTitle={experience.title}
+                    >
                       <Button fullWidth size="lg">
                         Apply Now
                       </Button>
-                    </Link>
+                    </BookingLink>
                   )}
                 </div>
               </CardContent>

@@ -31,6 +31,7 @@ export default function Header() {
               width={160}
               height={40}
               className="h-10 w-auto"
+              style={{ width: 'auto' }}
               priority
             />
             <span className="text-2xl font-heading font-bold text-[#21B3B1]">

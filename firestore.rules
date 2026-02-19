@@ -37,6 +37,11 @@ service cloud.firestore {
 
       // Only admins can delete users
       allow delete: if isAdmin();
+
+      // Browse history subcollection — only the owner can read/write
+      match /browseHistory/{experienceId} {
+        allow read, write: if isOwner(userId);
+      }
     }
 
     // NGOs collection
@@ -47,10 +52,34 @@ service cloud.firestore {
       // Any authenticated user can create an NGO registration (pending admin approval)
       allow create: if isSignedIn();
 
-      // Admins can update any NGO, or NGO owners can update their own
-      allow update: if isAdmin() || (isNGO() && resource.data.createdBy == request.auth.uid);
+      // Admins can update any NGO; NGOs can update their own (owner vs staff enforced at API layer)
+      allow update: if isAdmin() || isNGO();
 
       // Only admins can delete NGOs
+      allow delete: if isAdmin();
+    }
+
+    // NGO team members collection
+    match /ngoTeamMembers/{memberId} {
+      // Any signed-in user can read (API layer enforces scoping to own NGO)
+      allow read: if isSignedIn();
+
+      // Only admin can write directly; all writes go through API
+      allow create, update, delete: if isAdmin();
+    }
+
+    // NGO invitations collection
+    match /ngoInvitations/{inviteId} {
+      // Token-gated reads — anyone can read (API layer validates token ownership)
+      allow read: if true;
+
+      // NGOs can create invitations (owner check done at API layer)
+      allow create: if isNGO();
+
+      // Any signed-in user can update (to mark invitation as used)
+      allow update: if isSignedIn();
+
+      // Only admins can delete
       allow delete: if isAdmin();
     }
 

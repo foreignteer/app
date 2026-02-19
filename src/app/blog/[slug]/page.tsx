@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import DOMPurify from 'dompurify';
 import { BlogPost } from '@/lib/types/blog';
 import { Loader2, Calendar, Clock, User, ArrowLeft, Tag } from 'lucide-react';
 import Link from 'next/link';
@@ -166,7 +167,7 @@ export default function BlogPostPage() {
               prose-li:text-[#4A4A4A]
               prose-blockquote:border-l-[#21B3B1] prose-blockquote:text-[#7A7A7A] prose-blockquote:italic
               prose-img:rounded-lg prose-img:shadow-md"
-            dangerouslySetInnerHTML={{ __html: post.content }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
           />
 
           {/* Tags */}

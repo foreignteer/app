@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/hooks/useAuth';
@@ -10,6 +10,7 @@ import { PasswordInput } from '@/components/ui/PasswordInput';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { validatePassword, getPasswordStrength } from '@/lib/utils/validation';
 import { CheckCircle, XCircle } from 'lucide-react';
+import { AnalyticsEvents } from '@/lib/analytics/tracker';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -26,6 +27,10 @@ export default function RegisterPage() {
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [marketingConsent, setMarketingConsent] = useState(true); // Pre-ticked per GDPR requirement
   const [passwordTouched, setPasswordTouched] = useState(false);
+
+  useEffect(() => {
+    AnalyticsEvents.USER_REGISTER_START();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -60,6 +65,9 @@ export default function RegisterPage() {
 
     try {
       const userCredential = await signUp(formData.email, formData.password, formData.displayName);
+
+      // Track successful registration
+      AnalyticsEvents.USER_REGISTER_COMPLETE(userCredential.user.uid);
 
       // Send welcome email
       try {

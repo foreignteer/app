@@ -2,21 +2,36 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useBookings } from '@/lib/hooks/useBookings';
 import { useAuth } from '@/lib/hooks/useAuth';
-import { Calendar, MapPin, Users, ArrowRight, Mail } from 'lucide-react';
+import { Calendar, MapPin, Users, ArrowRight, Mail, History, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { format } from 'date-fns';
 import { Experience } from '@/lib/types/experience';
+import RegistrationBanner from '@/components/dashboard/RegistrationBanner';
+import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase/config';
+
+interface BrowseHistoryItem {
+  experienceId: string;
+  title: string;
+  country: string;
+  city: string;
+  causeCategories: string[];
+  image: string;
+  viewedAt: any;
+}
 
 export default function UserDashboard() {
   const { user } = useAuth();
   const { bookings, loading } = useBookings();
   const [userName, setUserName] = useState('');
   const [experiences, setExperiences] = useState<Record<string, Experience | null>>({});
+  const [browseHistory, setBrowseHistory] = useState<BrowseHistoryItem[]>([]);
 
   useEffect(() => {
     if (user) {
@@ -53,6 +68,23 @@ export default function UserDashboard() {
     }
   }, [bookings]);
 
+  // Fetch browse history from Firestore
+  useEffect(() => {
+    async function fetchBrowseHistory() {
+      if (!user?.uid) return;
+      try {
+        const historyRef = collection(db, 'users', user.uid, 'browseHistory');
+        const q = query(historyRef, orderBy('viewedAt', 'desc'), limit(6));
+        const snapshot = await getDocs(q);
+        const items = snapshot.docs.map((doc) => doc.data() as BrowseHistoryItem);
+        setBrowseHistory(items);
+      } catch {
+        // Silently fail
+      }
+    }
+    fetchBrowseHistory();
+  }, [user?.uid]);
+
   const activeBookings = bookings.filter(
     (b) => b.status === 'confirmed' || b.status === 'pending'
   );
@@ -70,6 +102,9 @@ export default function UserDashboard() {
             Manage your volunteering experiences and bookings
           </p>
         </div>
+
+        {/* Registration / Completion Reminders */}
+        <RegistrationBanner />
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -199,6 +234,75 @@ export default function UserDashboard() {
             )}
           </CardContent>
         </Card>
+
+        {/* Recently Viewed */}
+        {browseHistory.length > 0 && (
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="flex items-center gap-2">
+                <History className="w-5 h-5 text-[#21B3B1]" />
+                Recently Viewed
+              </CardTitle>
+              <Link href="/experiences">
+                <Button variant="ghost" size="sm">
+                  Browse All
+                  <ArrowRight className="ml-2" size={16} />
+                </Button>
+              </Link>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {browseHistory.map((item) => (
+                  <Link
+                    key={item.experienceId}
+                    href={`/experiences/${item.experienceId}`}
+                    className="group block border border-[#E6EAEA] rounded-lg overflow-hidden hover:border-[#21B3B1] hover:shadow-sm transition-all"
+                  >
+                    {/* Thumbnail */}
+                    <div className="relative h-24 bg-[#C9F0EF]">
+                      {item.image ? (
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <MapPin className="w-8 h-8 text-[#21B3B1]" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-2">
+                      <p className="text-xs font-semibold text-[#4A4A4A] line-clamp-2 group-hover:text-[#21B3B1] transition-colors">
+                        {item.title}
+                      </p>
+                      {item.city && (
+                        <p className="text-xs text-[#7A7A7A] mt-0.5 flex items-center gap-1">
+                          <MapPin className="w-3 h-3 flex-shrink-0" />
+                          {item.city}
+                        </p>
+                      )}
+                      {item.viewedAt && (
+                        <p className="text-xs text-[#8FA6A1] mt-0.5 flex items-center gap-1">
+                          <Clock className="w-3 h-3 flex-shrink-0" />
+                          {(() => {
+                            try {
+                              const date = item.viewedAt?.toDate ? item.viewedAt.toDate() : new Date(item.viewedAt);
+                              return format(date, 'MMM d');
+                            } catch {
+                              return '';
+                            }
+                          })()}
+                        </p>
+                      )}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

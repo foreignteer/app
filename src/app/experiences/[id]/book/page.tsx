@@ -6,6 +6,7 @@ import BookingForm from '@/components/experiences/BookingForm';
 import { Experience } from '@/lib/types/experience';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { AnalyticsEvents } from '@/lib/analytics/tracker';
 
 interface BookingPageProps {
   params: Promise<{ id: string }>;
@@ -35,6 +36,13 @@ export default function BookingPage({ params }: BookingPageProps) {
 
         const data = await response.json();
         setExperience(data.experience);
+        // Track booking flow entry
+        if (data.experience) {
+          AnalyticsEvents.BOOKING_PAYMENT_START(
+            data.experience.id,
+            data.experience.totalFee || data.experience.platformServiceFee || 0
+          );
+        }
       } catch (err) {
         console.error('Error fetching experience:', err);
         setError('Failed to load experience');

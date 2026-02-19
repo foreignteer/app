@@ -3,74 +3,68 @@ import { adminAuth, adminDb } from '@/lib/firebase/admin';
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, adminPassword } = await request.json();
-
-    // Simple admin password check (you should change this!)
-    if (adminPassword !== 'delete-user-admin-2025') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+    // Verify admin token via Authorization header
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    const token = authHeader.split('Bearer ')[1];
+    let decodedToken;
+    try {
+      decodedToken = await adminAuth.verifyIdToken(token);
+    } catch {
+      return NextResponse.json({ error: 'Unauthorized - Invalid token' }, { status: 401 });
+    }
+
+    if (decodedToken.role !== 'admin') {
+      return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 });
+    }
+
+    const { email } = await request.json();
 
     if (!email) {
-      return NextResponse.json(
-        { error: 'Email is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
 
-    console.log(`Attempting to delete user: ${email}`);
+    console.log(`Admin ${decodedToken.uid} attempting to delete user: ${email}`);
 
     // Get user by email
     let userRecord;
     try {
       userRecord = await adminAuth.getUserByEmail(email);
-      console.log(`Found user: ${userRecord.uid}`);
     } catch (error: any) {
       if (error.code === 'auth/user-not-found') {
-        return NextResponse.json(
-          { message: 'User not found in Firebase Auth' },
-          { status: 404 }
-        );
+        return NextResponse.json({ message: 'User not found in Firebase Auth' }, { status: 404 });
       }
       throw error;
     }
 
     // Delete from Firestore
-    // 1. Delete user document
     await adminDb.collection('users').doc(userRecord.uid).delete();
-    console.log('Deleted user document');
 
-    // 2. Delete verification tokens
+    // Delete verification tokens
     const tokens = await adminDb
       .collection('verificationTokens')
       .where('userId', '==', userRecord.uid)
       .get();
 
     const batch = adminDb.batch();
-    tokens.docs.forEach((doc) => {
-      batch.delete(doc.ref);
-    });
+    tokens.docs.forEach((doc) => batch.delete(doc.ref));
     await batch.commit();
-    console.log(`Deleted ${tokens.size} verification tokens`);
 
-    // 3. Delete newsletter subscription
+    // Delete newsletter subscription
     const newsletters = await adminDb
       .collection('newsletterSubscribers')
       .where('email', '==', email.toLowerCase())
       .get();
 
     const batch2 = adminDb.batch();
-    newsletters.docs.forEach((doc) => {
-      batch2.delete(doc.ref);
-    });
+    newsletters.docs.forEach((doc) => batch2.delete(doc.ref));
     await batch2.commit();
-    console.log(`Deleted ${newsletters.size} newsletter subscriptions`);
 
-    // 4. Delete from Firebase Auth (do this last)
+    // Delete from Firebase Auth (do this last)
     await adminAuth.deleteUser(userRecord.uid);
-    console.log('Deleted from Firebase Auth');
 
     return NextResponse.json(
       {
@@ -88,7 +82,7 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     console.error('Error deleting user:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to delete user' },
+      { error: 'Failed to delete user' },
       { status: 500 }
     );
   }

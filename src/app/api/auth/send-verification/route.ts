@@ -5,6 +5,20 @@ import { sendEmail } from '@/lib/services/emailService';
 
 export async function POST(request: NextRequest) {
   try {
+    // Verify the caller's identity
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const token = authHeader.split('Bearer ')[1];
+    let decodedToken;
+    try {
+      decodedToken = await adminAuth.verifyIdToken(token);
+    } catch {
+      return NextResponse.json({ error: 'Unauthorized - Invalid token' }, { status: 401 });
+    }
+
     const { userId } = await request.json();
 
     if (!userId) {
@@ -12,6 +26,11 @@ export async function POST(request: NextRequest) {
         { error: 'User ID is required' },
         { status: 400 }
       );
+    }
+
+    // Ensure user can only request verification for their own account (unless admin)
+    if (decodedToken.uid !== userId && decodedToken.role !== 'admin') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     // Get user details from Firebase Auth

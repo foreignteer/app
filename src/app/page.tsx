@@ -9,12 +9,16 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Testimonial } from '@/lib/types/testimonial';
 import RecentExperiences from '@/components/experiences/RecentExperiences';
+import { AnalyticsEvents } from '@/lib/analytics/tracker';
 
 export default function HomePage() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Track homepage view
+    AnalyticsEvents.PAGE_VIEW('/');
+
     // Fetch published testimonials
     fetch('/api/testimonials?publishedOnly=true')
       .then((res) => res.json())
@@ -63,13 +67,19 @@ export default function HomePage() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/experiences">
+                <Link
+                  href="/experiences"
+                  onClick={() => AnalyticsEvents.CTA_CLICK('Browse Experiences', 'homepage_hero')}
+                >
                   <Button size="lg" className="group">
                     Browse Experiences
                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
-                <Link href="/partner">
+                <Link
+                  href="/partner"
+                  onClick={() => AnalyticsEvents.CTA_CLICK('Partner with Us', 'homepage_hero')}
+                >
                   <Button size="lg" variant="outline">
                     Partner with Us
                   </Button>
