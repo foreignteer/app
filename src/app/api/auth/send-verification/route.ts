@@ -44,11 +44,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate verification token
-    const token = await createVerificationToken(userId, user.email);
+    const verificationToken = await createVerificationToken(userId, user.email);
 
     // Create verification link
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://foreignteer.com';
-    const verificationLink = `${baseUrl}/verify-email?token=${token}`;
+    const verificationLink = `${baseUrl}/verify-email?token=${verificationToken}`;
 
     // Send verification email via Brevo
     await sendEmail({

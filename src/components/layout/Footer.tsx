@@ -122,6 +122,14 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                  href="/help/ngo"
+                  className="text-text-light hover:text-primary transition-colors"
+                >
+                  NGO User Manual
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/contact"
                   className="text-text-light hover:text-primary transition-colors"
                 >
