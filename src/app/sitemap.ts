@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { adminDb } from '@/lib/firebase/admin';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://www.foreignteer.com';
+  const baseUrl = 'https://foreignteer.com';
 
   // Static routes
   const staticRoutes: MetadataRoute.Sitemap = [

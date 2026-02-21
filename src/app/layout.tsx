@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   title: "Foreignteer - Micro-Volunteering Made Easy",
   description: "Connect with meaningful volunteering experiences worldwide. Join Foreignteer to discover and book micro-volunteering opportunities that make a difference.",
   keywords: "volunteering, micro-volunteering, NGO, volunteer abroad, social impact, community service",
-  metadataBase: new URL('https://www.foreignteer.com'),
+  metadataBase: new URL('https://foreignteer.com'),
   viewport: {
     width: 'device-width',
     initialScale: 1,
@@ -38,9 +38,9 @@ export const metadata: Metadata = {
     siteName: 'Foreignteer',
     title: 'Foreignteer - Micro-Volunteering Made Easy',
     description: 'Connect with meaningful volunteering experiences worldwide',
-    url: 'https://www.foreignteer.com',
+    url: 'https://foreignteer.com',
     images: [{
-      url: 'https://www.foreignteer.com/images/og-image.jpg',
+      url: 'https://foreignteer.com/images/og-image.jpg',
       width: 1200,
       height: 630,
       alt: 'Foreignteer - Volunteering Opportunities Worldwide',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Foreignteer - Micro-Volunteering Made Easy',
     description: 'Connect with meaningful volunteering experiences worldwide',
-    images: ['https://www.foreignteer.com/images/twitter-image.jpg'],
+    images: ['https://foreignteer.com/images/twitter-image.jpg'],
   },
   appleWebApp: {
     capable: true,
@@ -97,8 +97,8 @@ export default function RootLayout({
               '@type': 'Organization',
               name: 'Foreignteer',
               alternateName: 'Foreignteer Volunteering Platform',
-              url: 'https://www.foreignteer.com',
-              logo: 'https://www.foreignteer.com/images/foreignteer-logo.png',
+              url: 'https://foreignteer.com',
+              logo: 'https://foreignteer.com/images/foreignteer-logo.png',
               description: 'Micro-volunteering platform connecting travelers with meaningful volunteering experiences worldwide',
               foundingDate: '2025',
               sameAs: [
@@ -129,12 +129,12 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'WebSite',
               name: 'Foreignteer',
-              url: 'https://www.foreignteer.com',
+              url: 'https://foreignteer.com',
               potentialAction: {
                 '@type': 'SearchAction',
                 target: {
                   '@type': 'EntryPoint',
-                  urlTemplate: 'https://www.foreignteer.com/experiences?search={search_term_string}',
+                  urlTemplate: 'https://foreignteer.com/experiences?search={search_term_string}',
                 },
                 'query-input': 'required name=search_term_string',
               },

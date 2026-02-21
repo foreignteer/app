@@ -16,6 +16,6 @@ export default function robots(): MetadataRoute.Robots {
         '/verify-email',
       ],
     },
-    sitemap: 'https://www.foreignteer.com/sitemap.xml',
+    sitemap: 'https://foreignteer.com/sitemap.xml',
   };
 }
