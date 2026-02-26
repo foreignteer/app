@@ -4,7 +4,7 @@ export interface NewsletterSubscriber {
   name?: string;
   interests?: string[];
   subscribedAt: Date;
-  source: 'footer' | 'registration' | 'newsletter-page';
+  source: 'footer' | 'volunteer-registration' | 'ngo-registration' | 'newsletter-page';
   marketingConsent: boolean;
   consentGivenAt: Date;
   unsubscribedAt?: Date;
@@ -16,6 +16,6 @@ export interface NewsletterSubscription {
   email: string;
   name?: string;
   interests?: string[];
-  source: 'footer' | 'registration' | 'newsletter-page';
+  source: 'footer' | 'volunteer-registration' | 'ngo-registration' | 'newsletter-page';
   userId?: string;
 }

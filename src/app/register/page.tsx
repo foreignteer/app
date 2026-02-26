@@ -93,7 +93,8 @@ export default function RegisterPage() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               email: formData.email,
-              source: 'registration',
+              name: formData.displayName,
+              source: 'volunteer-registration',
               userId: userCredential.user.uid,
             }),
           });

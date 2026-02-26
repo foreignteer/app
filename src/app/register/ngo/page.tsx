@@ -233,7 +233,8 @@ export default function RegisterNGOPage() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               email: accountData.email,
-              source: 'registration',
+              name: accountData.displayName || ngoData.name,
+              source: 'ngo-registration',
               userId: data.userId, // Assuming API returns userId
             }),
           });

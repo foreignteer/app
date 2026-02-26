@@ -10,6 +10,15 @@ contactsApi.setApiKey(
   process.env.BREVO_API_KEY || ''
 );
 
+// Brevo List IDs
+const BREVO_LISTS = {
+  ALL_SUBSCRIBERS: 2,        // Master list - all subscribers (no duplicates)
+  NEWSLETTER_PAGE: 5,         // Newsletter page signups
+  VOLUNTEER_REGISTRATION: 6,  // Volunteer registrations
+  NGO_REGISTRATION: 7,        // NGO registrations
+  UNSUBSCRIBED: 3,           // Unsubscribed list
+};
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -48,8 +57,19 @@ export async function POST(request: NextRequest) {
         // Update contact in Brevo (remove from unsubscribed list)
         try {
           const updateContact = new brevo.UpdateContact();
-          updateContact.listIds = [2]; // Newsletter list ID in Brevo
-          updateContact.unlinkListIds = [3]; // Unsubscribed list ID
+
+          // Determine which lists to add to based on source
+          const listsToAdd = [BREVO_LISTS.ALL_SUBSCRIBERS];
+          if (source === 'newsletter-page') {
+            listsToAdd.push(BREVO_LISTS.NEWSLETTER_PAGE);
+          } else if (source === 'volunteer-registration') {
+            listsToAdd.push(BREVO_LISTS.VOLUNTEER_REGISTRATION);
+          } else if (source === 'ngo-registration') {
+            listsToAdd.push(BREVO_LISTS.NGO_REGISTRATION);
+          }
+
+          updateContact.listIds = listsToAdd;
+          updateContact.unlinkListIds = [BREVO_LISTS.UNSUBSCRIBED];
           await contactsApi.updateContact(emailLower, updateContact);
         } catch (brevoErr) {
           console.error('Brevo resubscribe error:', brevoErr);
@@ -88,7 +108,15 @@ export async function POST(request: NextRequest) {
     try {
       const createContact = new brevo.CreateContact();
       createContact.email = emailLower;
-      createContact.listIds = [2]; // Newsletter list ID in Brevo
+
+      // Determine which lists to add to based on source
+      const listsToAdd = [BREVO_LISTS.ALL_SUBSCRIBERS]; // Always add to master list
+      if (source === 'newsletter-page') {
+        listsToAdd.push(BREVO_LISTS.NEWSLETTER_PAGE);
+      } else if (source === 'registration') {
+        listsToAdd.push(BREVO_LISTS.VOLUNTEER_REGISTRATION);
+      }
+      createContact.listIds = listsToAdd;
 
       // Build attributes object
       const attributes: { [key: string]: string } = {
@@ -121,7 +149,18 @@ export async function POST(request: NextRequest) {
       if (brevoErr.status === 400) {
         try {
           const updateContact = new brevo.UpdateContact();
-          updateContact.listIds = [2];
+
+          // Determine which lists to add to based on source
+          const listsToAdd = [BREVO_LISTS.ALL_SUBSCRIBERS];
+          if (source === 'newsletter-page') {
+            listsToAdd.push(BREVO_LISTS.NEWSLETTER_PAGE);
+          } else if (source === 'volunteer-registration') {
+            listsToAdd.push(BREVO_LISTS.VOLUNTEER_REGISTRATION);
+          } else if (source === 'ngo-registration') {
+            listsToAdd.push(BREVO_LISTS.NGO_REGISTRATION);
+          }
+
+          updateContact.listIds = listsToAdd;
           await contactsApi.updateContact(emailLower, updateContact);
         } catch (updateErr) {
           console.error('Brevo update contact error:', updateErr);
