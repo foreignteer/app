@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
-import { Download, Copy, Check } from 'lucide-react';
+import ColorCard from '@/components/brand/ColorCard';
 
 export const metadata: Metadata = {
   title: 'Brand Kit | Foreignteer',
@@ -280,48 +280,6 @@ export default function BrandKitPage() {
           <p>© 2026 Foreignteer. All brand assets are proprietary and protected.</p>
           <p className="mt-2">This page is for internal use and partners only. Please do not share publicly.</p>
         </div>
-      </div>
-    </div>
-  );
-}
-
-// Color Card Component
-function ColorCard({
-  name,
-  hex,
-  usage,
-  textColor = 'white',
-  border = false
-}: {
-  name: string;
-  hex: string;
-  usage: string;
-  textColor?: string;
-  border?: boolean;
-}) {
-  return (
-    <div className="group">
-      <div
-        className={`rounded-lg p-6 mb-3 aspect-square flex flex-col justify-between transition-transform hover:scale-105 ${border ? 'border-2 border-gray-200' : ''}`}
-        style={{ backgroundColor: hex }}
-      >
-        <div className={`text-${textColor === 'white' ? 'white' : '[#4A4A4A]'} font-semibold`}>
-          {name}
-        </div>
-        <button
-          onClick={() => {
-            navigator.clipboard.writeText(hex);
-          }}
-          className={`text-${textColor === 'white' ? 'white' : '[#4A4A4A]'} opacity-0 group-hover:opacity-100 transition-opacity text-sm flex items-center gap-2`}
-          title="Copy hex code"
-        >
-          <Copy className="w-4 h-4" />
-          Copy
-        </button>
-      </div>
-      <div className="text-sm">
-        <div className="font-mono font-semibold text-[#4A4A4A]">{hex}</div>
-        <div className="text-[#7A7A7A] text-xs mt-1">{usage}</div>
       </div>
     </div>
   );
