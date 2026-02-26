@@ -13,10 +13,10 @@ contactsApi.setApiKey(
 // Brevo List IDs
 const BREVO_LISTS = {
   ALL_SUBSCRIBERS: 2,        // Master list - all subscribers (no duplicates)
-  NEWSLETTER_PAGE: 5,         // Newsletter page signups
-  VOLUNTEER_REGISTRATION: 6,  // Volunteer registrations
-  NGO_REGISTRATION: 7,        // NGO registrations
-  UNSUBSCRIBED: 3,           // Unsubscribed list
+  NEWSLETTER_PAGE: 3,         // Newsletter page signups
+  VOLUNTEER_REGISTRATION: 4,  // Volunteer registrations
+  NGO_REGISTRATION: 5,        // NGO registrations
+  UNSUBSCRIBED: 3,           // Unsubscribed list (if you have one)
 };
 
 export async function POST(request: NextRequest) {
