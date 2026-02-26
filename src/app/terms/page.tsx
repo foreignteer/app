@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Terms of Service - Foreignteer',
   description: 'Read Foreignteer\'s terms of service. Learn about our platform rules, user responsibilities, and service conditions.',
+  alternates: { canonical: 'https://foreignteer.com/terms' },
   openGraph: {
     title: 'Terms of Service - Foreignteer',
     url: 'https://www.foreignteer.com/terms',

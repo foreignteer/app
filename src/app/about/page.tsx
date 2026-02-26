@@ -15,10 +15,13 @@ import {
 export const metadata: Metadata = {
   title: 'About Foreignteer - Micro-Volunteering Made Easy',
   description: 'Learn about Foreignteer\'s mission to connect travellers with meaningful volunteering experiences. Discover how we\'re making travel more impactful.',
+  alternates: {
+    canonical: 'https://foreignteer.com/about',
+  },
   openGraph: {
     title: 'About Foreignteer',
     description: 'Our mission to connect travellers with meaningful volunteering',
-    url: 'https://www.foreignteer.com/about',
+    url: 'https://foreignteer.com/about',
   },
 };
 

@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Partner with Foreignteer - Connect with Volunteers Worldwide',
   description: 'Join Foreignteer as an NGO partner. Connect with passionate volunteers, expand your reach, and create meaningful impact through micro-volunteering experiences.',
+  alternates: { canonical: 'https://foreignteer.com/partner' },
   keywords: 'NGO partnership, volunteer recruitment, partner with foreignteer, NGO platform, volunteer management, social impact partnership',
   openGraph: {
     title: 'Partner with Foreignteer - Connect with Volunteers',

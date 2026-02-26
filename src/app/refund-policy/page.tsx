@@ -5,6 +5,7 @@ import { Shield, Calendar, Clock, RefreshCw, AlertCircle, CheckCircle } from 'lu
 export const metadata: Metadata = {
   title: 'Refund Policy | Foreignteer',
   description: 'Understand our refund and cancellation policy for volunteering experiences, compliant with UK consumer law.',
+  alternates: { canonical: 'https://foreignteer.com/refund-policy' },
   openGraph: {
     title: 'Refund Policy | Foreignteer',
     description: 'Our fair and transparent refund policy for micro-volunteering experiences',

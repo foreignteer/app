@@ -26,6 +26,9 @@ export const metadata: Metadata = {
   description: "Connect with meaningful volunteering experiences worldwide. Join Foreignteer to discover and book micro-volunteering opportunities that make a difference.",
   keywords: "volunteering, micro-volunteering, NGO, volunteer abroad, social impact, community service",
   metadataBase: new URL('https://foreignteer.com'),
+  alternates: {
+    canonical: 'https://foreignteer.com',
+  },
   viewport: {
     width: 'device-width',
     initialScale: 1,

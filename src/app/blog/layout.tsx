@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Foreignteer Blog - Volunteering Stories & Travel Tips',
   description: 'Read inspiring stories from volunteers, get travel tips, and learn about making a difference through micro-volunteering around the world.',
+  alternates: { canonical: 'https://foreignteer.com/blog' },
   keywords: 'volunteering blog, travel stories, impact stories, volunteer tips, micro-volunteering experiences',
   openGraph: {
     title: 'Foreignteer Blog - Volunteering Stories & Travel Tips',

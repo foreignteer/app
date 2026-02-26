@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 export const metadata: Metadata = {
   title: 'How It Works - Foreignteer',
   description: 'Learn how to find and book meaningful micro-volunteering experiences with Foreignteer. Simple steps for volunteers and NGO partners.',
+  alternates: { canonical: 'https://foreignteer.com/how-it-works' },
   openGraph: {
     title: 'How Foreignteer Works',
     description: 'Connect with meaningful micro-volunteering experiences in just a few simple steps',

@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Privacy Policy - Foreignteer',
   description: 'Learn about Foreignteer\'s privacy policy. Understand how we collect, use, and protect your personal information.',
+  alternates: { canonical: 'https://foreignteer.com/privacy' },
   openGraph: {
     title: 'Privacy Policy - Foreignteer',
     url: 'https://www.foreignteer.com/privacy',
