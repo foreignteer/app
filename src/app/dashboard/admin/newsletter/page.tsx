@@ -285,7 +285,9 @@ export default function AdminNewsletterPage() {
                         </td>
                         <td className="py-3 px-4">
                           <Badge variant="secondary" size="sm">
-                            {sub.source === 'registration' ? 'Registration' : 'Footer'}
+                            {sub.source === 'volunteer-registration' ? 'Volunteer Registration' :
+                             sub.source === 'ngo-registration' ? 'NGO Registration' :
+                             sub.source === 'newsletter-page' ? 'Newsletter Page' : 'Footer'}
                           </Badge>
                         </td>
                         <td className="py-3 px-4 text-sm text-text-muted">
