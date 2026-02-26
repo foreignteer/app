@@ -176,7 +176,6 @@ export default function PrivacyPolicyPage() {
             </p>
             <div className="text-[#4A4A4A] space-y-2">
               <p>Email: <a href="mailto:info@foreignteer.com" className="text-[#21B3B1] hover:underline">info@foreignteer.com</a></p>
-              <p>Address: Hong Kong</p>
             </div>
           </section>
         </div>

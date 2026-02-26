@@ -116,11 +116,6 @@ export default function RootLayout({
                 areaServed: 'Worldwide',
                 availableLanguage: ['English'],
               },
-              address: {
-                '@type': 'PostalAddress',
-                addressLocality: 'Hong Kong',
-                addressCountry: 'HK',
-              },
             }),
           }}
         />

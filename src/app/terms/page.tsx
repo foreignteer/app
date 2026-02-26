@@ -142,7 +142,7 @@ export default function TermsOfServicePage() {
           <section>
             <h2 className="text-2xl font-semibold text-[#2C3E3A] mb-4">11. Governing Law</h2>
             <p className="text-[#4A4A4A] leading-relaxed mb-4">
-              These Terms of Service shall be governed by and construed in accordance with the laws of Hong Kong,
+              These Terms of Service shall be governed by and construed in accordance with the laws of England and Wales,
               without regard to its conflict of law provisions.
             </p>
           </section>

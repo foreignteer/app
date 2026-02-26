@@ -383,8 +383,8 @@ export default function RefundPolicyPage() {
                 <span className="font-semibold flex-shrink-0">1.</span>
                 <div>
                   <strong>Contact us first:</strong> Email{' '}
-                  <a href="mailto:complaints@foreignteer.com" className="text-[#21B3B1] underline">
-                    complaints@foreignteer.com
+                  <a href="mailto:info@foreignteer.com" className="text-[#21B3B1] underline">
+                    info@foreignteer.com
                   </a>{' '}
                   within 14 days of your experience
                 </div>
@@ -459,7 +459,6 @@ export default function RefundPolicyPage() {
               <h3 className="font-semibold text-[#4A4A4A] mb-2">Company Information</h3>
               <p className="text-sm text-[#7A7A7A]">
                 Foreignteer<br />
-                Hong Kong<br />
                 Email: <a href="mailto:info@foreignteer.com" className="text-[#21B3B1] underline">info@foreignteer.com</a>
               </p>
             </div>

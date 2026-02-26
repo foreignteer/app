@@ -33,10 +33,6 @@ export default function Footer() {
             </p>
             <div className="space-y-2 text-sm text-text-light">
               <div className="flex items-center gap-2">
-                <MapPin size={16} />
-                <span>Hong Kong</span>
-              </div>
-              <div className="flex items-center gap-2">
                 <Mail size={16} />
                 <a href="mailto:info@foreignteer.com" className="hover:text-primary">
                   info@foreignteer.com
