@@ -87,7 +87,9 @@ export default function AdminNewsletterPage() {
     total: subscribers.length,
     active: subscribers.filter((s) => s.status === 'active').length,
     unsubscribed: subscribers.filter((s) => s.status === 'unsubscribed').length,
-    fromRegistration: subscribers.filter((s) => s.source === 'registration').length,
+    fromVolunteerRegistration: subscribers.filter((s) => s.source === 'volunteer-registration').length,
+    fromNGORegistration: subscribers.filter((s) => s.source === 'ngo-registration').length,
+    fromNewsletterPage: subscribers.filter((s) => s.source === 'newsletter-page').length,
     fromFooter: subscribers.filter((s) => s.source === 'footer').length,
   };
 
@@ -130,66 +132,96 @@ export default function AdminNewsletterPage() {
         )}
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-text-muted mb-1">Total</p>
-                  <p className="text-2xl font-bold text-text-primary">{stats.total}</p>
+        <div className="space-y-4">
+          {/* Status Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-text-muted mb-1">Total</p>
+                    <p className="text-2xl font-bold text-text-primary">{stats.total}</p>
+                  </div>
+                  <Users className="w-8 h-8 text-primary opacity-50" />
                 </div>
-                <Users className="w-8 h-8 text-primary opacity-50" />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-text-muted mb-1">Active</p>
-                  <p className="text-2xl font-bold text-green-600">{stats.active}</p>
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-text-muted mb-1">Active</p>
+                    <p className="text-2xl font-bold text-green-600">{stats.active}</p>
+                  </div>
+                  <Mail className="w-8 h-8 text-green-600 opacity-50" />
                 </div>
-                <Mail className="w-8 h-8 text-green-600 opacity-50" />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-text-muted mb-1">Unsubscribed</p>
-                  <p className="text-2xl font-bold text-red-600">{stats.unsubscribed}</p>
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-text-muted mb-1">Unsubscribed</p>
+                    <p className="text-2xl font-bold text-red-600">{stats.unsubscribed}</p>
+                  </div>
+                  <Mail className="w-8 h-8 text-red-600 opacity-50" />
                 </div>
-                <Mail className="w-8 h-8 text-red-600 opacity-50" />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
 
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-text-muted mb-1">From Registration</p>
-                  <p className="text-2xl font-bold text-text-primary">{stats.fromRegistration}</p>
+          {/* Source Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-text-muted mb-1">Volunteer Registration</p>
+                    <p className="text-2xl font-bold text-text-primary">{stats.fromVolunteerRegistration}</p>
+                  </div>
+                  <Users className="w-8 h-8 text-primary opacity-50" />
                 </div>
-                <Users className="w-8 h-8 text-primary opacity-50" />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-text-muted mb-1">From Footer</p>
-                  <p className="text-2xl font-bold text-text-primary">{stats.fromFooter}</p>
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-text-muted mb-1">NGO Registration</p>
+                    <p className="text-2xl font-bold text-text-primary">{stats.fromNGORegistration}</p>
+                  </div>
+                  <Users className="w-8 h-8 text-primary opacity-50" />
                 </div>
-                <Mail className="w-8 h-8 text-primary opacity-50" />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-text-muted mb-1">Newsletter Page</p>
+                    <p className="text-2xl font-bold text-text-primary">{stats.fromNewsletterPage}</p>
+                  </div>
+                  <Mail className="w-8 h-8 text-primary opacity-50" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-text-muted mb-1">Footer</p>
+                    <p className="text-2xl font-bold text-text-primary">{stats.fromFooter}</p>
+                  </div>
+                  <Mail className="w-8 h-8 text-primary opacity-50" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         {/* Filters */}
