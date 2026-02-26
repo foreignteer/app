@@ -1,8 +1,10 @@
 export interface NewsletterSubscriber {
   id: string;
   email: string;
+  name?: string;
+  interests?: string[];
   subscribedAt: Date;
-  source: 'footer' | 'registration';
+  source: 'footer' | 'registration' | 'newsletter-page';
   marketingConsent: boolean;
   consentGivenAt: Date;
   unsubscribedAt?: Date;
@@ -12,6 +14,8 @@ export interface NewsletterSubscriber {
 
 export interface NewsletterSubscription {
   email: string;
-  source: 'footer' | 'registration';
+  name?: string;
+  interests?: string[];
+  source: 'footer' | 'registration' | 'newsletter-page';
   userId?: string;
 }

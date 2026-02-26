@@ -13,7 +13,7 @@ contactsApi.setApiKey(
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, source = 'footer', userId } = body;
+    const { email, source = 'footer', userId, name, interests } = body;
 
     if (!email || !email.includes('@')) {
       return NextResponse.json(
@@ -78,6 +78,8 @@ export async function POST(request: NextRequest) {
       consentGivenAt: now,
       status: 'active',
       ...(userId && { userId }),
+      ...(name && { name }),
+      ...(interests && interests.length > 0 && { interests }),
     };
 
     await adminDb.collection('newsletterSubscribers').add(subscriber);
@@ -95,6 +97,20 @@ export async function POST(request: NextRequest) {
       };
       if (userId) {
         attributes.USER_ID = userId;
+      }
+      if (name) {
+        createContact.updateEnabled = true;
+        // Split name into first and last name for Brevo
+        const nameParts = name.trim().split(' ');
+        if (nameParts.length > 1) {
+          attributes.FIRSTNAME = nameParts[0];
+          attributes.LASTNAME = nameParts.slice(1).join(' ');
+        } else {
+          attributes.FIRSTNAME = name;
+        }
+      }
+      if (interests && interests.length > 0) {
+        attributes.INTERESTS = interests.join(', ');
       }
       createContact.attributes = attributes;
 

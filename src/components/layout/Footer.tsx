@@ -97,6 +97,14 @@ export default function Footer() {
                   Contact Us
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/newsletter"
+                  className="text-text-light hover:text-primary transition-colors"
+                >
+                  Newsletter
+                </Link>
+              </li>
             </ul>
           </div>
 
