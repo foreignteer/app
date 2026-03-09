@@ -114,6 +114,10 @@ export async function GET(request: NextRequest) {
     // Expand recurring experiences into individual occurrences
     experiences = expandAllRecurringExperiences(experiences);
 
+    // Filter out overdue experiences
+    const now = new Date();
+    experiences = experiences.filter((exp) => new Date(exp.dates.end) >= now);
+
     // Sort based on sortBy parameter
     switch (sortBy) {
       case 'newest':
