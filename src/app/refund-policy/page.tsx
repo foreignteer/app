@@ -44,7 +44,8 @@ export default function RefundPolicyPage() {
               <div>
                 <h2 className="text-xl font-semibold text-[#4A4A4A] mb-3">Your Consumer Rights</h2>
                 <p className="text-[#7A7A7A] mb-3">
-                  At Foreignteer, we are committed to protecting your rights as a consumer under UK law,
+                  Foreignteer is a brand of <strong>Estuary Limited</strong>. We are committed to protecting
+                  your rights as a consumer under UK law,
                   including the Consumer Rights Act 2015 and the Consumer Contracts (Information, Cancellation
                   and Additional Charges) Regulations 2013.
                 </p>
@@ -458,7 +459,7 @@ export default function RefundPolicyPage() {
             <div className="border-t border-[#E6EAEA] pt-4 mt-4">
               <h3 className="font-semibold text-[#4A4A4A] mb-2">Company Information</h3>
               <p className="text-sm text-[#7A7A7A]">
-                Foreignteer<br />
+                <strong>Estuary Limited</strong> (trading as Foreignteer)<br />
                 Email: <a href="mailto:info@foreignteer.com" className="text-[#21B3B1] underline">info@foreignteer.com</a>
               </p>
             </div>

@@ -22,7 +22,8 @@ export default function TermsOfServicePage() {
               Last Updated: {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
             </p>
             <p className="text-[#4A4A4A] leading-relaxed mb-4">
-              Welcome to Foreignteer. By accessing or using our platform, you agree to be bound by these Terms of Service.
+              Welcome to Foreignteer. Foreignteer is a brand of <strong>Estuary Limited</strong> ("we", "us", or "our").
+              By accessing or using the Foreignteer platform, you agree to be bound by these Terms of Service.
             </p>
           </section>
 
@@ -153,6 +154,7 @@ export default function TermsOfServicePage() {
               If you have any questions about these Terms of Service, please contact us at:
             </p>
             <p className="text-[#4A4A4A]">
+              <strong>Estuary Limited</strong> (trading as Foreignteer)<br />
               Email: <a href="mailto:info@foreignteer.com" className="text-[#21B3B1] hover:underline">info@foreignteer.com</a>
             </p>
           </section>

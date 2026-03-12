@@ -10,9 +10,9 @@ export default function CookiePolicyPage() {
               Last Updated: {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
             </p>
             <p className="text-[#4A4A4A] leading-relaxed mb-4">
-              This Cookie Policy explains how Foreignteer ("we", "us", or "our") uses cookies and similar
-              technologies when you visit our platform. By using our platform, you consent to the use of
-              cookies in accordance with this policy.
+              This Cookie Policy explains how Foreignteer, a brand of <strong>Estuary Limited</strong> ("we",
+              "us", or "our"), uses cookies and similar technologies when you visit our platform. By using
+              our platform, you consent to the use of cookies in accordance with this policy.
             </p>
           </section>
 

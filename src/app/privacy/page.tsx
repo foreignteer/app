@@ -22,8 +22,9 @@ export default function PrivacyPolicyPage() {
               Last Updated: {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
             </p>
             <p className="text-[#4A4A4A] leading-relaxed mb-4">
-              At Foreignteer, we are committed to protecting your privacy and personal data. This Privacy Policy
-              explains how we collect, use, disclose, and safeguard your information when you use our platform.
+              Foreignteer is a brand of <strong>Estuary Limited</strong> ("we", "us", or "our"). We are committed to
+              protecting your privacy and personal data. This Privacy Policy explains how we collect, use, disclose,
+              and safeguard your information when you use the Foreignteer platform.
             </p>
           </section>
 
@@ -175,6 +176,7 @@ export default function PrivacyPolicyPage() {
               If you have questions about this Privacy Policy or our data practices, please contact us:
             </p>
             <div className="text-[#4A4A4A] space-y-2">
+              <p><strong>Estuary Limited</strong> (trading as Foreignteer)</p>
               <p>Email: <a href="mailto:info@foreignteer.com" className="text-[#21B3B1] hover:underline">info@foreignteer.com</a></p>
             </div>
           </section>

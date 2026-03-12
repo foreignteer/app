@@ -198,7 +198,7 @@ export default function Footer() {
         <div className="mt-8 pt-8 border-t border-gray-200">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-text-light text-center md:text-left">
-              &copy; {currentYear} Foreignteer. All rights reserved.
+              &copy; {currentYear} Estuary Limited. Foreignteer is a brand of Estuary Limited.
             </p>
             <div className="flex items-center gap-2">
               <a
